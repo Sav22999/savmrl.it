@@ -19,7 +19,8 @@
         <div class="big-space"></div>
         <br>
         <p class="horizontal-center-p basic text-align-justify">
-            It's available also the web browser add-on, which permits you to create a shortened link just pressing the add-on icon on the toolbar.
+            It's available also the web browser add-on, which permits you to create a shortened link just pressing the
+            add-on icon on the toolbar.
             <br>
             It's available on the main web browser add-ons stores!
         </p>
@@ -29,9 +30,12 @@
             <br>
             Install the web browser add-on
             <br>
-            <a href="https://addons.mozilla.org/en-GB/firefox/addon/savmrl-it/"><img src="/savmrl/images/badges/firefox.png" class="badge"/></a>
-            <a href="https://chromewebstore.google.com/detail/pkbjoeedhjjokllfhgcapbbihianeemn"><img src="/savmrl/images/badges/chrome.png" class="badge"/></a>
-            <a href="https://microsoftedge.microsoft.com/addons/detail/jdgcfpdoiojfebhafmihkihficfnpahk" class="hidden"><img src="/savmrl/images/badges/ms-edge.png" class="badge"/></a>
+            <a href="https://savmrl.it/7hgSa"><img
+                        src="/savmrl/images/badges/firefox.png" class="badge"/></a>
+            <a href="https://savmrl.it/cQi6A"><img
+                        src="/savmrl/images/badges/chrome.png" class="badge"/></a>
+            <a href="https://microsoftedge.microsoft.com/addons/detail/jdgcfpdoiojfebhafmihkihficfnpahk" class="hidden"><img
+                        src="/savmrl/images/badges/ms-edge.png" class="badge"/></a>
         </p>
     </div>
     <div class="ads-section">

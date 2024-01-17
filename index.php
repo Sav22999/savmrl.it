@@ -82,9 +82,9 @@
             <div class="text-align-center" id="addons">
                 Install the web browser add-on
                 <br>
-                <a href="https://addons.mozilla.org/en-GB/firefox/addon/savmrl-it/"><img
+                <a href="https://savmrl.it/7hgSa"><img
                             src="/savmrl/images/badges/firefox.png" class="badge"/></a>
-                <a href="https://chromewebstore.google.com/detail/pkbjoeedhjjokllfhgcapbbihianeemn"><img
+                <a href="https://savmrl.it/cQi6A"><img
                             src="/savmrl/images/badges/chrome.png" class="badge"/></a>
                 <a href="https://microsoftedge.microsoft.com/addons/detail/jdgcfpdoiojfebhafmihkihficfnpahk"
                    class="hidden"><img src="/savmrl/images/badges/ms-edge.png" class="badge"/></a>

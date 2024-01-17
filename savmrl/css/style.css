@@ -57,10 +57,17 @@ footer * {
     font-family: 'basic', sans-serif;
 }
 
+body {
+    background-color: #00A7AA;
+}
+
 main {
     position: relative;
     margin: 0px;
     margin-top: 130px;
+    margin-left: -8px;
+    margin-right: -8px;
+    background-color: #eeeeee;
     padding: 100px 50px;
     width: auto;
 }
