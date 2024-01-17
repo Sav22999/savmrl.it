@@ -24,7 +24,7 @@ If you like this project, leave a *Star* ⭐ to receive updates on your *GitHub 
 
 To support me, you can do a donation :smile: with **LiberaPay** or **PayPal**:
 
-<a href="https://liberapay.com/Sav22999/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> [<img src="./savmrl/badges/images/paypal.svg" width="160px"></img>](https://paypal.me/saveriomorelli)
+<a href="https://liberapay.com/Sav22999/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a> [<img src="./savmrl/images/badges/paypal.svg" width="160px"></img>](https://paypal.me/saveriomorelli)
 
 ### Screenshots
 
