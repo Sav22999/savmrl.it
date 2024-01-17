@@ -128,7 +128,7 @@ h3 {
     transition: var(--transition);
     position: absolute;
     top: 25px;
-    margin-left: -26px !important;
+    margin-left: -27px !important;
     margin-bottom: -4px;
 }
 
@@ -136,8 +136,9 @@ h3 {
     width: 30px;
     height: 30px;
     margin: -4px;
-    margin-left: -31px !important;
+    margin-left: -32px !important;
     margin-bottom: -7px;
+    margin-top: -7px !important;
 }
 
 .square-20px {
