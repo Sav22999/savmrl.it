@@ -130,6 +130,12 @@ function getGoodString($string)
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 }
 
+function isValidUrl($string)
+{
+    //return true -> it doesn't contain "https://www.savmrl.it, false -> otherwise
+    return (strpos($string, "https://www.savmrl.it") === false && strpos($string, "https://savmrl.it") === false );
+}
+
 function getIpAddress()
 {
     $ip_address = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : (isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : $_SERVER['REMOTE_ADDR']);
@@ -202,47 +208,50 @@ function insertNewRedirect($link)
         $ip_address = getIpAddress();
 
         $link_to_use = getGoodString($link);
+        if (isValidUrl($link)) {
+            while (!$foundUniqueValue && $attempts > 0) {
+                $newValue = generateRandomString(5);
 
-        while (!$foundUniqueValue && $attempts > 0) {
-            $newValue = generateRandomString(5);
+                // Snippet: SELECT * FROM `redirect_savmrl` WHERE `name` = '$newValue' FOR UPDATE
+                $query_select = "SELECT * FROM `redirect_savmrl` WHERE `name` = ? FOR UPDATE";
+                $stmt_select = $c->prepare($query_select);
+                $stmt_select->bind_param("s", $newValue);
+                $stmt_select->execute();
+                $result_select = $stmt_select->get_result();
+                $stmt_select->close();
 
-            // Snippet: SELECT * FROM `redirect_savmrl` WHERE `name` = '$newValue' FOR UPDATE
-            $query_select = "SELECT * FROM `redirect_savmrl` WHERE `name` = ? FOR UPDATE";
-            $stmt_select = $c->prepare($query_select);
-            $stmt_select->bind_param("s", $newValue);
-            $stmt_select->execute();
-            $result_select = $stmt_select->get_result();
-            $stmt_select->close();
+                if ($result_select->num_rows === 0) {
+                    if (filter_var($link_to_use, FILTER_VALIDATE_URL) !== false) {
+                        // nothing, the URL is valid
+                    } else {
+                        $c->rollback();
+                        $c->close();
+                        return "invalid_url";
+                    }
 
-            if ($result_select->num_rows === 0) {
-                if (filter_var($link_to_use, FILTER_VALIDATE_URL) !== false) {
-                    // nothing, the URL is valid
+                    // Snippet: INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, '$newValue', '$link_to_use', NULL, NULL, NULL, CURRENT_TIMESTAMP, '$ip_address')
+                    $query_insert = "INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, ?, ?, NULL, NULL, NULL, CURRENT_TIMESTAMP, ?)";
+                    $stmt_insert = $c->prepare($query_insert);
+                    $stmt_insert->bind_param("sss", $newValue, $link_to_use, $ip_address);
+                    $stmt_insert->execute();
+                    $stmt_insert->close();
+
+                    $c->commit();
+                    $foundUniqueValue = true;
+                    $value_to_return = $newValue;
                 } else {
+                    // The string already exists
                     $c->rollback();
-                    $c->close();
-                    return "invalid_url";
                 }
 
-                // Snippet: INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, '$newValue', '$link_to_use', NULL, NULL, NULL, CURRENT_TIMESTAMP, '$ip_address')
-                $query_insert = "INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, ?, ?, NULL, NULL, NULL, CURRENT_TIMESTAMP, ?)";
-                $stmt_insert = $c->prepare($query_insert);
-                $stmt_insert->bind_param("sss", $newValue, $link_to_use, $ip_address);
-                $stmt_insert->execute();
-                $stmt_insert->close();
-
-                $c->commit();
-                $foundUniqueValue = true;
-                $value_to_return = $newValue;
-            } else {
-                // The string already exists
-                $c->rollback();
+                $attempts--;
             }
-
-            $attempts--;
+            $c->query("UNLOCK TABLES");
+            $c->close();
+        } else {
+            $c->close();
+            return "invalid_url";
         }
-
-        $c->query("UNLOCK TABLES");
-        $c->close();
     }
 
     return $value_to_return;
