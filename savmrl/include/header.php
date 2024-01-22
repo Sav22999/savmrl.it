@@ -10,13 +10,17 @@ if (isset($title)) {
     echo "<title>savmrl.it</title>";
 }
 
-$title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a>"; //TODO : set manually
+$title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
 $seconds = 0; //TODO : set manually
 
 $url_opengraph = "https://www.savmrl.it/savmrl/images/banner.png";
 
+$redirect_table = "redirect_savmrl";
+$opened_table = "opened_savmrl";
+
 function getUrlFromName($name)
 {
+    global $redirect_table, $opened_table;
     $name_to_use = $name;
 
     $found = false;
@@ -29,8 +33,17 @@ function getUrlFromName($name)
             $c->set_charset("utf8");
 
             // Snippet: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
-            // Using prepared stataments -> the safest techniques to manage queries of a database
-            $query = "SELECT * FROM `redirect_savmrl` WHERE `name`=?";
+            // Using prepared statements -> the safest techniques to manage queries of a database
+            $query = "SELECT t1.*, t2.rows
+                 FROM `$redirect_table` AS t1 
+                 LEFT JOIN (
+                    SELECT name, COUNT(*) AS rows
+                    FROM `$opened_table`
+                    GROUP BY name
+                 ) AS t2 ON t1.name = t2.name
+                 WHERE t1.name = ? 
+                 AND (t1.limit_times IS NULL OR t2.rows IS NULL OR t2.rows < t1.limit_times)
+                 AND (t1.expiry_date IS NULL OR CURDATE() <= t1.expiry_date)";
             $stmt = $c->prepare($query);
             $stmt->bind_param("s", $name_to_use);
             $stmt->execute();
@@ -70,6 +83,7 @@ function getUrlFromName($name)
 
 function getStatistics($name)
 {
+    global $redirect_table, $opened_table;
     $name_to_use = $name;
 
     $found = false;
@@ -84,7 +98,7 @@ function getStatistics($name)
             $c->set_charset("utf8");
 
             // Snippet 1: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
-            $query_exists = "SELECT * FROM `redirect_savmrl` WHERE `name`=?";
+            $query_exists = "SELECT * FROM `$redirect_table` WHERE `name`=?";
             $stmt_exists = $c->prepare($query_exists);
             $stmt_exists->bind_param("s", $name_to_use);
             $stmt_exists->execute();
@@ -93,7 +107,7 @@ function getStatistics($name)
 
             if ($result_exists->num_rows > 0) {
                 // Snippet 2: SELECT COUNT(*) AS `count` FROM `opened_savmrl` WHERE `name`='$name_to_use'
-                $query_count = "SELECT COUNT(*) AS `count` FROM `opened_savmrl` WHERE `name`=?";
+                $query_count = "SELECT COUNT(*) AS `count` FROM `$opened_table` WHERE `name`=?";
                 $stmt_count = $c->prepare($query_count);
                 $stmt_count->bind_param("s", $name_to_use);
                 $stmt_count->execute();
@@ -133,7 +147,7 @@ function getGoodString($string)
 function isValidUrl($string)
 {
     //return true -> it doesn't contain "https://www.savmrl.it, false -> otherwise
-    return (strpos($string, "https://www.savmrl.it") === false && strpos($string, "https://savmrl.it") === false );
+    return (strpos($string, "https://www.savmrl.it") === false && strpos($string, "https://savmrl.it") === false);
 }
 
 function getIpAddress()
@@ -145,6 +159,7 @@ function getIpAddress()
 
 function redirectTo($name, $url, $seconds)
 {
+    global $redirect_table, $opened_table;
     if ($name !== false) {
         $name_to_use = $name;
 
@@ -155,7 +170,16 @@ function redirectTo($name, $url, $seconds)
             $c->set_charset("utf8");
 
             // Snippet 1: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
-            $query_select = "SELECT * FROM `redirect_savmrl` WHERE `name`=?";
+            $query_select = "SELECT t1.*, t2.rows
+                 FROM `$redirect_table` AS t1 
+                 LEFT JOIN (
+                    SELECT name, COUNT(*) AS rows
+                    FROM `$opened_table`
+                    GROUP BY name
+                 ) AS t2 ON t1.name = t2.name
+                 WHERE t1.name = ? 
+                 AND (t1.limit_times IS NULL OR t2.rows IS NULL OR t2.rows < t1.limit_times)
+                 AND (t1.expiry_date IS NULL OR CURDATE() <= t1.expiry_date)";
             $stmt_select = $c->prepare($query_select);
             $stmt_select->bind_param("s", $name_to_use);
             $stmt_select->execute();
@@ -164,7 +188,7 @@ function redirectTo($name, $url, $seconds)
 
             if ($result_select->num_rows > 0) {
                 // Snippet 2: INSERT INTO `opened_savmrl` (`id`, `name`, `ip_address`, `visited_timestamp`) VALUES (NULL, '$name_to_use', '$ip_address', CURRENT_TIMESTAMP);
-                $query_insert = "INSERT INTO `opened_savmrl` (`id`, `name`, `ip_address`, `visited_timestamp`) VALUES (NULL, ?, ?, CURRENT_TIMESTAMP)";
+                $query_insert = "INSERT INTO `$opened_table` (`id`, `name`, `ip_address`, `visited_timestamp`) VALUES (NULL, ?, ?, CURRENT_TIMESTAMP)";
                 $stmt_insert = $c->prepare($query_insert);
                 $stmt_insert->bind_param("ss", $name_to_use, $ip_address);
 
@@ -194,8 +218,9 @@ function generateRandomString($length = 5)
     return $randomString;
 }
 
-function insertNewRedirect($link)
+function insertNewRedirect($link, $openings, $date)
 {
+    global $redirect_table;
     $value_to_return = "error";
     $attempts = 20; //TODO : set manually the max attempts to do before to get error in case no strings is found
     global $localhost_db, $username_db, $password_db, $database_savmrl;
@@ -208,12 +233,14 @@ function insertNewRedirect($link)
         $ip_address = getIpAddress();
 
         $link_to_use = getGoodString($link);
+        $openings = isValidNumber($openings);
+        $date = isValidDate($date);
         if (isValidUrl($link)) {
             while (!$foundUniqueValue && $attempts > 0) {
                 $newValue = generateRandomString(5);
 
                 // Snippet: SELECT * FROM `redirect_savmrl` WHERE `name` = '$newValue' FOR UPDATE
-                $query_select = "SELECT * FROM `redirect_savmrl` WHERE `name` = ? FOR UPDATE";
+                $query_select = "SELECT * FROM `$redirect_table` WHERE `name` = ? FOR UPDATE";
                 $stmt_select = $c->prepare($query_select);
                 $stmt_select->bind_param("s", $newValue);
                 $stmt_select->execute();
@@ -230,9 +257,10 @@ function insertNewRedirect($link)
                     }
 
                     // Snippet: INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, '$newValue', '$link_to_use', NULL, NULL, NULL, CURRENT_TIMESTAMP, '$ip_address')
-                    $query_insert = "INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, ?, ?, NULL, NULL, NULL, CURRENT_TIMESTAMP, ?)";
+                    $query_insert = "INSERT INTO `$redirect_table` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, ?, ?, NULL, ?, ?, CURRENT_TIMESTAMP, ?)";
                     $stmt_insert = $c->prepare($query_insert);
-                    $stmt_insert->bind_param("sss", $newValue, $link_to_use, $ip_address);
+                    $stmt_insert->bind_param("ssiss", $newValue, $link_to_use, $openings, $date, $ip_address);
+
                     $stmt_insert->execute();
                     $stmt_insert->close();
 
@@ -257,9 +285,25 @@ function insertNewRedirect($link)
     return $value_to_return;
 }
 
+function isValidDate($date)
+{
+    $dateTime = DateTime::createFromFormat('Y-m-d', $date);
+    if ($dateTime !== false && array_sum(DateTime::getLastErrors()) === 0) {
+        return $dateTime->format('Y-m-d');
+    }
+    return null;
+}
+
+function isValidNumber($number)
+{
+    if (is_numeric($number) && $number > 0) {
+        return $number;
+    }
+    return null;
+}
+
 ?>
 
-<link rel="stylesheet" href="https://www.saveriomorelli.com/style/site.css"/>
 <link rel="stylesheet" href="/savmrl/css/style.css"/>
 <link rel="icon" href="/savmrl/images/icon.svg"/>
 <meta http-equiv="content-type" content="text/html; charset=UTF-16">

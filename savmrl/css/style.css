@@ -18,9 +18,77 @@
     src: url("/savmrl/font/victormono.ttf");
 }
 
+@font-face {
+    font-family: 'overpass';
+    src: url("/savmrl/font/overpass.ttf");
+}
+
+/*Imported from saveriomorelli.com/site.css*/
+:root {
+    --font-family: 'basic';
+    --font-family-mono: 'source';
+    --border-radius: 5px;
+    --transition: 0.5s;
+}
+
+* {
+    scrollbar-color: #00A7AA #ffffff;
+    scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: #ffffff; /* or add it to the track */
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #00A7AA;
+}
+
+body {
+    background-color: #eeeeee;
+    font-family: var(--font-family), sans-serif;
+    font-size: 18px;
+}
+
+footer {
+    color: white;
+    margin: -8px;
+    padding: 20px;
+}
+
+footer nav {
+    width: auto;
+    margin: 0px;
+    text-align: center;
+}
+
+footer nav a {
+    color: white;
+    transition: 0.5s;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 10px;
+}
+
+footer nav a:hover {
+    color: #66ccff;
+}
+
+a {
+    outline: none;
+    cursor: pointer;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/*End imported*/
+
 *, a {
     color: #00A7AA;
     font-size: 1em;
+    line-height: 1.3em;
     font-family: 'brilors', sans-serif;
 }
 
@@ -81,6 +149,7 @@ main {
     background-position: 0px center;
     background-repeat: no-repeat;
     background-size: 1.6em;
+    line-height: 2em;
 }
 
 h1 {
@@ -215,6 +284,27 @@ form#generate-link-form {
     position: relative;
 }
 
+input:focus, button:active, textarea:focus, input:active {
+    box-shadow: 0px 0px 0px 3px #74cfd0;
+    z-index: 99;
+}
+
+textarea, input {
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    font-family: inherit;
+    border: 1px solid #00A7AA;
+    background-color: #ffffff;
+    border-radius: var(--border-radius);
+    transition: 0.5s;
+    height: auto;
+    display: block;
+    box-sizing: border-box;
+    overflow: auto;
+    outline: none;
+}
+
 .input-link {
     width: 100%;
     box-sizing: border-box;
@@ -223,7 +313,60 @@ form#generate-link-form {
     font-size: 1.2em;
     border-radius: var(--border-radius);
     border: 1px solid #00A7AA;
+    color: #00A7AA;
     font-family: 'sourcecodepro', monospace;
+}
+
+.optional-param {
+    width: auto;
+    display: inline-block;
+    font-family: "overpass", serif;
+    padding: 2px;
+    margin: 0px 5px;
+    box-sizing: border-box;
+    background-color: inherit;
+    border: 0px solid transparent;
+    border-radius: 0px;
+    border-bottom: 2px solid #00A7AA;
+    background-image: url("/savmrl/images/edit.svg");
+    background-size: auto 60%;
+    background-position: right 2px center;
+    background-repeat: no-repeat;
+    text-align: center;
+    padding-right: 20px;
+    overflow: auto;
+}
+
+#opening_expiry {
+    width: 80px;
+}
+
+#opening_expiry:focus {
+    text-align: left;
+}
+
+#date_expiry {
+    width: 140px;
+}
+
+#date_expiry:focus {
+    text-align: left;
+}
+
+.optional-param:focus {
+    background-color: #ffffff;
+    border-bottom: 0px solid transparent;
+    border-radius: var(--border-radius);
+    background-image: none;
+    padding-right: 2px;
+}
+
+#advanced-params {
+    margin-top: 10px;
+}
+
+#advanced-params * {
+    line-height: 0.8em;
 }
 
 *::-webkit-input-placeholder { /*Chromium based: WebKit, Blink, etc.*/
@@ -243,12 +386,17 @@ form#generate-link-form {
     text-align: center;
     padding: 10px 20px;
     text-transform: none;
-    display: none;
+    display: inline-block;
     font-family: 'basic', sans-serif;
+    width: auto;
+    cursor: default;
+}
+#copy-link-button {
+    cursor: copy;
 }
 
-#copy-link-button, #another-link-button, #see-stats-button {
-    display: inline-block;
+#div-after-link {
+    display: none;
 }
 
 #generate-link-button:hover, #copy-link-button:hover, #another-link-button:hover, #see-stats-button:hover {

@@ -17,13 +17,15 @@
 </header>
 <main>
     <div class="horizontal-center">
-        <h2 class="title-section">Link doesn't exist</h2>
+        <h2 class="title-section">Link doesn't exist or has expired</h2>
         <div class="big-space"></div>
         <br>
         <p class="horizontal-center-p">
-            The shortened link you're looking for doesn't exist.
+            The shortened link you're looking for doesn't exist, or it's expired.
             <br>
-            Be sure the shortened link you used is correct or try again.
+            Be sure the shortened link you used is correct, is still valid<sup>*</sup> or try again.
+            <br><br>
+            <sup>*</sup> Invalid links could be because the link is not correct at all, or the limit of opening number times has achieved, or because it was valid until a specific datetime.
         </p>
     </div>
     <div class="ads-section">

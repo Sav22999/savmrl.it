@@ -10,6 +10,15 @@
     if (isset($_GET["link"]) && $_GET["link"] !== "") {
         $link_as_parameter = getGoodString($_GET["link"]);
     }
+
+    $expiry_date = "∞";
+    if (isset($_GET["date"]) && $_GET["date"] !== "∞" && $_GET["date"] !== "") {
+        $expiry_date = $_GET["date"];
+    }
+    $expiry_openings = "∞";
+    if (isset($_GET["openings"]) && $_GET["openings"] !== "∞" && $_GET["openings"] !== "") {
+        $expiry_openings = $_GET["openings"];
+    }
     ?>
     <title><?php echo $title; ?></title>
 </head>
@@ -25,8 +34,11 @@
         <div id="info-messages"></div>
         <?php
         $error = false;
-        if ($link_as_parameter !== "") {
-            $shortener_code = insertNewRedirect($link_as_parameter);
+        if ($expiry_date !== "∞" && isValidDate($expiry_date) === null) $error = true;
+        if ($expiry_openings !== "∞" && isValidNumber($expiry_openings) === null) $error = true;
+
+        if ($link_as_parameter !== "" && !$error) {
+            $shortener_code = insertNewRedirect($link_as_parameter, $expiry_openings, $expiry_date);
             if ($shortener_code !== "error" && $shortener_code !== "invalid_url") {
                 $shortened_url = "https://savmrl.it/" . $shortener_code;
                 ?>
@@ -39,7 +51,7 @@
                     </div>
 
                     <input id="copy-link-button" class="button-link" type="button" value="Copy the shortened link"
-                           onclick="copy_link()"/>
+                           onclick="copyLink()"/>
                     <input id="another-link-button" class="button-link" type="button" value="Generate another link"
                            onclick="location.href='/'"/>
                     <a href="/stats/?code=<?php echo $shortener_code; ?>">
@@ -54,8 +66,7 @@
             } else {
                 $error = true;
             }
-        }
-        if ($link_as_parameter === "" || $error) {
+        } else if ($link_as_parameter === "" || $error) {
             $hidden_or_not_class = "hidden-btn";
             if ($link_as_parameter !== "") $hidden_or_not_class = "";
             if ($error) {
@@ -69,12 +80,24 @@
             <form class="text-align-center" id="generate-link-form">
                 <input id="link-input" type="url" class="input-link" placeholder="Insert your link (URL) here!"
                        name="link"
-                       oninput="link_input()"
+                       oninput="linkInput()"
                        value="<?php echo $link_as_parameter; ?>"
                        required/>
-
-                <input id="generate-link-button" class="button-link <?php echo $hidden_or_not_class; ?>" type="submit"
-                       value="Generate shortener link"/>
+                <div id="div-after-link">
+                    <div id="advanced-params">
+                        The link espires after
+                        <input class="optional-param" id="opening_expiry" type="text" min="1" name="openings"
+                               value="<?php echo $expiry_openings; ?>" oninput="validateOpenings(this)"
+                               onblur="setInfinityNumber(this)"
+                               onfocus="checkInfinity(this);changeTypeTextToNumber(this)">
+                        openings <b>or</b> on
+                        <input class="optional-param" id="date_expiry" type="text" name="date"
+                               value="<?php echo $expiry_date; ?>" oninput="validateDate(this)"
+                               onblur="setInfinityDate(this)" onfocus="checkInfinity(this);changeTypeTextToDate(this)">
+                    </div>
+                    <input id="generate-link-button" class="button-link <?php echo $hidden_or_not_class; ?>"
+                           type="submit" value="Generate shortener link"/>
+                </div>
             </form>
             <div class="big-space"></div>
             <div class="big-space"></div>
@@ -93,30 +116,92 @@
     </div>
 
     <script>
-        function link_input() {
+        function linkInput() {
             let linkInput = document.getElementById("link-input");
-            let generateLinkButton = document.getElementById("generate-link-button");
-            if (linkInput.value.replaceAll(" ", "") === "") generateLinkButton.style.display = "none";
-            else generateLinkButton.style.display = "inline-block";
+            let divAfterLink = document.getElementById("div-after-link");
+            if (divAfterLink !== null) {
+                if (linkInput.value.replaceAll(" ", "") === "") divAfterLink.style.display = "none";
+                else divAfterLink.style.display = "block";
+            }
         }
 
-        function copy_link() {
+        function copyLink() {
             var linkInput = document.getElementById('link-input-to-copy');
+            var copyButton = document.getElementById('copy-link-button');
             linkInput.select();
             document.execCommand('copy');
             linkInput.setSelectionRange(0, 0);
 
-            let newMessage = document.createElement("p");
-            newMessage.classList.add("text-align-center", "info-message");
-            newMessage.textContent = "Shortener link copied in the clipboard correctly!";
-            let allMessages = document.getElementById("info-messages");
-            allMessages.appendChild(newMessage);
+            let previousText = copyButton.value;
+            copyButton.value = "✓ Link copied!";
             setTimeout(function () {
-                allMessages.removeChild(newMessage);
+                copyButton.value = previousText;
             }, 3000);
         }
 
-        if (document.getElementById("link-input") !== null && document.getElementById("generate-link-button") !== null) link_input();
+        function validateOpenings(input) {
+            let inputValue = input.value;
+            inputValue = inputValue.replace(/[^0-9∞]/g, '');
+            if (inputValue === '' || (inputValue !== '∞' && (isNaN(inputValue) || parseInt(inputValue) < 1))) {
+                //error
+            }
+            input.value = inputValue;
+        }
+
+        function setInfinityNumber(input) {
+            let inputValue = input.value;
+            if (input.type === "number") input.type = "text";
+            inputValue = inputValue.replace(/[^0-9∞]/g, '');
+            if (inputValue === '' || isNaN(inputValue) || parseInt(inputValue) < 1) {
+                input.value = '∞';
+            }
+            inputValue = input.value;
+
+            if (!isNaN(inputValue) && parseInt(inputValue) >= 1) {
+                input.value = parseInt(inputValue);
+                //console.log(`Correct number ${parseInt(inputValue)}`)
+            } else if (inputValue === "∞") {
+                //console.log("Not set openings limit");
+            } else {
+                //console.log(`Error: ${inputValue}`);
+            }
+        }
+
+        function changeTypeTextToNumber(input) {
+            if (input.type === "text") input.type = "number";
+            input.min = 1;
+        }
+
+        function validateDate(input) {
+            let inputValue = input.value;
+            if (inputValue === '' || inputValue !== '∞' && !isValidDate(inputValue)) {
+                //error
+            }
+            input.value = inputValue;
+        }
+
+        function setInfinityDate(input) {
+            let inputValue = input.value;
+            if (input.type === "date") input.type = "text";
+            if (inputValue === '' || inputValue !== '∞' && !isValidDate(inputValue)) {
+                input.value = '∞';
+            }
+        }
+
+        function isValidDate(value) {
+            return !isNaN(Date.parse(value));
+        }
+
+        function checkInfinity(input) {
+            if (input.value === "∞") input.value = "";
+        }
+
+        function changeTypeTextToDate(input) {
+            if (input.type === "text") input.type = "date";
+            input.min = new Date().toISOString().split('T')[0];
+        }
+
+        if (document.getElementById("link-input") !== null && document.getElementById("div-after-link") !== null) linkInput();
     </script>
 </main>
 <footer>
