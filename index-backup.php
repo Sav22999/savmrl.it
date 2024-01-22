@@ -1,6 +1,6 @@
 <html>
 <head>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header.php"); ?>
 
     <?php
     global $title_header;
@@ -45,7 +45,6 @@
                 <div class="text-align-center">
                     <input id="link-input-to-copy" class="input-link" type="url" placeholder="Copy this shortener link!"
                            value="<?php echo $shortened_url; ?>" readonly/>
-                    <button id="edit-link" onclick="editOrSaveLink(this)"></button>
 
                     <div class="text-align-center">
                         Redirect link: <a href="<?php echo $link_as_parameter; ?>"><?php echo $link_as_parameter; ?></a>
@@ -67,7 +66,9 @@
             } else {
                 $error = true;
             }
-        } else if ($link_as_parameter === "" || $error) {
+        }
+
+        if ($link_as_parameter === "" || $error) {
             $hidden_or_not_class = "hidden-btn";
             if ($link_as_parameter !== "") $hidden_or_not_class = "";
             if ($error) {
@@ -79,22 +80,13 @@
             }
             ?>
             <form class="text-align-center" id="generate-link-form">
-                <span id="basic-advanced-switcher">
-                    <span id="selected-switcher-option"></span>
-                    <span id="basic-switcher-option" class="option-switcher selected-option"
-                          onclick="changeBasicAdvanced('basic')">Basic</span>
-                    <span id="advanced-switcher-option" class="option-switcher"
-                          onclick="changeBasicAdvanced('advanced')">Advanced</span>
-                </span>
-                <br>
                 <input id="link-input" type="url" class="input-link" placeholder="Insert your link (URL) here!"
                        name="link"
                        oninput="linkInput()"
                        value="<?php echo $link_as_parameter; ?>"
                        required/>
                 <div id="div-after-link">
-                    <div id="advanced-params" class="hidden">
-                        <span>
+                    <div id="advanced-params">
                         The link expires after
                         <input class="optional-param" id="opening_expiry" type="text" min="1" name="openings"
                                value="<?php echo $expiry_openings; ?>" oninput="validateOpenings(this)"
@@ -104,7 +96,6 @@
                         <input class="optional-param" id="date_expiry" type="text" name="date"
                                value="<?php echo $expiry_date; ?>" oninput="validateDate(this)"
                                onblur="setInfinityDate(this)" onfocus="checkInfinity(this);changeTypeTextToDate(this)">
-                        </span>
                     </div>
                     <input id="generate-link-button" class="button-link <?php echo $hidden_or_not_class; ?>"
                            type="submit" value="Generate shortener link"/>
@@ -159,11 +150,11 @@
             input.value = inputValue;
         }
 
-        function setInfinityNumber(input, force = false) {
+        function setInfinityNumber(input) {
             let inputValue = input.value;
             if (input.type === "number") input.type = "text";
             inputValue = inputValue.replace(/[^0-9∞]/g, '');
-            if (inputValue === '' || isNaN(inputValue) || parseInt(inputValue) < 1 || force) {
+            if (inputValue === '' || isNaN(inputValue) || parseInt(inputValue) < 1) {
                 input.value = '∞';
             }
             inputValue = input.value;
@@ -191,10 +182,10 @@
             input.value = inputValue;
         }
 
-        function setInfinityDate(input, force = false) {
+        function setInfinityDate(input) {
             let inputValue = input.value;
             if (input.type === "date") input.type = "text";
-            if (inputValue === '' || inputValue !== '∞' && !isValidDate(inputValue) || force) {
+            if (inputValue === '' || inputValue !== '∞' && !isValidDate(inputValue)) {
                 input.value = '∞';
             }
         }
@@ -210,68 +201,6 @@
         function changeTypeTextToDate(input) {
             if (input.type === "text") input.type = "date";
             input.min = new Date().toISOString().split('T')[0];
-        }
-
-        function editOrSaveLink(button) {
-            let editImage = "https://www.savmrl.it/savmrl/images/edit.svg";
-            let saveImage = "https://www.savmrl.it/savmrl/images/save.svg";
-
-            let inputLink = document.getElementById("link-input-to-copy");
-
-            let computedStyle = window.getComputedStyle(button);
-            let backgroundImage = computedStyle.getPropertyValue('background-image');
-            let imageUrl = backgroundImage.match(/url\(['"]?(.*?)['"]?\)/)[1];
-
-            if (imageUrl === editImage || inputLink.readOnly) {
-                //edit link
-                button.style.backgroundImage = `url("${saveImage}")`;
-                inputLink.value = inputLink.value.replace("https://savmrl.it/", "");
-                inputLink.readOnly = false;
-                inputLink.focus();
-            } else {
-                //save link
-                //TODO
-                button.style.backgroundImage = `url("${editImage}")`;
-                inputLink.value = "https://savmrl.it/" + inputLink.value;
-                inputLink.readOnly = true;
-                inputLink.blur();
-            }
-        }
-
-        function changeBasicAdvanced(status) {
-            let basic = document.getElementById("basic-switcher-option");
-            let advanced = document.getElementById("advanced-switcher-option");
-
-            if (basic.classList.contains("selected-option")) basic.classList.remove("selected-option");
-            if (advanced.classList.contains("selected-option")) advanced.classList.remove("selected-option");
-
-            let selector = document.getElementById("selected-switcher-option");
-
-            if (status === "basic") {
-                basic.classList.add("selected-option");
-                selector.style.left = "2px";
-                selector.style.right = "80px";
-                showHideAdvanced("hide");
-            } else {
-                advanced.classList.add("selected-option");
-                selector.style.left = "50px";
-                selector.style.right = "2px";
-                showHideAdvanced("show");
-            }
-        }
-
-        function showHideAdvanced(status) {
-            let advancedContainer = document.getElementById("advanced-params");
-            if (status === "show") {
-                //show elements
-
-                if (advancedContainer.classList.contains("hidden")) advancedContainer.classList.remove("hidden");
-            } else {
-                //hide (if exists!)
-                setInfinityNumber(document.getElementById("opening_expiry"), true);
-                setInfinityDate(document.getElementById("date_expiry"), true);
-                advancedContainer.classList.add("hidden");
-            }
         }
 
         if (document.getElementById("link-input") !== null && document.getElementById("div-after-link") !== null) linkInput();

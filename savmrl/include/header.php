@@ -25,7 +25,6 @@ function getUrlFromName($name)
 
     $found = false;
     $invalid = false;
-    if (strlen($name_to_use) !== 5) $invalid = true;
 
     if (!$invalid) {
         global $localhost_db, $username_db, $password_db, $database_savmrl;
@@ -88,7 +87,6 @@ function getStatistics($name)
 
     $found = false;
     $invalid = true;
-    if (strlen($name_to_use) === 5) $invalid = false;
 
     if (!$invalid) {
         global $localhost_db, $username_db, $password_db, $database_savmrl;
@@ -283,6 +281,11 @@ function insertNewRedirect($link, $openings, $date)
     }
 
     return $value_to_return;
+}
+
+function customiseLink($old_name, $new_name)
+{
+
 }
 
 function isValidDate($date)

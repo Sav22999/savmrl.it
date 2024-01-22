@@ -10,13 +10,13 @@ if (isset($title)) {
     echo "<title>savmrl.it</title>";
 }
 
-$title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a> <span style='color: teal;font-family: serif'>αlpha</span>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
+$title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
 $seconds = 0; //TODO : set manually
 
 $url_opengraph = "https://www.savmrl.it/savmrl/images/banner.png";
 
-$redirect_table = "redirect_alpha_savmrl";
-$opened_table = "opened_alpha_savmrl";
+$redirect_table = "redirect_savmrl";
+$opened_table = "opened_savmrl";
 
 function getUrlFromName($name)
 {
@@ -25,6 +25,7 @@ function getUrlFromName($name)
 
     $found = false;
     $invalid = false;
+    if (strlen($name_to_use) !== 5) $invalid = true;
 
     if (!$invalid) {
         global $localhost_db, $username_db, $password_db, $database_savmrl;
@@ -87,6 +88,7 @@ function getStatistics($name)
 
     $found = false;
     $invalid = true;
+    if (strlen($name_to_use) === 5) $invalid = false;
 
     if (!$invalid) {
         global $localhost_db, $username_db, $password_db, $database_savmrl;
