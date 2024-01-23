@@ -29,7 +29,7 @@ function getUrlFromName($name)
     if (!$invalid) {
         global $localhost_db, $username_db, $password_db, $database_savmrl;
         if ($c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl)) {
-            $c->set_charset("utf8");
+            $c->set_charset("utf8mb4");
 
             // Snippet: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
             // Using prepared statements -> the safest techniques to manage queries of a database
@@ -93,10 +93,10 @@ function getStatistics($name)
 
         //Using prepared stataments -> it's the safest way for MySQL queries
         if ($c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl)) {
-            $c->set_charset("utf8");
+            $c->set_charset("utf8mb4");
 
             // Snippet 1: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
-            $query_exists = "SELECT * FROM `$redirect_table` WHERE `name`=?";
+            $query_exists = "SELECT * FROM `$redirect_table` WHERE `name` = ?";
             $stmt_exists = $c->prepare($query_exists);
             $stmt_exists->bind_param("s", $name_to_use);
             $stmt_exists->execute();
@@ -165,7 +165,7 @@ function redirectTo($name, $url, $seconds)
 
         global $localhost_db, $username_db, $password_db, $database_savmrl;
         if ($c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl)) {
-            $c->set_charset("utf8");
+            $c->set_charset("utf8mb4");
 
             // Snippet 1: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
             $query_select = "SELECT t1.*, t2.rows
@@ -225,7 +225,7 @@ function insertNewRedirect($link, $openings, $date)
 
     if ($c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl)) {
         $c->autocommit(false);
-        $c->set_charset("utf8");
+        $c->set_charset("utf8mb4");
 
         $foundUniqueValue = false;
         $ip_address = getIpAddress();
@@ -249,9 +249,9 @@ function insertNewRedirect($link, $openings, $date)
                     if (filter_var($link_to_use, FILTER_VALIDATE_URL) !== false) {
                         // nothing, the URL is valid
                     } else {
-                        $c->rollback();
-                        $c->close();
-                        return "invalid_url";
+                        //$c->rollback();
+                        //$c->close();
+                        //return "invalid_url";
                     }
 
                     // Snippet: INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, '$newValue', '$link_to_use', NULL, NULL, NULL, CURRENT_TIMESTAMP, '$ip_address')
@@ -259,7 +259,13 @@ function insertNewRedirect($link, $openings, $date)
                     $stmt_insert = $c->prepare($query_insert);
                     $stmt_insert->bind_param("ssiss", $newValue, $link_to_use, $openings, $date, $ip_address);
 
-                    $stmt_insert->execute();
+                    if ($stmt_insert->execute()) {
+                        //successful
+                    } else {
+                        $c->rollback();
+                        $c->close();
+                        return "error";
+                    }
                     $stmt_insert->close();
 
                     $c->commit();
