@@ -76,7 +76,7 @@
 
         <h3>10. License</h3>
         <p class="horizontal-center-p basic text-align-justify">
-            The license used for this project is the <a href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License version 2.0.</a>.
+            The license used for this project is the <a href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License version 2.0</a>.
         </p>
 
         <p class="horizontal-center-p basic text-align-justify">

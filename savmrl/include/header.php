@@ -86,7 +86,7 @@ function getStatistics($name)
     $name_to_use = $name;
 
     $found = false;
-    $invalid = true;
+    $invalid = false;
 
     if (!$invalid) {
         global $localhost_db, $username_db, $password_db, $database_savmrl;
