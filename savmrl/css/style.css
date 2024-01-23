@@ -363,19 +363,21 @@ input[readonly] {
 }
 .option-switcher {
     cursor: inherit;
-    line-height: 1em;
-    font-size: 13px;
+    line-height: 5px;
+    font-size: 16px;
     transition: var(--transition);
     width: auto;
     margin: 0px;
     color: #00A7AA;
     display: inline-block;
-    padding: 10px 10px 10px 10px;
+    padding: 12px;
     box-sizing: border-box;
-    height: 25px;
+    height: 30px;
     background-color: transparent;
     z-index: 4;
     position: relative;
+    font-weight: normal;
+    font-family: "basic", sans-serif;
 }
 .option-switcher:last-child {
     margin-left: -10px;
@@ -399,10 +401,10 @@ input[readonly] {
 
 .selected-option-basic {
     left: 2px;
-    right: 80px;
+    right: 85px;
 }
 .selected-option-advanced {
-    left: 50px;
+    left: 55px;
     right: 2px;
 }
 
@@ -500,7 +502,7 @@ input[readonly] {
     text-align: justify;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1100px) {
     .horizontal-center {
         width: 100%;
     }
@@ -516,6 +518,11 @@ input[readonly] {
 
     #addons {
         display: none;
+    }
+
+    #title-page-with-icon {
+        padding-left: 0em;
+        background-image: none;
     }
 }
 
