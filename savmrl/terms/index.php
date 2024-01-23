@@ -74,6 +74,11 @@
                     href="http://saveriomorelli.com/contact-me/">here</a>.
         </p>
 
+        <h3>10. License</h3>
+        <p class="horizontal-center-p basic text-align-justify">
+            The license used for this project is the <a href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License version 2.0.</a>.
+        </p>
+
         <p class="horizontal-center-p basic text-align-justify">
             By using the savmrl.it shortener service, you acknowledge that you have read, understood, and agreed to
             these terms and conditions.
