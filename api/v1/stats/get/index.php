@@ -2,11 +2,12 @@
 include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/credentials.php");
 global $redirect_table, $opened_table, $localhost_db, $username_db, $password_db, $database_savmrl;
 header("Content-Type:application/json");
-$post = json_decode(file_get_contents('php://input'), true);
+//$request = json_decode(file_get_contents('php://input'), true); //POST request
+$request = $_GET; //GET request
 
-$condition = isset($post["name"]);
+$condition = isset($request["name"]);
 if ($condition) {
-    $name_to_use = $post["name"];
+    $name_to_use = $request["name"];
 
     $found = false;
     $invalid = false;
