@@ -13,11 +13,6 @@ if (isset($title)) {
 $title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
 $seconds = 0; //TODO : set manually
 
-$url_opengraph = "https://www.savmrl.it/savmrl/images/banner.png";
-
-$redirect_table = "redirect_savmrl";
-$opened_table = "opened_savmrl";
-
 function getUrlFromName($name)
 {
     global $redirect_table, $opened_table;
@@ -33,19 +28,16 @@ function getUrlFromName($name)
 
             // Snippet: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
             // Using prepared statements -> the safest techniques to manage queries of a database
-            $query = "SELECT t1.*, t2.rows
-                 FROM `$redirect_table` AS t1 
-                 LEFT JOIN (
-                    SELECT name, COUNT(*) AS rows
-                    FROM `$opened_table`
-                    GROUP BY name
-                 ) AS t2 ON t1.name = t2.name
-                 WHERE t1.name = ? 
-                 AND (t1.limit_times IS NULL OR t2.rows IS NULL OR t2.rows < t1.limit_times)
-                 AND (t1.expiry_date IS NULL OR CURDATE() <= t1.expiry_date)";
+            $query = "SELECT t1.*, t2.rows FROM `$redirect_table` AS t1 LEFT JOIN (SELECT name, COUNT(*) AS rows FROM `$opened_table` GROUP BY name) AS t2 ON t1.name = t2.name WHERE t1.name = ? AND (t1.limit_times IS NULL OR t2.rows IS NULL OR t2.rows < t1.limit_times) AND (t1.expiry_date IS NULL OR CURDATE() <= t1.expiry_date)";
             $stmt = $c->prepare($query);
             $stmt->bind_param("s", $name_to_use);
-            $stmt->execute();
+            if ($stmt->execute()) {
+                //successful
+            } else {
+                $stmt->close();
+                $c->close();
+                return "invalid";
+            }
             $result = $stmt->get_result();
             $stmt->close();
 
@@ -249,9 +241,9 @@ function insertNewRedirect($link, $openings, $date)
                     if (filter_var($link_to_use, FILTER_VALIDATE_URL) !== false) {
                         // nothing, the URL is valid
                     } else {
-                        //$c->rollback();
-                        //$c->close();
-                        //return "invalid_url";
+                        $c->rollback();
+                        $c->close();
+                        return "invalid_url";
                     }
 
                     // Snippet: INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, '$newValue', '$link_to_use', NULL, NULL, NULL, CURRENT_TIMESTAMP, '$ip_address')
@@ -312,25 +304,3 @@ function isValidNumber($number)
 }
 
 ?>
-
-<link rel="stylesheet" href="/savmrl/css/style.css"/>
-<link rel="icon" href="/savmrl/images/icon.svg"/>
-<meta http-equiv="content-type" content="text/html; charset=UTF-16">
-<meta name="viewport" content="width=device-width, initial-scale=0.8"/>
-
-<meta property="og:locale" content="en"/>
-<meta property="og:type" content="website"/>
-<meta property="og:title" content="savmrl.it"/>
-<meta property="og:description"
-      content="The best anonymous and free link shortener"/>
-<meta property="og:url" content="https://www.savmrl.it"/>
-<meta property="og:site_name" content="savmrl.it"/>
-<meta property="og:image" content="<?php echo $url_opengraph; ?>"/>
-<meta property="og:image:secure_url" content="<?php echo $url_opengraph; ?>"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:description"
-      content="The best anonymous and free link shortener"/>
-<meta name="twitter:title" content="savmrl.it"/>
-<meta name="twitter:site" content="@Sav22999"/>
-<meta name="twitter:image" content="<?php echo $url_opengraph; ?>"/>
-<meta name="twitter:creator" content="@Sav22999"/>

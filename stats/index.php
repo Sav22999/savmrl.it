@@ -1,6 +1,7 @@
 <html>
 <head>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta.php"); ?>
 
     <?php
     global $title_header, $seconds;
