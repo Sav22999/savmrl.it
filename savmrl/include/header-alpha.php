@@ -83,6 +83,9 @@ function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false)
                         //no access code required
                     }
 
+                    if ($is_protected) {
+                        $url = decryptTextWithPassword($url, $accessCode);
+                    }
                     if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
                         $c->close();
                         return $url;
@@ -244,6 +247,27 @@ function generateRandomString($length = 5)
     return $randomString;
 }
 
+function deriveKeyFromPassword($password, $salt, $keyLength = 32, $iterations = 10000, $algorithm = 'sha256') {
+    return hash_pbkdf2($algorithm, $password, $salt, $iterations, $keyLength, true);
+}
+
+function encryptTextWithPassword($text, $password) {
+    $salt = openssl_random_pseudo_bytes(16); // Generate a random salt
+    $key = deriveKeyFromPassword($password, $salt);
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+    $encryptedText = openssl_encrypt($text, 'aes-256-cbc', $key, 0, $iv);
+    return base64_encode($salt . $iv . $encryptedText);
+}
+
+function decryptTextWithPassword($encryptedText, $password) {
+    $decoded = base64_decode($encryptedText);
+    $salt = substr($decoded, 0, 16);
+    $iv = substr($decoded, 16, openssl_cipher_iv_length('aes-256-cbc'));
+    $encryptedText = substr($decoded, 16 + openssl_cipher_iv_length('aes-256-cbc'));
+    $key = deriveKeyFromPassword($password, $salt);
+    return openssl_decrypt($encryptedText, 'aes-256-cbc', $key, 0, $iv);
+}
+
 function insertNewRedirect($link, $openings = null, $date = null, $access_code = null)
 {
     global $redirect_table;
@@ -258,8 +282,8 @@ function insertNewRedirect($link, $openings = null, $date = null, $access_code =
         $foundUniqueValue = false;
         $ip_address = getIpAddress();
 
-        $link_to_use = getGoodString($link);
         $access_code_to_use = null;
+        $link_to_use = getGoodString($link);
         if ($access_code !== null && $access_code !== "") {
             $access_code_to_use = hash('sha512', $access_code);
         }
@@ -284,6 +308,11 @@ function insertNewRedirect($link, $openings = null, $date = null, $access_code =
                         $c->rollback();
                         $c->close();
                         return "invalid_url";
+                    }
+
+                    if ($access_code !== null && $access_code !== "") {
+                        //encrypt the link
+                        $link_to_use = encryptTextWithPassword($link, $access_code);
                     }
 
                     // Snippet: INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, '$newValue', '$link_to_use', NULL, NULL, NULL, CURRENT_TIMESTAMP, '$ip_address')

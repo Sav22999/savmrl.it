@@ -143,13 +143,13 @@
                 }
 
                 function onsubmit_link(form) {
-                    const baseUrl = "./";
+                    const baseUrl = "./index-alpha.php";
                     const openingExpiry = document.getElementById('opening_expiry');
                     const dateExpiry = document.getElementById('date_expiry');
                     const link = document.getElementById('link-input');
                     const accessCode = document.getElementById('access_code');
 
-                    form.action = `${baseUrl}?openings=${encodeURIComponent(openingExpiry.value)}&date=${encodeURIComponent(dateExpiry.value)}&link=${encodeURIComponent(link.value)}`;
+                    form.action = `${baseUrl}?advanced&openings=${encodeURIComponent(openingExpiry.value)}&date=${encodeURIComponent(dateExpiry.value)}&link=${encodeURIComponent(link.value)}`;
                     openingExpiry.name = "";
                     dateExpiry.name = "";
                     link.name = "";
