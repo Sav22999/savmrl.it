@@ -335,9 +335,11 @@ textarea, input {
     position: relative;
     z-index: 100 !important;
 }
+
 #edit-link:hover {
     background-color: rgba(116, 207, 208, 0.2);
 }
+
 #edit-link:active {
     background-color: rgba(116, 207, 208, 0.5);
 }
@@ -361,6 +363,7 @@ input[readonly] {
     z-index: 0;
     margin-bottom: 10px;
 }
+
 .option-switcher {
     cursor: inherit;
     line-height: 5px;
@@ -379,6 +382,7 @@ input[readonly] {
     font-weight: normal;
     font-family: "basic", sans-serif;
 }
+
 .option-switcher:last-child {
     margin-left: -10px;
 }
@@ -403,6 +407,7 @@ input[readonly] {
     left: 2px;
     right: 85px;
 }
+
 .selected-option-advanced {
     left: 55px;
     right: 2px;
@@ -428,6 +433,23 @@ input[readonly] {
     overflow: auto;
 }
 
+#access-code {
+    /*for access_code redirecting*/
+    width: 40%;
+    display: inline-block;
+    height: auto;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    box-sizing: border-box;
+    background-image: none;
+}
+#access_code {
+    /*for index*/
+    width: 200px;
+    display: inline-block;
+    background-image: none;
+}
+
 #opening_expiry {
     width: 80px;
 }
@@ -446,10 +468,11 @@ input[readonly] {
 
 .optional-param:focus {
     background-color: #ffffff;
-    border-bottom: 0px solid transparent;
+    border-bottom: 2px solid transparent;
     border-radius: var(--border-radius);
     background-image: none;
     padding-right: 2px;
+    text-align: left;
 }
 
 #advanced-params {
@@ -464,7 +487,7 @@ input[readonly] {
     color: #74cfd0;
 }
 
-#generate-link-button, #copy-link-button, #another-link-button, #see-stats-button {
+#generate-link-button, #go-to-link-button, #copy-link-button, #another-link-button, #see-stats-button {
     font-size: 1.2em;
     border-radius: var(--border-radius);
     border: 1px solid #00A7AA;
@@ -482,6 +505,7 @@ input[readonly] {
     width: auto;
     cursor: default;
 }
+
 #copy-link-button {
     cursor: copy;
 }
@@ -490,7 +514,7 @@ input[readonly] {
     display: none;
 }
 
-#generate-link-button:hover, #copy-link-button:hover, #another-link-button:hover, #see-stats-button:hover {
+#generate-link-button:hover, #copy-link-button:hover, #another-link-button:hover, #see-stats-button:hover, .button-link:hover {
     opacity: 1;
 }
 

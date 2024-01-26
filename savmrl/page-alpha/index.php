@@ -1,6 +1,6 @@
 <html>
 <head>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php"); ?>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta.php"); ?>
 
     <?php
@@ -13,6 +13,8 @@
     $name = end($url_segments);*/
 
     $name = substr($_SERVER['REQUEST_URI'], 1);
+
+    $name = substr($_SERVER['REQUEST_URI'], 19);//TODO: remove this
 
     $redirect_url = getUrlFromName($name, false, false);
     $title = "Redirecting - " . $redirect_url;

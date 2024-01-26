@@ -10,8 +10,11 @@ if (isset($title)) {
     echo "<title>savmrl.it</title>";
 }
 
-$title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
+$title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a> <span style='color: teal;font-family: serif'>αlpha</span>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
 $seconds = 0; //TODO : set manually
+
+$redirect_table = "redirect_alpha_savmrl";
+$opened_table = "opened_alpha_savmrl";
 
 function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false)
 {
