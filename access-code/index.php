@@ -52,7 +52,7 @@
             echo $redirect_url;
 
             if ($redirect_url !== "access_code_wrong" && $redirect_url !== "access_code_required") {
-                redirectTo(false, "/", 10);
+                redirectTo(false, "/", 0);
             }
 
             //Access code
