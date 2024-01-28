@@ -173,12 +173,22 @@
     </div>
 
     <script>
+
+
         function linkInput() {
             let linkInput = document.getElementById("link-input");
             let divAfterLink = document.getElementById("div-after-link");
             if (divAfterLink !== null) {
                 if (linkInput.value.replaceAll(" ", "") === "") divAfterLink.style.display = "none";
                 else divAfterLink.style.display = "block";
+            }
+
+            if (linkInput.classList.contains("basic")) linkInput.classList.remove("basic");
+            if (linkInput.classList.contains("sourcecodepro")) linkInput.classList.remove("sourcecodepro");
+            if (linkInput.value === "") {
+                linkInput.classList.add("basic");
+            } else {
+                linkInput.classList.add("sourcecodepro");
             }
         }
 

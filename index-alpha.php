@@ -180,6 +180,14 @@
                 if (linkInput.value.replaceAll(" ", "") === "") divAfterLink.style.display = "none";
                 else divAfterLink.style.display = "block";
             }
+
+            if (linkInput.classList.contains("basic")) linkInput.classList.remove("basic");
+            if (linkInput.classList.contains("sourcecodepro")) linkInput.classList.remove("sourcecodepro");
+            if (linkInput.value === "") {
+                linkInput.classList.add("basic");
+            } else {
+                linkInput.classList.add("sourcecodepro");
+            }
         }
 
         function copyLink() {
