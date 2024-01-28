@@ -317,6 +317,7 @@
                 //hide (if exists!)
                 setInfinityNumber(document.getElementById("opening_expiry"), true);
                 setInfinityDate(document.getElementById("date_expiry"), true);
+                document.getElementById("access_code").value = "";
                 advancedContainer.classList.add("hidden");
             }
         }

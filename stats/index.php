@@ -37,6 +37,7 @@
                 was valid until a specific datetime.
             </p>
             <?php
+            redirectTo(false, "/", 10);
         } else if ($n_clicks === "invalid" || $redirect_link === "invalid") {
             ?>
             <title>savmrl.it - Page not exists</title>
@@ -48,6 +49,7 @@
                 or try again.
             </p>
             <?php
+            redirectTo(false, "/", 10);
         } else if ($n_clicks === "?" || $redirect_link === "?") {
             redirectTo(false, "/", 0);
         } else {
