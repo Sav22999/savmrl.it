@@ -49,8 +49,6 @@
             <?php
             redirectTo($name, $redirect_url, $seconds);
         } else {
-            echo $redirect_url;
-
             if ($redirect_url !== "access_code_wrong" && $redirect_url !== "access_code_required") {
                 redirectTo(false, "/", 0);
             }

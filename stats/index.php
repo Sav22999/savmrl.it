@@ -13,11 +13,6 @@
     $n_clicks = getStatistics($name);
     $redirect_link = getUrlFromName($name);
     $title = "savmrl.it - Statistics";
-
-
-    if ($n_clicks === "not_exists" || $redirect_link === "not_exists") redirectTo(false, "/page-not-exists/", 0);
-    else if ($n_clicks === "invalid" || $redirect_link === "invalid") redirectTo(false, "/invalid/", 0);
-    else if ($n_clicks === "?" || $redirect_link === "?") redirectTo(false, "/", 0);
     ?>
     <title><?php echo $title; ?></title>
 </head>
@@ -28,14 +23,46 @@
 </header>
 <main>
     <div class="horizontal-center">
-        <h2 class="title-section">Statistics<br>
-            <a href="<?php echo "https://savmrl.it/" . $name; ?>"><?php echo "https://savmrl.it/" . $name; ?></a>
-        </h2>
-        <h1 class="subtitle-section no-bold font-small"><?php echo $n_clicks; ?></h1>
-        <br class="big-space">
-        <br>
-        <br>
-        <p class="text-align-center">This is the times number this link has been opened.</p>
+        <?php
+        if ($n_clicks === "not_exists" || $redirect_link === "not_exists") {
+            ?>
+            <title>savmrl.it - Page not exists</title>
+            <h2 class="title-section">Link doesn't exist or has expired</h2>
+            <div class="big-space"></div>
+            <br>
+            <p class="horizontal-center-p">
+                The shortened link you're looking for doesn't exist, or it's expired.<br>Be sure the shortened link you
+                used is correct, is still valid<sup>*</sup> or try again.<br><br><sup>*</sup> Invalid links could be
+                because the link is not correct at all, or the limit of opening number times has achieved, or because it
+                was valid until a specific datetime.
+            </p>
+            <?php
+        } else if ($n_clicks === "invalid" || $redirect_link === "invalid") {
+            ?>
+            <title>savmrl.it - Page not exists</title>
+            <h2 class="title-section">Invalid link</h2>
+            <div class="big-space"></div>
+            <br>
+            <p class="horizontal-center-p">
+                The shortened link you provided is <b>not</b> valid.<br>Be sure the shortened link you used is correct
+                or try again.
+            </p>
+            <?php
+        } else if ($n_clicks === "?" || $redirect_link === "?") {
+            redirectTo(false, "/", 0);
+        } else {
+            ?>
+            <h2 class="title-section">Statistics<br>
+                <a href="<?php echo "https://savmrl.it/" . $name; ?>"><?php echo "https://savmrl.it/" . $name; ?></a>
+            </h2>
+            <h1 class="subtitle-section no-bold font-small"><?php echo $n_clicks; ?></h1>
+            <br class="big-space">
+            <br>
+            <br>
+            <p class="text-align-center">This is the times number this link has been opened.</p>
+            <?php
+        }
+        ?>
     </div>
     <div class="ads-section">
     </div>

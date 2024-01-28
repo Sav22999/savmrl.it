@@ -88,7 +88,7 @@
             <form class="text-align-center" id="generate-link-form" onsubmit="onsubmit_link(this)">
                 <?php
                 $is_advanced = false;
-                if ($expiry_openings !== "∞" || $expiry_date !== "∞" || (isset($_GET["advanced"]))) {
+                if ($expiry_openings !== "∞" || $expiry_date !== "∞" || $access_code !== "" || (isset($_GET["advanced"]))) {
                     $is_advanced = true;
                 }
                 ?>
