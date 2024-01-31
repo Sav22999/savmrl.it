@@ -253,7 +253,7 @@
                     const dateExpiry = document.getElementById('date_expiry');
                     const link = document.getElementById('link-input');
 
-                    form.action = `${baseUrl}?&openings=${encodeURIComponent(openingExpiry.value)}&date=${encodeURIComponent(dateExpiry.value)}&link=${encodeURIComponent(link.value)}`;
+                    form.action = `${baseUrl}?openings=${encodeURIComponent(openingExpiry.value)}&date=${encodeURIComponent(dateExpiry.value)}&link=${encodeURIComponent(link.value)}`;
                     openingExpiry.name = "";
                     dateExpiry.name = "";
                     link.name = "";
