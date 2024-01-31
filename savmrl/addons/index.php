@@ -27,7 +27,7 @@
         </p>
         <div class="big-space"></div>
         <div class="big-space"></div>
-        <p class="basic text-center">
+        <p class="basic text-align-center">
             <br>
             Install the web browser add-on
             <br>
