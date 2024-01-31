@@ -50,9 +50,9 @@
                 <p class="text-align-center hidden" id="message">
                 </p>
                 <div class="text-align-center" id="copy-link-container">
-                    <input id="link-input-to-copy" class="input-link" type="url"
-                           placeholder="Copy this shortener link!"
-                           value="<?php echo $shortened_url; ?>" oninput="validateName(this)" readonly/>
+                    <input id="link-input-to-copy" class="input-link" type="url" placeholder="Copy this shortener link!"
+                           value="<?php echo $shortened_url; ?>" onkeydown="onkeydown_enter(event)"
+                           oninput="validateName(this)" readonly/>
                     <input type="button" id="edit-link" onclick="editOrSaveLink(this)">
 
                     <div class="text-align-center">
@@ -89,6 +89,12 @@
                         }
 
                         this.value = getValidatedNewName(this.value);
+                    }
+
+                    function onkeydown_enter(event) {
+                        if (event.key === "Enter") {
+                            editOrSaveLink(document.getElementById("edit-link"));
+                        }
                     }
 
                     function onsubmit_newName(old_name, new_name) {
