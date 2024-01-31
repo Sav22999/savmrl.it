@@ -1,14 +1,6 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/credentials.php");
-global $localhost_db, $password_db, $database_savmrl, $username_db;
-
-global $title;
-if (isset($title)) {
-    echo "<title>" . $title . "</title>";
-} else {
-    $title = "?";
-    echo "<title>savmrl.it</title>";
-}
+global $localhost_db, $password_db, $database_savmrl, $username_db, $title;
 
 $title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
 $seconds = 0; //TODO : set manually

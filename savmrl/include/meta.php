@@ -22,3 +22,13 @@ $url_opengraph = "https://www.savmrl.it/savmrl/images/banner.png";
 <meta name="twitter:site" content="@Sav22999"/>
 <meta name="twitter:image" content="<?php echo $url_opengraph; ?>"/>
 <meta name="twitter:creator" content="@Sav22999"/>
+
+<?php
+global $title;
+if (isset($title)) {
+    echo "<title>" . $title . "</title>";
+} else {
+    $title = "?";
+    echo "<title>savmrl.it</title>";
+}
+?>

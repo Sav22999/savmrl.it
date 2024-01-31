@@ -261,6 +261,10 @@ h3 {
     background-color: #00A7AA;
 }
 
+.error-message *, .info-message * {
+    color: inherit;
+}
+
 .big-space {
     height: 20px;
     width: 0px;

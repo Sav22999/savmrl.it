@@ -31,9 +31,9 @@
             <br>
             Install the web browser add-on
             <br>
-            <a href="https://savmrl.it/7hgSa"><img src="/savmrl/images/badges/firefox.png" class="badge"/></a>
-            <a href="https://savmrl.it/cQi6A"><img src="/savmrl/images/badges/chrome.png" class="badge"/></a>
-            <a href="https://savmrl.it/90utg"><img src="/savmrl/images/badges/ms-edge.png" class="badge"/></a>
+            <a href="https://savmrl.it/firefox"><img src="/savmrl/images/badges/firefox.png" class="badge"/></a>
+            <a href="https://savmrl.it/chrome"><img src="/savmrl/images/badges/chrome.png" class="badge"/></a>
+            <a href="https://savmrl.it/edge"><img src="/savmrl/images/badges/ms-edge.png" class="badge"/></a>
         </p>
     </div>
     <div class="ads-section">

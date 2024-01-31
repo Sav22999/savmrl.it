@@ -24,7 +24,7 @@
 <main>
     <div class="horizontal-center">
         <?php
-        if ($n_clicks === "not_exists" || $redirect_link === "not_exists") {
+        if ($n_clicks === "not_exists" && $redirect_link === "not_exists") {
             ?>
             <title>savmrl.it - Page not exists</title>
             <h2 class="title-section">Link doesn't exist or has expired</h2>
@@ -38,7 +38,7 @@
             </p>
             <?php
             redirectTo(false, "/", 10);
-        } else if ($n_clicks === "invalid" || $redirect_link === "invalid") {
+        } else if ($n_clicks === "invalid" && $redirect_link === "invalid") {
             ?>
             <title>savmrl.it - Page not exists</title>
             <h2 class="title-section">Invalid link</h2>
@@ -50,7 +50,7 @@
             </p>
             <?php
             redirectTo(false, "/", 10);
-        } else if ($n_clicks === "?" || $redirect_link === "?") {
+        } else if ($n_clicks === "?" && $redirect_link === "?") {
             redirectTo(false, "/", 0);
         } else {
             ?>

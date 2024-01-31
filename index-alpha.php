@@ -47,13 +47,17 @@
             if ($shortener_code !== "error" && $shortener_code !== "invalid_url") {
                 $shortened_url = "https://savmrl.it/" . $shortener_code;
                 ?>
-                <div class="text-align-center">
-                    <input id="link-input-to-copy" class="input-link" type="url" placeholder="Copy this shortener link!"
-                           value="<?php echo $shortened_url; ?>" readonly/>
-                    <!--<button id="edit-link" class="hidden" onclick="editOrSaveLink(this)"></button>-->
+                <p class="text-align-center hidden" id="message">
+                </p>
+                <div class="text-align-center" id="copy-link-container">
+                    <input id="link-input-to-copy" class="input-link" type="url"
+                           placeholder="Copy this shortener link!"
+                           value="<?php echo $shortened_url; ?>" oninput="validateName(this)" readonly/>
+                    <input type="button" id="edit-link" onclick="editOrSaveLink(this)">
 
                     <div class="text-align-center">
-                        Redirect link: <a href="<?php echo $link_as_parameter; ?>"><?php echo $link_as_parameter; ?></a>
+                        Redirect link: <a
+                                href="<?php echo $link_as_parameter; ?>"><?php echo $link_as_parameter; ?></a>
                     </div>
 
                     <input id="copy-link-button" class="button-link" type="button" value="Copy the shortened link"
@@ -61,13 +65,114 @@
                     <input id="another-link-button" class="button-link" type="button" value="Generate another link"
                            onclick="location.href='/'"/>
                     <a href="/stats/?code=<?php echo $shortener_code; ?>">
-                        <input id="see-stats-button" class="button-link" type="button" value="See click statistics"/>
+                        <input id="see-stats-button" class="button-link" type="button"
+                               value="See click statistics"/>
                     </a>
+                    <div id="additional_params" class=""></div>
                 </div>
                 <div class="text-align-center margin-top-10px">
                     <img id="qrcode"
                          src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=<?php echo $shortened_url; ?>"/>
                 </div>
+
+                <script>
+                    let global_old_name = "<?php echo $shortener_code; ?>";
+
+                    let inputCopy = document.getElementById("link-input-to-copy");
+                    document.getElementById("link-input-to-copy").oninput = function () {
+                        if (inputCopy.classList.contains("basic")) inputCopy.classList.remove("basic");
+                        if (inputCopy.classList.contains("sourcecodepro")) inputCopy.classList.remove("sourcecodepro");
+                        if (inputCopy.value === "") {
+                            inputCopy.classList.add("basic");
+                        } else {
+                            inputCopy.classList.add("sourcecodepro");
+                        }
+
+                        this.value = getValidatedNewName(this.value);
+                    }
+
+                    function onsubmit_newName(old_name, new_name) {
+                        let data = {
+                            new_name: getValidatedNewName(new_name),
+                            old_name: getValidatedNewName(old_name)
+                        };
+
+                        fetch('https://www.savmrl.it/api/v1/link/edit/', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json',},
+                            body: JSON.stringify(data),
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                console.log(result.code);
+                                if (document.getElementById("message").classList.contains("hidden")) {
+                                    document.getElementById("message").classList.remove("hidden");
+                                }
+                                if (document.getElementById("message").classList.contains("error-message")) {
+                                    document.getElementById("message").classList.remove("error-message");
+                                }
+                                if (document.getElementById("message").classList.contains("info-message")) {
+                                    document.getElementById("message").classList.remove("info-message");
+                                }
+                                if (result.code === "200") {
+                                    global_old_name = getValidatedNewName(new_name);
+                                    document.getElementById("message").classList.add("info-message");
+                                    document.getElementById("message").innerHTML = `Link renamed correctly from <b>${result.data.old_name}</b> to <b>${result.data.new_name}</b>`;
+                                } else {
+                                    document.getElementById("message").classList.add("error-message");
+                                    document.getElementById("message").innerHTML = `Error (<b>${result.code}</b>): <i>${result.description}</i>`;
+                                    document.getElementById("link-input-to-copy").value = "https://savmrl.it/" + global_old_name;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+
+                                document.getElementById("link-input-to-copy").value = "https://savmrl.it/" + global_old_name;
+                            });
+                    }
+
+                    function editOrSaveLink(button) {
+                        let editImage = "https://www.savmrl.it/savmrl/images/edit.svg";
+                        let saveImage = "https://www.savmrl.it/savmrl/images/save.svg";
+
+                        let inputLink = document.getElementById("link-input-to-copy");
+
+                        let computedStyle = window.getComputedStyle(button);
+                        let backgroundImage = computedStyle.getPropertyValue('background-image');
+                        let imageUrl = backgroundImage.match(/url\(['"]?(.*?)['"]?\)/)[1];
+
+                        if (imageUrl === editImage || inputLink.readOnly) {
+                            //edit link
+                            button.style.backgroundImage = `url("${saveImage}")`;
+                            inputLink.value = inputLink.value.replace("https://savmrl.it/", "");
+                            inputLink.readOnly = false;
+                            inputLink.focus();
+                        } else {
+                            //save link
+                            //TODO
+                            button.style.backgroundImage = `url("${editImage}")`;
+                            let new_name = getValidatedNewName(inputLink.value);
+                            inputLink.value = inputLink.value.replace("https://savmrl.it/", "");
+                            inputLink.value = "https://savmrl.it/" + inputLink.value;
+                            inputLink.readOnly = true;
+                            inputLink.blur();
+
+                            if (global_old_name !== new_name) {
+                                onsubmit_newName(global_old_name, new_name);
+                            }
+                        }
+                    }
+
+                    function getValidatedNewName(new_name) {
+                        // Replace any characters that are not 0-9, a-z, A-Z, or "-" with an empty string
+                        let validatedName = new_name.toString().replace(/[^0-9a-zA-Z\-]/g, '');
+
+                        // Limit the length to a maximum of 100 characters
+                        validatedName = validatedName.substring(0, 100);
+
+                        return validatedName;
+                    }
+                </script>
                 <?php
             } else {
                 $error = true;
@@ -147,9 +252,8 @@
                     const openingExpiry = document.getElementById('opening_expiry');
                     const dateExpiry = document.getElementById('date_expiry');
                     const link = document.getElementById('link-input');
-                    const accessCode = document.getElementById('access_code');
 
-                    form.action = `${baseUrl}?advanced&openings=${encodeURIComponent(openingExpiry.value)}&date=${encodeURIComponent(dateExpiry.value)}&link=${encodeURIComponent(link.value)}`;
+                    form.action = `${baseUrl}?&openings=${encodeURIComponent(openingExpiry.value)}&date=${encodeURIComponent(dateExpiry.value)}&link=${encodeURIComponent(link.value)}`;
                     openingExpiry.name = "";
                     dateExpiry.name = "";
                     link.name = "";
@@ -162,9 +266,9 @@
             <div class="text-align-center" id="addons">
                 Install the web browser add-on
                 <br>
-                <a href="https://savmrl.it/7hgSa"><img src="/savmrl/images/badges/firefox.png" class="badge"/></a>
-                <a href="https://savmrl.it/cQi6A"><img src="/savmrl/images/badges/chrome.png" class="badge"/></a>
-                <a href="https://savmrl.it/90utg"><img src="/savmrl/images/badges/ms-edge.png" class="badge"/></a>
+                <a href="https://savmrl.it/firefox"><img src="/savmrl/images/badges/firefox.png" class="badge"/></a>
+                <a href="https://savmrl.it/chrome"><img src="/savmrl/images/badges/chrome.png" class="badge"/></a>
+                <a href="https://savmrl.it/edge"><img src="/savmrl/images/badges/ms-edge.png" class="badge"/></a>
             </div>
             <?php
         }
@@ -264,32 +368,6 @@
         function changeTypeTextToDate(input) {
             if (input.type === "text") input.type = "date";
             input.min = new Date().toISOString().split('T')[0];
-        }
-
-        function editOrSaveLink(button) {
-            let editImage = "https://www.savmrl.it/savmrl/images/edit.svg";
-            let saveImage = "https://www.savmrl.it/savmrl/images/save.svg";
-
-            let inputLink = document.getElementById("link-input-to-copy");
-
-            let computedStyle = window.getComputedStyle(button);
-            let backgroundImage = computedStyle.getPropertyValue('background-image');
-            let imageUrl = backgroundImage.match(/url\(['"]?(.*?)['"]?\)/)[1];
-
-            if (imageUrl === editImage || inputLink.readOnly) {
-                //edit link
-                button.style.backgroundImage = `url("${saveImage}")`;
-                inputLink.value = inputLink.value.replace("https://savmrl.it/", "");
-                inputLink.readOnly = false;
-                inputLink.focus();
-            } else {
-                //save link
-                //TODO
-                button.style.backgroundImage = `url("${editImage}")`;
-                inputLink.value = "https://savmrl.it/" + inputLink.value;
-                inputLink.readOnly = true;
-                inputLink.blur();
-            }
         }
 
         function changeBasicAdvanced(status) {
