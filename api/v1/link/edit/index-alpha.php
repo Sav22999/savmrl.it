@@ -1,6 +1,6 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/credentials.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
 global $redirect_table, $opened_table, $localhost_db, $username_db, $password_db, $database_savmrl;
 header("Content-Type:application/json");
 $request = json_decode(file_get_contents('php://input'), true); //POST request

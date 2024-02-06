@@ -103,7 +103,7 @@
                             old_name: getValidatedNewName(old_name)
                         };
 
-                        fetch('https://www.savmrl.it/api/v1/link/edit/', {
+                        fetch('https://www.savmrl.it/api/v1/link/edit/index-alpha.php', {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json',},
                             body: JSON.stringify(data),
