@@ -44,8 +44,12 @@
 
         if ($link_as_parameter !== "" && !$error) {
             $shortener_code = insertNewRedirect($link_as_parameter, $expiry_openings, $expiry_date, $access_code);
-            if ($shortener_code !== "error" && $shortener_code !== "invalid_url") {
-                $shortened_url = "https://savmrl.it/" . $shortener_code;
+            if ($shortener_code !== "error") {
+                if ($shortener_code === "invalid_url") {
+                    $shortener_code = "";
+                    $shortened_url = $link_as_parameter;
+                }
+                else $shortened_url = "https://savmrl.it/" . $shortener_code;
                 ?>
                 <p class="text-align-center hidden" id="message">
                 </p>
@@ -53,7 +57,9 @@
                     <input id="link-input-to-copy" class="input-link" type="url" placeholder="Copy this shortener link!"
                            value="<?php echo $shortened_url; ?>" onkeydown="onkeydown_enter(event)"
                            oninput="validateName(this)" readonly/>
-                    <input type="button" id="edit-link" onclick="editOrSaveLink(this)">
+                    <?php if ($shortener_code !== "") { ?>
+                        <input type="button" id="edit-link" onclick="editOrSaveLink(this)">
+                    <?php } ?>
 
                     <div class="text-align-center">
                         Redirect link: <a
