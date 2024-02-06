@@ -115,6 +115,7 @@ function echo_not_exists()
 {
     $response["code"] = "404";
     $response["status"] = "Error";
+    $response["timestamp"] = getTimestamp();
     $response["description"] = "Name doesn't exist or the link has been created more than 30 minutes ago";
     return $response;
 }
@@ -123,6 +124,7 @@ function echo_invalid()
 {
     $response["code"] = "401";
     $response["status"] = "Error";
+    $response["timestamp"] = getTimestamp();
     $response["description"] = "Invalid link";
     return $response;
 }
@@ -131,6 +133,7 @@ function echo_unauthorized()
 {
     $response["code"] = "403";
     $response["status"] = "Error";
+    $response["timestamp"] = getTimestamp();
     $response["description"] = "Unauthorized to edit link";
     return $response;
 }
@@ -139,6 +142,7 @@ function echo_already_chosen()
 {
     $response["code"] = "402";
     $response["status"] = "Error";
+    $response["timestamp"] = getTimestamp();
     $response["description"] = "The name chosen is already taken";
     return $response;
 }
@@ -147,6 +151,7 @@ function echo_result($old_name, $new_name)
 {
     $response["code"] = "200";
     $response["status"] = "Successful";
+    $response["timestamp"] = getTimestamp();
     $data["old_name"] = $old_name;
     $data["new_name"] = $new_name;
     $response["data"] = $data;

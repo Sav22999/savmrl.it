@@ -126,7 +126,7 @@
                                     document.getElementById("message").innerHTML = `Link renamed correctly from <b>${result.data.old_name}</b> to <b>${result.data.new_name}</b>`;
                                 } else {
                                     document.getElementById("message").classList.add("error-message");
-                                    document.getElementById("message").innerHTML = `Error (<b>${result.code}</b>): <i>${result.description}</i>`;
+                                    document.getElementById("message").innerHTML = `<i>[${result.timestamp}]</i> Error (<b>${result.code}</b>): <i>${result.description}</i>`;
                                     document.getElementById("link-input-to-copy").value = "https://savmrl.it/" + global_old_name;
                                 }
                             })

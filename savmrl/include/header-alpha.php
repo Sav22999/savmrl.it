@@ -364,4 +364,9 @@ function isValidNumber($number)
     return null;
 }
 
+function getTimestamp()
+{
+    return date('Y-m-d H:i:s');
+}
+
 ?>
