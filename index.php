@@ -49,7 +49,7 @@
                     $shortener_code = "";
                     $shortened_url = $link_as_parameter;
                 }
-                else $shortened_url = "https://savmrl.it/" . $shortener_code;
+                else $shortened_url = "https://savmrl.it/r/" . $shortener_code;
                 ?>
                 <p class="text-align-center hidden" id="message">
                 </p>
@@ -156,7 +156,7 @@
                         if (imageUrl === editImage || inputLink.readOnly) {
                             //edit link
                             button.style.backgroundImage = `url("${saveImage}")`;
-                            inputLink.value = inputLink.value.replace("https://savmrl.it/", "");
+                            inputLink.value = inputLink.value.substring(("https://savmrl.it/r/").length);
                             inputLink.readOnly = false;
                             inputLink.focus();
                         } else {
@@ -164,8 +164,8 @@
                             //TODO
                             button.style.backgroundImage = `url("${editImage}")`;
                             let new_name = getValidatedNewName(inputLink.value);
-                            inputLink.value = inputLink.value.replace("https://savmrl.it/", "");
-                            inputLink.value = "https://savmrl.it/" + inputLink.value;
+                            inputLink.value = inputLink.value.replace("https://savmrl.it/r/", "");
+                            inputLink.value = "https://savmrl.it/r/" + inputLink.value;
                             inputLink.readOnly = true;
                             inputLink.blur();
 

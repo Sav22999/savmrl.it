@@ -437,6 +437,10 @@ input[readonly] {
     overflow: auto;
 }
 
+#access_code {
+    padding: 2px;
+}
+
 #access-code {
     /*for access_code redirecting*/
     width: 40%;
@@ -533,6 +537,10 @@ input[readonly] {
 
 .text-align-justify {
     text-align: justify;
+}
+
+.font-size-30 {
+    font-size: 30px;
 }
 
 @media screen and (max-width: 1100px) {
