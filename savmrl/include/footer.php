@@ -5,7 +5,7 @@ by <a href="https://saveriomorelli.com">Saverio Morelli</a>
 <br>
 <span class="footer-small-text">
 <a href="/savmrl/privacy/">Privacy policy</a>  | <a href="/savmrl/terms/">Terms</a> | <a
-            href="/savmrl/addons/">Web browser add-ons</a> | <a href="https://savmrl.it/github">GitHub</a>
+            href="/savmrl/addons/">Web browser add-ons</a> | <a href="https://savmrl.it/r/github">GitHub</a>
 </span>
 <!--<br>
 <span class="footer-small-text">
