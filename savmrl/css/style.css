@@ -7,6 +7,10 @@
     font-family: 'brilors';
     src: url("/savmrl/font/brilors.otf");
 }
+@font-face {
+    font-family: 'brilors2';
+    src: url("/savmrl/font/brilors2.otf");
+}
 
 @font-face {
     font-family: 'sourcecodepro';
@@ -89,7 +93,7 @@ a {
     color: #00A7AA;
     font-size: 1em;
     line-height: 1.3em;
-    font-family: 'brilors', sans-serif;
+    font-family: 'brilors', 'brilors2', sans-serif;
 }
 
 header {
@@ -142,7 +146,7 @@ main {
 
 #title-page-with-icon {
     color: #EEEEEE;
-    font-family: 'brilors', sans-serif;
+    font-family: 'brilors', 'brilors2', sans-serif;
     padding-left: 1.9em;
     font-size: 2em;
     background-image: url("/savmrl/images/icon-big.svg");

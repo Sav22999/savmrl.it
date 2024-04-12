@@ -30,7 +30,7 @@
             Outdated link! Please, use the new link: <a
                     href="https://savmrl.it/r/<?php echo $name; ?>">savmrl.it/r/<?php echo $name; ?></a>
         </div>
-        <?php redirectTo(false, "https://savmrl.it/r/" . $name, 5); ?>
+        <?php redirectTo(false, "https://savmrl.it/r/" . $name, 1); ?>
     </div>
     <div class="ads-section">
     </div>
