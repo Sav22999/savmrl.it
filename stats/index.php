@@ -6,8 +6,11 @@
     <?php
     global $title_header, $seconds;
 
-    $name = "";
-    if (isset($_GET["code"])) $name = getGoodString($_GET["code"]);
+    $name = substr($_SERVER['REQUEST_URI'], 7); // /stats/ -> start from the 7th index (the 0, 1, 2, 3, 4, 5, 6 are removed "/stats/")
+    //If the name start with "?code=" remove it
+    if (substr($name, 0, 6) === "?code=") {
+        $name = substr($name, 6);
+    }
     if ($name === "") redirectTo(false, "/", 0);
 
     $n_clicks = getStatistics($name);
@@ -55,7 +58,7 @@
         } else {
             ?>
             <h2 class="title-section">Statistics<br>
-                <a href="<?php echo "https://savmrl.it/" . $name; ?>"><?php echo "https://savmrl.it/" . $name; ?></a>
+                <a href="<?php echo "https://savmrl.it/r/" . $name; ?>"><?php echo "https://savmrl.it/r/" . $name; ?></a>
             </h2>
             <h1 class="subtitle-section no-bold font-small"><?php echo $n_clicks; ?></h1>
             <br class="big-space">

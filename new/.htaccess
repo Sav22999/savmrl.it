@@ -1,0 +1,2 @@
+ErrorDocument 404 /new/
+ErrorDocument 403 /new/

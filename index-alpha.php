@@ -69,7 +69,7 @@
                            onclick="copyLink()"/>
                     <input id="another-link-button" class="button-link" type="button" value="Generate another link"
                            onclick="location.href='/'"/>
-                    <a href="/stats/?code=<?php echo $shortener_code; ?>">
+                    <a href="/stats/<?php echo $shortener_code; ?>">
                         <input id="see-stats-button" class="button-link" type="button"
                                value="See click statistics"/>
                     </a>

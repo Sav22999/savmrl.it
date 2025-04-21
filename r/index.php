@@ -12,7 +12,7 @@
     $url_segments = explode('/', $current_url);
     $name = end($url_segments);*/
 
-    $name = substr($_SERVER['REQUEST_URI'], 3);
+    $name = substr($_SERVER['REQUEST_URI'], 3); // /r/ -> start from the 3rd index (the 0, 1 and 2 are removed "/r/")
 
     $redirect_url = getUrlFromName($name, false, false);
     $title = "Redirecting - " . $redirect_url;

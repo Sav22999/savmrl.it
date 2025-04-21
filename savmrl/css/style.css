@@ -7,6 +7,7 @@
     font-family: 'brilors';
     src: url("/savmrl/font/brilors.otf");
 }
+
 @font-face {
     font-family: 'brilors2';
     src: url("/savmrl/font/brilors2.otf");
@@ -31,7 +32,7 @@
 :root {
     --font-family: 'basic';
     --font-family-mono: 'source';
-    --border-radius: 5px;
+    --border-radius: 50px;
     --transition: 0.5s;
 }
 
@@ -140,7 +141,7 @@ main {
     margin-left: -8px;
     margin-right: -8px;
     background-color: #eeeeee;
-    padding: 100px 50px;
+    padding: 50px 50px;
     width: auto;
 }
 
@@ -184,6 +185,7 @@ h3 {
     display: inline-block;
     height: 50px;
     width: auto;
+    border-radius: var(--border-radius);
 }
 
 #addons {
@@ -354,6 +356,7 @@ textarea, input {
 
 input[readonly] {
     box-shadow: none;
+    padding-right: 50px;
 }
 
 #basic-advanced-switcher {
@@ -389,10 +392,20 @@ input[readonly] {
     position: relative;
     font-weight: normal;
     font-family: "basic", sans-serif;
+    border-radius: 20px;
 }
 
 .option-switcher:last-child {
     margin-left: -10px;
+}
+
+.option-switcher:hover {
+    background-color: #00A7AA11;
+}
+
+.option-switcher:focus, .option-switcher:active {
+    z-index: 9;
+    box-shadow: 0px 0px 0px 2px #00A7AA44;
 }
 
 .selected-option {
@@ -548,6 +561,10 @@ input[readonly] {
 }
 
 @media screen and (max-width: 1100px) {
+    main {
+        padding: 20px;
+    }
+
     .horizontal-center {
         width: 100%;
     }
@@ -568,6 +585,14 @@ input[readonly] {
     #title-page-with-icon {
         padding-left: 0em;
         background-image: none;
+    }
+
+    #link-input {
+        padding: 10px 10px;
+    }
+
+    input {
+        font-size: 1em !important;
     }
 }
 

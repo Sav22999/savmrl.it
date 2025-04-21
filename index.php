@@ -70,7 +70,7 @@
                            onclick="copyLink()"/>
                     <input id="another-link-button" class="button-link" type="button" value="Generate another link"
                            onclick="location.href='/'"/>
-                    <a id="see-stats-button-link" href="/stats/?code=<?php echo $shortener_code; ?>">
+                    <a id="see-stats-button-link" href="/stats/<?php echo $shortener_code; ?>">
                         <input id="see-stats-button" class="button-link" type="button"
                                value="See click statistics"/>
                     </a>
@@ -130,7 +130,7 @@
                                     global_old_name = getValidatedNewName(new_name);
                                     document.getElementById("message").classList.add("info-message");
                                     document.getElementById("message").innerHTML = `Link renamed correctly from <b>${result.data.old_name}</b> to <b>${result.data.new_name}</b>`;
-                                    document.getElementById("see-stats-button-link").href = "https://savmrl.it/stats/?code=" + result.data.new_name;
+                                    document.getElementById("see-stats-button-link").href = "https://savmrl.it/stats/" + result.data.new_name;
                                 } else {
                                     document.getElementById("message").classList.add("error-message");
                                     document.getElementById("message").innerHTML = `<i>[${result.timestamp}]</i> Error (<b>${result.code}</b>): <i>${result.description}</i>`;
