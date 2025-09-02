@@ -1,7 +1,7 @@
 <html>
 <head>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php"); ?>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php"); ?>
 
     <?php
     global $title_header;
@@ -32,7 +32,16 @@
 <header>
     <?php echo $title_header; ?>
 </header>
-<main>
+<main id="drop-area">
+    <div id="drop-area-overlay">
+        <div class="drop-area-overlay--content">
+            <p>
+                <img src="/savmrl/images/release.svg" class="image-release"/>
+            </p>
+            <h1>Release the link to paste it in the input field</h1>
+        </div>
+    </div>
+
     <div class="horizontal-center">
         <h2 class="title-section">The best anonymous and free link shortener</h2>
         <div class="big-space"></div>
@@ -207,24 +216,84 @@
                     $is_advanced = true;
                 }
                 ?>
-                <span id="basic-advanced-switcher">
-                    <span id="selected-switcher-option" class="<?php if ($is_advanced) {
-                        echo "selected-option-advanced";
-                    } else {
-                        echo "selected-option-basic";
-                    } ?>"></span>
-                    <span id="basic-switcher-option" class="option-switcher <?php if (!$is_advanced) {
-                        echo "selected-option";
-                    } ?>"
-                          onclick="changeBasicAdvanced('basic')">Basic</span>
-                    <span id="advanced-switcher-option" class="option-switcher <?php if ($is_advanced) {
-                        echo "selected-option";
-                    } ?>"
-                          onclick="changeBasicAdvanced('advanced')">Advanced</span>
-                </span>
-                <br>
-                <input id="link-input" type="url" class="input-link" placeholder="Insert your link (URL) here!"
-                       name="link" oninput="linkInput()" value="<?php echo $link_as_parameter; ?>" required/>
+                <div id="basic-advanced-switcher">
+                    <div class="square-50px">
+                        <div class="border-radius-bottom-right-20px"></div>
+                    </div>
+                    <div class="switcher">
+                        <div id="basic-switcher-option" class="option-switcher <?php if (!$is_advanced) {
+                            echo "selected-option";
+                        } ?>"
+                             onclick="changeBasicAdvanced('basic')">Basic
+                        </div>
+                        <div id="advanced-switcher-option" class="option-switcher <?php if ($is_advanced) {
+                            echo "selected-option";
+                        } ?>"
+                             onclick="changeBasicAdvanced('advanced')">Advanced
+                        </div>
+                    </div>
+                    <div class="square-50px">
+                        <div class="border-radius-bottom-left-20px"></div>
+                    </div>
+                </div>
+                <div class="input-link-container">
+                    <input id="link-input" type="url" class="input-link" placeholder="Insert your link (URL) here!"
+                           name="link" oninput="linkInput()" value="<?php echo $link_as_parameter; ?>" required/>
+                </div>
+                <script>
+                    const dropArea = document.getElementById('drop-area');
+
+                    // Prevent default drag behaviors
+                    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                        dropArea.addEventListener(eventName, preventDefaults, false);
+                    });
+
+                    function preventDefaults(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+
+                    // Highlight on drag hover
+                    ['dragenter', 'dragover'].forEach(eventName => {
+                        dropArea.addEventListener(eventName, () => dropArea.classList.add('highlight'), false);
+                    });
+
+                    ['dragleave', 'drop'].forEach(eventName => {
+                        dropArea.addEventListener(eventName, () => dropArea.classList.remove('highlight'), false);
+                    });
+
+                    // Handle dropped link
+                    dropArea.addEventListener('drop', handleDrop, false);
+
+                    function handleDrop(e) {
+                        const dt = e.dataTransfer;
+                        let url = null;
+
+                        // Try to get URL from text/uri-list
+                        if (dt.getData('text/uri-list')) {
+                            url = dt.getData('text/uri-list');
+                        }
+                        // Fallback: plain text might contain a URL
+                        else if (dt.getData('text/plain')) {
+                            const text = dt.getData('text/plain');
+                            // Simple check if it looks like a URL
+                            if (text.startsWith('http://') || text.startsWith('https://')) {
+                                url = text;
+                            }
+                        }
+
+                        if (url) {
+                            displayLink(url);
+                        } else {
+                            //TODO: no valid URL found
+                        }
+                    }
+
+                    function displayLink(url) {
+                        document.getElementById('link-input').value = url;
+                        linkInput();
+                    }
+                </script>
                 <div id="div-after-link">
                     <div id="advanced-params" class="<?php if (!$is_advanced) {
                         echo "hidden";
@@ -387,18 +456,18 @@
             if (basic.classList.contains("selected-option")) basic.classList.remove("selected-option");
             if (advanced.classList.contains("selected-option")) advanced.classList.remove("selected-option");
 
-            let selector = document.getElementById("selected-switcher-option");
+            /*let selector = document.getElementById("selected-switcher-option");
 
             if (selector.classList.contains("selected-option-basic")) selector.classList.remove("selected-option-basic");
-            if (selector.classList.contains("selected-option-advanced")) selector.classList.remove("selected-option-advanced");
+            if (selector.classList.contains("selected-option-advanced")) selector.classList.remove("selected-option-advanced");*/
 
             if (status === "basic") {
                 basic.classList.add("selected-option");
-                selector.classList.add("selected-option-basic");
+                //selector.classList.add("selected-option-basic");
                 showHideAdvanced("hide");
             } else {
                 advanced.classList.add("selected-option");
-                selector.classList.add("selected-option-advanced");
+                //selector.classList.add("selected-option-advanced");
                 showHideAdvanced("show");
             }
         }
