@@ -2,10 +2,16 @@
 <head>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php"); ?>
     <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/translations.php"); ?>
 
     <?php
     global $title_header;
     $title = "savmrl.it - Link shortener service";
+
+    $language = "en";
+    if (isset($_GET["lang"]) && $_GET["lang"] !== "" && isValidLanguage(getGoodString($_GET["lang"]))) {
+        $language = getGoodString($_GET["lang"]);
+    }
 
     $link_as_parameter = "";
     if (isset($_GET["link"]) && $_GET["link"] !== "") {
@@ -43,6 +49,7 @@
     </div>
 
     <div class="horizontal-center">
+        <?php /*echo getStringTranslated('welcome', $language);*/ ?>
         <div class="vertical-center-home">
             <div class="vertical-top">
                 <h2 class="title-section brilors">The best anonymous and free link shortener</h2>
@@ -66,7 +73,6 @@
                     <div class="text-align-center" id="copy-link-container">
                         <div class="input-link-container">
                             <input id="link-input-to-copy" class="input-link" type="url"
-                                   placeholder="Copy this shortener link!"
                                    value="<?php echo $shortened_url; ?>" onkeydown="onkeydown_enter(event)"
                                    oninput="validateName(this)" readonly/>
                             <?php if ($shortener_code !== "") { ?>
@@ -249,8 +255,8 @@
                     </div>
                     <script>
                         const dropArea = document.getElementById('drop-area');
+                        let dragCounter = 0;
 
-                        // Prevent default drag behaviors
                         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                             dropArea.addEventListener(eventName, preventDefaults, false);
                         });
@@ -260,39 +266,37 @@
                             e.stopPropagation();
                         }
 
-                        // Highlight on drag hover
-                        ['dragenter', 'dragover'].forEach(eventName => {
-                            dropArea.addEventListener(eventName, () => dropArea.classList.add('highlight'), false);
-                        });
+                        dropArea.addEventListener('dragenter', () => {
+                            dragCounter++;
+                            dropArea.classList.add('highlight');
+                        }, false);
 
-                        ['dragleave', 'drop'].forEach(eventName => {
-                            dropArea.addEventListener(eventName, () => dropArea.classList.remove('highlight'), false);
-                        });
+                        dropArea.addEventListener('dragleave', () => {
+                            dragCounter--;
+                            if (dragCounter === 0) {
+                                dropArea.classList.remove('highlight');
+                            }
+                        }, false);
 
-                        // Handle dropped link
-                        dropArea.addEventListener('drop', handleDrop, false);
+                        dropArea.addEventListener('drop', (e) => {
+                            dragCounter = 0;
+                            dropArea.classList.remove('highlight');
+                            handleDrop(e);
+                        }, false);
 
                         function handleDrop(e) {
                             const dt = e.dataTransfer;
                             let url = null;
-
-                            // Try to get URL from text/uri-list
                             if (dt.getData('text/uri-list')) {
                                 url = dt.getData('text/uri-list');
-                            }
-                            // Fallback: plain text might contain a URL
-                            else if (dt.getData('text/plain')) {
+                            } else if (dt.getData('text/plain')) {
                                 const text = dt.getData('text/plain');
-                                // Simple check if it looks like a URL
                                 if (text.startsWith('http://') || text.startsWith('https://')) {
                                     url = text;
                                 }
                             }
-
                             if (url) {
                                 displayLink(url);
-                            } else {
-                                //TODO: no valid URL found
                             }
                         }
 
@@ -377,14 +381,12 @@
             let linkInput = document.getElementById("link-input");
             let divAfterLink = document.getElementById("div-after-link");
             let generateButton = document.getElementById("generate-link-button");
-            if (divAfterLink !== null) {
-                if (linkInput.value.replaceAll(" ", "") !== "" && validLink(linkInput.value)) {
-                    divAfterLink.style.display = "block";
-                    if (generateButton.classList.contains("hidden")) generateButton.classList.remove("hidden");
-                } else {
-                    divAfterLink.style.display = "none";
-                    generateButton.classList.add("hidden");
-                }
+            if (linkInput !== null && linkInput.value.replaceAll(" ", "") !== "" && validLink(linkInput.value)) {
+                //divAfterLink.style.display = "block";
+                if (generateButton !== null && generateButton.classList.contains("hidden")) generateButton.classList.remove("hidden");
+            } else {
+                //divAfterLink.style.display = "none";
+                if (generateButton !== null) generateButton.classList.add("hidden");
             }
 
             /*if (linkInput.classList.contains("frankruhllibre")) linkInput.classList.remove("frankruhllibre");
@@ -500,16 +502,16 @@
             if (status === "show") {
                 //show elements
 
-                if (advancedContainer.classList.contains("hidden")) advancedContainer.classList.remove("hidden");
+                if (advancedContainer && advancedContainer.classList.contains("hidden")) advancedContainer.classList.remove("hidden");
             } else {
                 //hide (if exists!)
                 setInfinityNumber(document.getElementById("opening_expiry"), true);
                 setInfinityDate(document.getElementById("date_expiry"), true);
-                advancedContainer.classList.add("hidden");
+                if (advancedContainer) advancedContainer.classList.add("hidden");
             }
         }
 
-        if (document.getElementById("link-input") !== null && document.getElementById("div-after-link") !== null) linkInput();
+        linkInput();
     </script>
 </main>
 <footer>

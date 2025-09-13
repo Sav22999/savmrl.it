@@ -2,7 +2,7 @@
 include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/credentials.php");
 global $localhost_db, $password_db, $database_savmrl, $username_db, $title;
 
-$title_header = "<a href='/' id='title-page-with-icon'>savmrl.it</a> <span style='color: teal;font-family: serif'>αlpha</span>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
+$title_header = "<a href='/' id='title-page-with-icon'><img src='/savmrl/images/icon-big.svg'/><div class='text'>savmrl.it</div></a> <span style='color: teal;font-family: serif'>αlpha</span>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
 $seconds = 0; //TODO : set manually
 
 $redirect_table = "redirect_alpha_savmrl";
