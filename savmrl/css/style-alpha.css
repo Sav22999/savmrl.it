@@ -124,11 +124,10 @@ header {
     color: #EEEEEE;
     box-sizing: border-box;
     padding: 30px 70px;
+    padding-bottom: 20px;
     text-align: center;
     font-weight: bold;
     font-family: 'frankruhllibre', sans-serif;
-    margin-bottom: 10px;
-
     display: flex;
     flex-direction: row;
     align-items: center;
