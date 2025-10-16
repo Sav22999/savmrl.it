@@ -20,70 +20,107 @@
         <div class="big-space"></div>
         <br>
 
-        <h3>1. Acceptance of Terms:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            By utilizing the savmrl.it project ("Service"), you agree to adhere to the following terms and
-            conditions. If you do not agree, please refrain from using the Service.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>1. Acceptance of Terms</h4>
+            <p>By using the <strong>savmrl.it</strong> project (the “Service”), you agree to be bound by these Terms and
+                Conditions. If you do not agree with any part of these Terms, please do not use the Service.</p>
+        </section>
 
-        <h3>2. Free and Anonymous Service:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            a. The savmrl.it shortener project is provided free of charge; no payment is required for its use.<br>
-            b. Users can utilize the Service anonymously without the need for registration or sign-up.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>2. Free and Anonymous Service</h4>
+            <ul>
+                <li>The <strong>savmrl.it</strong> link shortener is provided <strong>free of charge</strong> — no
+                    payment or subscription is required.
+                </li>
+                <li>Users may use the Service <strong>anonymously</strong>, without registration or account creation.
+                </li>
+            </ul>
+        </section>
 
-        <h3>3. Owner Information:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            The owner of savmrl.it is based in Italy, Europe.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>3. Ownership and Jurisdiction</h4>
+            <p>The Service is owned and operated in <strong>Italy, European Union</strong>. All matters related to the
+                Service are governed by <strong>Italian law and jurisdiction</strong>.</p>
+        </section>
 
-        <h3>4. Data Collection:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            a. When a user shortens or opens a link, only the public IP address is collected for security and analytical
-            purposes.<br>
-            b. Users' IP addresses are stored securely and are not shared with third parties, except as required by law.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>4. Data Collection and Privacy</h4>
+            <ul>
+                <li>When a user creates or accesses a shortened link, the Service collects only the <strong>public IP
+                        address</strong> for security, functionality, and analytics purposes.
+                </li>
+                <li>IP addresses are stored securely and <strong>never shared with third parties</strong>, except as
+                    required by law.
+                </li>
+                <li>For full details, please refer to our <a href="https://www.savmrl.it/privacy">Privacy Policy</a>.
+                </li>
+            </ul>
+        </section>
 
-        <h3>5. Future Feature Changes:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            Features of the Service may be subject to change in the future. Users will be notified of significant
-            changes, and continued use of the Service after such modifications constitutes acceptance of the updated
-            terms.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>5. Changes to the Service</h4>
+            <p>The features, design, and operation of the Service may change over time. Significant updates will be
+                announced on the site. Continued use after such changes constitutes acceptance of the updated Terms.</p>
+        </section>
 
-        <h3>6. Illegal Activities:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            The Service strictly prohibits the promotion of illegal activities. Links may be periodically checked, and
-            any found to be associated with illegal contents will be removed from the database.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>6. Prohibited and Illegal Activities</h4>
+            <p>The Service must not be used for illegal, abusive, or malicious purposes. Links containing or redirecting
+                to illegal content may be removed without notice. Users remain solely responsible for the content of the
+                URLs they shorten and share.</p>
+        </section>
 
-        <h3>7. Reporting Violations:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            If users encounter any violations or suspect malicious activities related to the Service, please report them
-            promptly by contacting me. I will investigate reported incidents and take appropriate action.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>7. Reporting Abuse</h4>
+            <p>If you encounter a suspicious or illegal link, or believe the Service is being misused, please report it
+                immediately via the contact form available on the website. We will investigate and take appropriate
+                measures.</p>
+        </section>
 
-        <h3>8. Limitation of Liability:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            savmrl.it and its operators are not liable for any damages, losses, or consequences arising from the use of
-            the shortener service. Users utilize the Service at their own risk.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>8. Limitation of Liability</h4>
+            <p>The Service is provided “as is” without warranties of any kind. The operators of
+                <strong>savmrl.it</strong> are not liable for:</p>
+            <ul>
+                <li>Any damages or losses resulting from use or misuse of the Service;</li>
+                <li>The content or safety of shortened URLs;</li>
+                <li>Service interruptions, errors, or data loss.</li>
+            </ul>
+            <p>Use of the Service is at your own risk.</p>
+        </section>
 
-        <h3>9. Contact Information:</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            For questions, concerns, or inquiries related to these terms, please contact me via the form you find <a
-                    href="http://saveriomorelli.com/contact-me/">here</a>.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>9. Contact Information</h4>
+            <p>For any questions or concerns regarding these Terms, please contact us using the <strong>contact
+                    form</strong> available on the following website page: <a
+                        href="https://www.saveriomorelli.com/contact-me/">https://www.saveriomorelli.com/contact-me/</a>
+            </p>
+        </section>
 
-        <h3>10. License</h3>
-        <p class="horizontal-center-p basic text-align-justify">
-            The license used for this project is the <a href="https://www.mozilla.org/MPL/2.0/">Mozilla Public License version 2.0</a>.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>10. License</h4>
+            <p>The project is released under the <strong>Mozilla Public License, version 2.0</strong>. You can view the
+                license at <a href="https://www.mozilla.org/MPL/2.0/" target="_blank" rel="noopener">https://www.mozilla.org/MPL/2.0/</a>.
+            </p>
+        </section>
 
-        <p class="horizontal-center-p basic text-align-justify">
-            By using the savmrl.it shortener service, you acknowledge that you have read, understood, and agreed to
-            these terms and conditions.
-        </p>
+        <section class="horizontal-center-p text-align-justify">
+            <h4>11. Changes to Terms</h4>
+            <p>We may revise this Terms and Conditions of Service from time to time. The latest version will always be
+                available at <a
+                        href="https://www.savmrl.it/terms">https://www.savmrl.it/terms</a> with the updated "last
+                modified" date. Please review periodically.</p>
+        </section>
+
+        <section class="horizontal-center-p text-align-justify">
+            <p>
+                By using the savmrl.it shortener service, you acknowledge that you have read, understood, and agreed to
+                these terms and conditions.
+            </p>
+            <p>
+                Last updated: 16 Oct 2025
+            </p>
+        </section>
     </div>
     <div class="ads-section">
     </div>
