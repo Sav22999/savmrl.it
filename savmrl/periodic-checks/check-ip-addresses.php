@@ -32,10 +32,10 @@ if ($condition) {
             $res = $result_exists->fetch_array();
 
             if ($res["total_records"] > 0) {
-                // Aggiorna redirect_table
+                // Update redirect_table
                 $query_delete1 = "UPDATE `$redirect_table` SET `inserted_from_ip` = '' WHERE `inserted_from_ip` != '' AND `inserted_timestamp` < NOW() - INTERVAL 30 DAY";
                 if ($c->query($query_delete1)) {
-                    // Aggiorna opened_table
+                    // Update opened_table
                     $query_delete2 = "UPDATE `$opened_table` SET `ip_address` = '' WHERE `ip_address` != '' AND `visited_timestamp` < NOW() - INTERVAL 30 DAY";
                     if ($c->query($query_delete2)) {
                         $found = true;
@@ -67,9 +67,9 @@ function echo_null()
 
 function echo_invalid()
 {
-    $response["code"] = "401";
+    $response["code"] = "400";
     $response["status"] = "Error";
-    $response["description"] = "Invalid link";
+    $response["description"] = "No IP addresses found or invalid request";
     return $response;
 }
 
