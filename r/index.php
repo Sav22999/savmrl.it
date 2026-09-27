@@ -1,170 +1,97 @@
-<html>
+<?php
+http_response_code(410);
+header('Content-Type: text/html; charset=UTF-8');
+?>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header.php"); ?>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta.php"); ?>
-
-    <?php
-    global $title_header, $seconds;
-
-    /*
-    $current_url = $_SERVER['REQUEST_URI'];
-    $current_url = trim($current_url, '/');
-    $url_segments = explode('/', $current_url);
-    $name = end($url_segments);*/
-
-    $name = substr($_SERVER['REQUEST_URI'], 3); // /r/ -> start from the 3rd index (the 0, 1 and 2 are removed "/r/")
-
-    $redirect_url = getUrlFromName($name, false, false);
-    $title = "Redirecting - " . $redirect_url;
-
-    $errors = array("not_exists", "invalid", "access_code_required", "access_code_wrong", "reported", "?");
-    ?>
-    <title><?php echo $title; ?></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>savmrl.it — Link suspended</title>
+    <link rel="icon" type="image/svg+xml" href="/savmrl/images/icon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6f7;
+            color: #2d3436;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .container {
+            text-align: center;
+            max-width: 520px;
+        }
+        .icon {
+            margin-bottom: 24px;
+        }
+        .icon svg {
+            width: 80px;
+            height: 80px;
+        }
+        h1 {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #d63031;
+            margin-bottom: 16px;
+        }
+        .subtitle {
+            font-size: 1em;
+            line-height: 1.7;
+            color: #636e72;
+            margin-bottom: 24px;
+        }
+        .legal {
+            font-size: 0.85em;
+            line-height: 1.6;
+            color: #b2bec3;
+            border-top: 1px solid #dfe6e9;
+            padding-top: 20px;
+        }
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #b2bec3;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-top: 24px;
+        }
+        .brand img {
+            width: 24px;
+            height: 24px;
+            opacity: 0.5;
+        }
+    </style>
 </head>
 <body>
-
-<header>
-    <?php echo $title_header; ?>
-</header>
-
-<main>
-    <div class="horizontal-center">
-        <?php if (!in_array($redirect_url, $errors)) { ?>
-            <h2 class="title-section">Redirecting…</h2>
-            <h1 class="subtitle-section no-bold font-small"><?php echo $redirect_url; ?></h1>
-            <div class="big-space"></div>
-        <br>
-        <br>
-            <p class="horizontal-center-p">
-                You will be redirected to the link in some seconds. In case the redirect doesn't work, please <a
-                        href="<?php echo $redirect_url; ?>">click here</a>
-            </p>
-        <?php redirectTo($name, $redirect_url, $seconds);
-        } else {
-        //It's an error
-        $errors_type_1 = array("not_exists", "invalid", "?"); //error message
-        $errors_type_2 = array("access_code_required", "access_code_wrong"); //require password or wrong password
-        $errors_type_3 = array("reported"); //reported message
-        $errors_type_4 = array(); //redirect only to a page
-
-        if (in_array($redirect_url, $errors_type_1)) {
-        $title = "";
-        $title_section = "";
-        $description = "";
-        $go_to = "/";
-        $seconds = 0;
-
-        switch ($redirect_url) {
-            case "not_exists":
-                $title = "savmrl.it - Page not exists";
-                $title_section = "Link doesn't exist or has expired";
-                $description = "The shortened link you're looking for doesn't exist, or it's expired.<br>Be sure the shortened link you used is correct, is still valid<sup>*</sup> or try again.<br><br><sup>*</sup> Invalid links could be because the link is not correct at all, or the limit of opening number times has achieved, or because it was valid until a specific datetime.";
-
-                $go_to = "/";
-                $seconds = 10;
-                break;
-
-            case "invalid":
-                $title = "savmrl.it - Invalid";
-                $title_section = "Invalid link";
-                $description = "The shortened link you provided is <b>not</b> valid.<br>Be sure the shortened link you used is correct or try again.";
-
-                $go_to = "/";
-                $seconds = 10;
-                break;
-
-            default:
-                $go_to = "/";
-                $seconds = 0;
-        }
-        ?>
-            <title><?php echo $title; ?></title>
-            <h2 class="title-section"><?php echo $title_section; ?></h2>
-            <div class="big-space"></div>
-        <br>
-            <p class="horizontal-center-p">
-                <?php echo $description; ?>
-            </p>
-        <?php
-
-        redirectTo(false, $go_to, $seconds);
-        } else if (in_array($redirect_url, $errors_type_2)) {
-        //Access code
-        $title = "savmrl.it - Access code required";
-        $title_section = "Access code required";
-        $description = "To get the link, please insert the access code";
-
-        if ($redirect_url === "access_code_wrong") {
-            //error: wrong access code
-        }
-
-        ?>
-            <title><?php echo $title; ?></title>
-            <h2 class="title-section"><?php echo $title_section; ?></h2>
-            <p class="horizontal-center-p">
-                <?php echo $description; ?>
-            </p>
-            <div class="big-space"></div>
-        <br>
-        <?php //TODO: request as POST and not as GET. The name have to be 'access_code' as POST parameter ?>
-            <form method="post" action="/access-code/" onsubmit="onsubmit_link(this);">
-                <p class="text-align-center">
-                    <input class="optional-param" id="access-code" type="password" name="access_code"
-                           placeholder="Digit the access code" required/>
-                    <input id="go-to-link-button" class="button-link" type="submit" value="Go to the link"/>
-                </p>
-            </form>
-
-            <script>
-                document.getElementById("access-code").onfocus = function () {
-                    document.getElementById("access-code").type = "text";
-                }
-                document.getElementById("access-code").onblur = function () {
-                    document.getElementById("access-code").type = "password";
-                }
-
-                function onsubmit_link(form) {
-                    let nameElement = document.createElement("input");
-                    nameElement.type = "text";
-                    nameElement.classList.add("hidden");
-                    nameElement.name = "name";
-                    nameElement.value = "<?php echo $name; ?>";
-                    form.appendChild(nameElement);
-                }
-            </script>
-        <?php
-        } else if (in_array($redirect_url, $errors_type_3)) {
-        //Links reported
-        $title = "savmrl.it - Link blocked";
-        $title_section = "Link blocked because reported as unsafe";
-        $description = "This link has been reported as unsafe, and now it's blocked!<br>If you desire, you can contact me to get more information.";
-        $go_to = "/";
-        $seconds = 10;
-        ?>
-            <title><?php echo $title; ?></title>
-            <h2 class="title-section"><?php echo $title_section; ?></h2>
-            <div class="big-space"></div>
-        <br>
-            <p class="horizontal-center-p">
-                <?php echo $description; ?>
-            </p>
-            <?php
-
-            redirectTo(false, $go_to, $seconds);
-        } else if (in_array($redirect_url, $errors_type_4)) {
-            //Just redirecting
-            //
-        }
-            ?>
-
-        <?php } ?>
+    <div class="container">
+        <div class="icon">
+            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="35" fill="none" stroke="#d63031" stroke-width="2.5" opacity="0.2"/>
+                <line x1="22" y1="22" x2="58" y2="58" stroke="#d63031" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="58" y1="22" x2="22" y2="58" stroke="#d63031" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h1>Link suspended</h1>
+        <p class="subtitle">
+            This link is no longer reachable.<br>
+            The savmrl.it service has been suspended due to illegal use.
+        </p>
+        <div class="legal">
+            For inquiries: <a href="https://saveriomorelli.com/contact-me" style="color:#636e72;font-weight:600;">saveriomorelli.com/contact-me</a>
+        </div>
+        <span class="brand">
+            <img src="/savmrl/images/icon.svg" alt="">
+            savmrl.it
+        </span>
     </div>
-    <div class="ads-section">
-    </div>
-</main>
-<footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer.php"); ?>
-</footer>
-
 </body>
 </html>

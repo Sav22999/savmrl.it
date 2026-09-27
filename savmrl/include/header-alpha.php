@@ -1,14 +1,15 @@
 <?php
+include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/maintenance.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/credentials.php");
 global $localhost_db, $password_db, $database_savmrl, $username_db, $title;
 
-$title_header = "<a href='/' id='title-page-with-icon'><img src='/savmrl/images/icon-big.svg'/><div class='text'>savmrl.it</div></a> <span style='color: teal;font-family: serif'>αlpha</span>"; //TODO : set manually //<span style='color: teal;font-family: serif'>αlpha</span>
+$title_header = "<a href='/alpha/' id='title-page-with-icon'><img src='/savmrl/images/icon-big.svg'/><div class='text'>savmrl.it</div></a> <span style='color: teal;font-family: serif'>αlpha</span>";
 $seconds = 0; //TODO : set manually
 
 $redirect_table = "redirect_alpha_savmrl";
 $opened_table = "opened_alpha_savmrl";
 
-function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false)
+function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false, &$linkData = null)
 {
     global $redirect_table, $opened_table;
     $name_to_use = $name;
@@ -28,13 +29,10 @@ function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false)
         if ($c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl)) {
             $c->set_charset("utf8mb4");
 
-            // Snippet: SELECT * FROM `redirect_savmrl` WHERE `name`='$name_to_use'
-            // Using prepared statements -> the safest techniques to manage queries of a database
             $query = "SELECT t1.*, t2.rows FROM `$redirect_table` AS t1 LEFT JOIN (SELECT name, COUNT(*) AS rows FROM `$opened_table` GROUP BY name) AS t2 ON t1.name = t2.name WHERE t1.name = ? AND (t1.limit_times IS NULL OR t2.rows IS NULL OR t2.rows < t1.limit_times) AND (t1.expiry_date IS NULL OR CURDATE() <= t1.expiry_date)";
             $stmt = $c->prepare($query);
-            $stmt->bind_param("s", $name_to_use); //for password
+            $stmt->bind_param("s", $name_to_use);
             if ($stmt->execute()) {
-                //successful
             } else {
                 $stmt->close();
                 $c->close();
@@ -50,43 +48,41 @@ function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false)
                     $url = $row['redirect_link'];
 
                     if ($row["reported"] === 1) {
-                        //the link has been marked as "reported"
                         $c->close();
                         return "reported";
-                    } else {
-                        //the link is valid
+                    }
+
+                    if (isset($row["admin_blocked"]) && $row["admin_blocked"] == 1) {
+                        $c->close();
+                        return "admin_blocked";
                     }
 
                     if ($row["access_code"] !== null) {
                         if ($is_protected) {
                             if ($row["access_code"] === $access_to_use) {
-                                //access code correct -- do nothing
                             } else {
-                                //access code incorrect
                                 $c->close();
                                 return "access_code_wrong";
                             }
                         } else {
-                            //access code required and not inserted
                             $c->close();
                             return "access_code_required";
                         }
-                    } else {
-                        //no access code required
                     }
 
                     if ($is_protected) {
                         $url = decryptTextWithPassword($url, $accessCode);
                     }
                     if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+                        $linkData = [
+                            'redirect_seconds' => isset($row['redirect_seconds']) ? (int)$row['redirect_seconds'] : 0,
+                        ];
                         $c->close();
                         return $url;
                     } else {
                         $invalid = true;
                     }
                 }
-            } else {
-                //not found
             }
 
             $c->close();
@@ -260,12 +256,16 @@ function decryptTextWithPassword($encryptedText, $password) {
     return openssl_decrypt($encryptedText, 'aes-256-cbc', $key, 0, $iv);
 }
 
-function insertNewRedirect($link, $openings = null, $date = null, $access_code = null)
+function insertNewRedirect($link, $openings = null, $date = null, $access_code = null, $user_id = null, $redirect_seconds = null)
 {
     global $redirect_table;
     $value_to_return = "error";
-    $attempts = 20; //TODO : set manually the max attempts to do before to get error in case no strings is found
+    $attempts = 20;
     global $localhost_db, $username_db, $password_db, $database_savmrl;
+
+    if ($redirect_seconds !== null) {
+        $redirect_seconds = max(5, min(30, (int)$redirect_seconds));
+    }
 
     if ($c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl)) {
         $c->autocommit(false);
@@ -307,10 +307,9 @@ function insertNewRedirect($link, $openings = null, $date = null, $access_code =
                         $link_to_use = encryptTextWithPassword($link, $access_code);
                     }
 
-                    // Snippet: INSERT INTO `redirect_savmrl` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`) VALUES (NULL, '$newValue', '$link_to_use', NULL, NULL, NULL, CURRENT_TIMESTAMP, '$ip_address')
-                    $query_insert = "INSERT INTO `$redirect_table` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`, `reported`) VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, NULL)";
+                    $query_insert = "INSERT INTO `$redirect_table` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `redirect_seconds`, `inserted_timestamp`, `inserted_from_ip`, `reported`, `user_id`) VALUES (NULL, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?)";
                     $stmt_insert = $c->prepare($query_insert);
-                    $stmt_insert->bind_param("sssiss", $newValue, $link_to_use, $access_code_to_use, $openings, $date, $ip_address);
+                    $stmt_insert->bind_param("sssissisi", $newValue, $link_to_use, $access_code_to_use, $openings, $date, $redirect_seconds, $ip_address, $user_id);
 
                     if ($stmt_insert->execute()) {
                         //successful

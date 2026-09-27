@@ -1,0 +1,2 @@
+ErrorDocument 404 /alpha/account/
+ErrorDocument 403 /alpha/account/

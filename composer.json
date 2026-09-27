@@ -1,0 +1,8 @@
+{
+    "name": "sav22999/savmrl-it",
+    "description": "savmrl.it - Link shortener service",
+    "require": {
+        "php": ">=7.4",
+        "phpmailer/phpmailer": "^6.5"
+    }
+}

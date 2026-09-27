@@ -1,0 +1,2 @@
+ErrorDocument 404 /account/
+ErrorDocument 403 /account/

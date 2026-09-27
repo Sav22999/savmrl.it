@@ -25,7 +25,7 @@ if ($condition) {
         $c->set_charset("utf8mb4");
 
         // Lock the tables for both SELECT and UPDATE
-        $c->query("LOCK TABLES `$redirect_table` READ, `$redirect_table` WRITE");
+        $c->query("LOCK TABLES `$redirect_table` WRITE, `$opened_table` WRITE");
 
         //"c1" ("old name")
         //"c2" ("new name")
