@@ -17,8 +17,8 @@
 <header>
     <?php echo $title_header; ?>
     <div class="auth-nav">
-        <a href="/alpha/admin/" class="auth-nav-link">Dashboard</a>
-        <a href="/alpha/admin/logout/" class="auth-nav-link auth-logout-btn"><?php echo t('logout', $lang); ?></a>
+        <a href="/alpha/admin/" class="auth-nav-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12l9-9 9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v8a2 2 0 002 2h10a2 2 0 002-2v-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Dashboard</a>
+        <a href="/alpha/admin/logout/" class="auth-nav-link auth-logout-btn"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3H6.004C5.8 3 4.7 3 3.85 3.436a3 3 0 00-1.414 1.414C2 5.7 2 6.8 2 9.004V14.996C2 17.2 2 18.3 2.436 19.15a3 3 0 001.414 1.414C4.7 21 5.8 21 8.004 21H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 12h10m0 0l-3.5-3M22 12l-3.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> <?php echo t('logout', $lang); ?></a>
     </div>
 </header>
 <main>
@@ -236,7 +236,7 @@ function appendLinks(links, total) {
                     }
                 } catch(e) {}
             }
-            status += ' <span class="badge badge-user-reported">' + fmtNum(link.user_reports) + '× reported</span>' + reasonTags;
+            status += reasonTags;
         }
 
         let destHtml;

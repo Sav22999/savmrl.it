@@ -134,6 +134,7 @@ $strings = [
 
     'accept-terms' => 'He leído y acepto la <a href="/alpha/privacy/" target="_blank">Política de privacidad</a> y los <a href="/alpha/terms/" target="_blank">Términos de servicio</a>',
     'must-accept-terms' => 'Debes aceptar la Política de privacidad y los Términos de servicio',
+    'service-disclaimer' => 'Al usar este servicio, aceptas la <a href="/alpha/privacy/" target="_blank">Política de privacidad</a> y los <a href="/alpha/terms/" target="_blank">Términos de servicio</a>.',
     'captcha-required' => 'Completa la verificación',
 
     // ALTCHA widget

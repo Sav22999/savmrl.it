@@ -1042,6 +1042,7 @@ img#qrcode {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    gap: 6px;
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: var(--border-radius-sm);
     transition: var(--transition);
@@ -1392,6 +1393,15 @@ img#qrcode {
     font-size: 0.85em;
     flex-wrap: wrap;
     color: var(--color-text-secondary);
+}
+
+.session-item:last-child {
+    border-bottom: none;
+}
+
+.session-item button,
+.session-item .badge {
+    margin-left: auto;
 }
 
 .session-item button {
@@ -1777,6 +1787,18 @@ img#qrcode {
 }
 
 .terms-checkbox-row a {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.service-disclaimer {
+    font-size: 0.78em;
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-top: 12px;
+}
+
+.service-disclaimer a {
     color: var(--color-primary);
     font-weight: 500;
 }

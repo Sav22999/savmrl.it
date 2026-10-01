@@ -71,7 +71,7 @@
             if (!$current_user): ?>
                 <div class="auth-required-container">
                     <div class="auth-required-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 3h2.996C18.2 3 19.3 3 20.15 3.436a3 3 0 011.414 1.414C22 5.7 22 6.8 22 9.004V14.996C22 17.2 22 18.3 21.564 19.15a3 3 0 01-1.414 1.414C19.3 21 18.2 21 15.996 21H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 12H2m0 0l3.5-3M2 12l3.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 3H6.004C5.8 3 4.7 3 3.85 3.436a3 3 0 00-1.414 1.414C2 5.7 2 6.8 2 9.004V14.996C2 17.2 2 18.3 2.436 19.15a3 3 0 001.414 1.414C4.7 21 5.8 21 8.004 21H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M22 12H12m0 0l3.5-3M12 12l3.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
                     <h3><?php echo t('login-required', $lang); ?></h3>
                     <p class="auth-required-desc"><?php echo t('login-required-desc', $lang); ?></p>
@@ -372,10 +372,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="terms-checkbox-row">
-                            <input type="checkbox" id="accept_terms" required />
-                            <label for="accept_terms"><?php echo t('accept-terms', $lang); ?></label>
-                        </div>
+                        <p class="service-disclaimer"><?php echo t('service-disclaimer', $lang); ?></p>
                     </div>
                 </form>
 
@@ -387,12 +384,6 @@
                     }
 
                     function onsubmit_link(form) {
-                        var termsCheckbox = document.getElementById('accept_terms');
-                        if (!termsCheckbox.checked) {
-                            alert('<?php echo addslashes(t('must-accept-terms', $lang)); ?>');
-                            return false;
-                        }
-
                         const baseUrl = "/alpha/";
                         const openingExpiry = document.getElementById('opening_expiry');
                         const dateExpiry = document.getElementById('date_expiry');
