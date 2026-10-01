@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/translations.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/meta.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/translations.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth.php");
     auth_start_session();
     if (auth_get_current_user()) { header('Location: /alpha/account/'); exit; }
     global $title_header;
@@ -17,7 +17,7 @@
 <header>
     <?php echo $title_header; ?>
 </header>
-<main>
+<main class="main-centered">
     <div class="horizontal-center">
         <div class="auth-form-container">
             <h2 class="title-section brilors"><?php echo t('login', $lang); ?></h2>
@@ -31,6 +31,9 @@
                 </form>
                 <p class="text-align-center auth-link-text">
                     <?php echo t('no-account', $lang); ?> <a href="/alpha/account/register/"><?php echo t('signup', $lang); ?></a>
+                </p>
+                <p class="text-align-center auth-link-text">
+                    <a href="/alpha/account/forgot-password/"><?php echo t('forgot-password', $lang); ?></a>
                 </p>
             </div>
 
@@ -47,15 +50,16 @@
             <div id="twofa-form-container" class="hidden">
                 <p class="text-align-center"><?php echo t('enter-2fa', $lang); ?></p>
                 <form id="twofa-form" class="auth-form" onsubmit="submitTwoFa(event)">
-                    <input type="text" id="otp-code" class="input-link" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required />
+                    <input type="text" id="otp-code" class="input-link otp-input" placeholder="······" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="one-time-code" required />
                     <input type="submit" class="button-link" value="<?php echo t('verify', $lang); ?>" />
                 </form>
+                <button type="button" class="otp-resend" id="login-resend-btn" onclick="resendLoginOtp()"><?php echo t('resend-code', $lang); ?></button>
             </div>
         </div>
     </div>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/footer.php"); ?>
 </footer>
 
 <script>
@@ -139,6 +143,35 @@ function submitTwoFa(e) {
         window.location.href = '/alpha/account/';
     })
     .catch(() => showMessage(<?php echo json_encode(t('connection-error', $lang)); ?>, true));
+}
+
+function resendLoginOtp() {
+    if (!tempToken) return;
+    var btn = document.getElementById('login-resend-btn');
+    btn.disabled = true;
+    btn.textContent = '...';
+
+    fetch('/api/v2/user/resend-otp/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({temp_token: tempToken, purpose: 'login_2fa'}),
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.code === '200') {
+            tempToken = data.data.temp_token;
+            showMessage(<?php echo json_encode(t('code-resent', $lang)); ?>, false);
+        } else {
+            showMessage(data.description, true);
+        }
+        btn.disabled = false;
+        btn.textContent = <?php echo json_encode(t('resend-code', $lang)); ?>;
+    })
+    .catch(() => {
+        showMessage(<?php echo json_encode(t('connection-error', $lang)); ?>, true);
+        btn.disabled = false;
+        btn.textContent = <?php echo json_encode(t('resend-code', $lang)); ?>;
+    });
 }
 </script>
 </body>

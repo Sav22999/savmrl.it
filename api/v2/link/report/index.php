@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/v2/helpers.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/savmrl/include/mailer.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/alpha/include/mailer.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     api_method_not_allowed('POST');
@@ -36,15 +36,37 @@ if ($result->num_rows === 0) {
 $link = $result->fetch_assoc();
 $stmt->close();
 
-$stmt2 = $conn->prepare("UPDATE `$table` SET `reported` = 1 WHERE `name` = ?");
-$stmt2->bind_param('s', $name);
-$stmt2->execute();
-$stmt2->close();
+$has_user_reports = false;
+$col_check = $conn->query("SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = '$table' AND COLUMN_NAME = 'user_reports'");
+if ($col_check && $col_check->num_rows > 0) {
+    $has_user_reports = true;
+}
+
+if ($has_user_reports) {
+    $get_reasons = $conn->prepare("SELECT `user_report_reason` FROM `$table` WHERE `name` = ?");
+    $get_reasons->bind_param('s', $name);
+    $get_reasons->execute();
+    $row = $get_reasons->get_result()->fetch_assoc();
+    $get_reasons->close();
+
+    $reasons = [];
+    if ($row && $row['user_report_reason']) {
+        $decoded = json_decode($row['user_report_reason'], true);
+        if (is_array($decoded)) $reasons = $decoded;
+    }
+    $reasons[$reason] = isset($reasons[$reason]) ? $reasons[$reason] + 1 : 1;
+    $reasons_json = json_encode($reasons);
+
+    $stmt2 = $conn->prepare("UPDATE `$table` SET `user_reports` = `user_reports` + 1, `user_report_reason` = ? WHERE `name` = ?");
+    $stmt2->bind_param('ss', $reasons_json, $name);
+    $stmt2->execute();
+    $stmt2->close();
+}
 $conn->close();
 
 $ip = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : (isset($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : $_SERVER['REMOTE_ADDR']);
 $reason_label = ucfirst($reason);
-$link_url = "https://savmrl.it/r/" . htmlspecialchars($name);
+$link_url = SHORT_URL_BASE . htmlspecialchars($name);
 $dest_url = htmlspecialchars($link['redirect_link']);
 
 $subject = "[savmrl.it] Link reported: $reason_label — $name";
@@ -57,7 +79,7 @@ $html = "
     <p><strong>Reporter IP:</strong> $ip</p>
     <p><strong>Time:</strong> " . date('Y-m-d H:i:s') . " UTC</p>
     <hr style='border:none;border-top:1px solid #eee;margin:16px 0'>
-    <p style='color:#888;font-size:13px'>The link has been automatically flagged as reported.</p>
+    <p style='color:#888;font-size:13px'>This report requires manual review. The link has not been blocked automatically.</p>
 </div>";
 
 send_email('saverio.morelli@protonmail.com', $subject, $html);

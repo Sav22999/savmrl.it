@@ -1,13 +1,10 @@
 <?php
 
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/credentials.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/credentials.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth.php");
 
 header("Content-Type: application/json; charset=utf-8");
-header("Access-Control-Allow-Origin: https://savmrl.it");
-header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
@@ -62,6 +59,8 @@ function api_method_not_allowed($allowed) {
     api_response(405, "Error", "Method not allowed. Use: " . $allowed);
 }
 
+define('SHORT_URL_BASE', 'https://savmrl.it/alpha/r/');
+
 function get_json_body() {
     $body = file_get_contents('php://input');
     $data = json_decode($body, true);
@@ -89,6 +88,25 @@ function validate_name($name) {
 function get_authenticated_user() {
     auth_start_session();
     return auth_get_current_user();
+}
+
+function get_altcha_key() {
+    global $password_db, $database_savmrl;
+    return hash_hmac('sha256', 'altcha-challenge-key', $password_db . $database_savmrl);
+}
+
+function verify_altcha($payload_b64) {
+    if (empty($payload_b64)) return false;
+    $payload = json_decode(base64_decode($payload_b64), true);
+    if (!$payload || !isset($payload['algorithm']) || !isset($payload['challenge']) ||
+        !isset($payload['number']) || !isset($payload['salt']) || !isset($payload['signature'])) {
+        return false;
+    }
+    $hmac_key = get_altcha_key();
+    $expected_challenge = hash('sha256', $payload['salt'] . $payload['number']);
+    $expected_signature = hash_hmac('sha256', $expected_challenge, $hmac_key);
+    return hash_equals($expected_challenge, $payload['challenge']) &&
+           hash_equals($expected_signature, $payload['signature']);
 }
 
 ?>

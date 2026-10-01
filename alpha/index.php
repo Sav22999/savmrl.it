@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php"); ?>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php"); ?>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/translations.php"); ?>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/meta.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/translations.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth.php"); ?>
 
     <?php
     auth_start_session();
@@ -14,9 +14,11 @@
 
     $lang = detectLanguage();
 
+    $raw_link = "";
     $link_as_parameter = "";
     if (isset($_GET["link"]) && $_GET["link"] !== "") {
-        $link_as_parameter = getGoodString($_GET["link"]);
+        $raw_link = $_GET["link"];
+        $link_as_parameter = getGoodString($raw_link);
     }
 
     $expiry_date = "∞";
@@ -46,13 +48,13 @@
 
 <header>
     <?php echo $title_header; ?>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth-header-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth-header.php"); ?>
 </header>
-<main id="drop-area">
+<main id="drop-area" class="main-centered">
     <div id="drop-area-overlay">
         <div class="drop-area-overlay--content">
             <p>
-                <img src="/savmrl/images/release.svg" class="image-release" alt="Drop link"/>
+                <img src="/alpha/images/release.svg" class="image-release" alt="Drop link"/>
             </p>
             <h1><?php echo t('drag-n-drop', $lang); ?></h1>
         </div>
@@ -61,12 +63,16 @@
     <div class="horizontal-center">
         <div class="vertical-center-home">
             <div class="vertical-top">
-                <h2 class="title-section brilors"><?php echo t('payoff', $lang); ?></h2>
+                <h2 class="title-section brilors home-title"><?php echo t('payoff', $lang); ?></h2>
+                <p class="home-subtitle"><?php echo t('payoff-desc', $lang); ?></p>
                 <div id="info-messages"></div>
             </div>
             <?php
             if (!$current_user): ?>
                 <div class="auth-required-container">
+                    <div class="auth-required-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 3h2.996C18.2 3 19.3 3 20.15 3.436a3 3 0 011.414 1.414C22 5.7 22 6.8 22 9.004V14.996C22 17.2 22 18.3 21.564 19.15a3 3 0 01-1.414 1.414C19.3 21 18.2 21 15.996 21H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 12H2m0 0l3.5-3M2 12l3.5 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
                     <h3><?php echo t('login-required', $lang); ?></h3>
                     <p class="auth-required-desc"><?php echo t('login-required-desc', $lang); ?></p>
                     <div class="auth-required-actions">
@@ -111,16 +117,20 @@
             if ($link_as_parameter !== "" && !$error) {
                 $user_id = (int)$current_user['id'];
                 $redirect_sec_val = ($redirect_seconds !== "" && $redirect_seconds > 0) ? $redirect_seconds : null;
-                $shortener_code = insertNewRedirect($link_as_parameter, $expiry_openings, $expiry_date, $access_code, $user_id, $redirect_sec_val);
+                $shortener_code = insertNewRedirect($raw_link, $expiry_openings, $expiry_date, $access_code, $user_id, $redirect_sec_val);
                 if ($shortener_code !== "error") {
                     if ($shortener_code === "invalid_url") {
                         $shortener_code = "";
                         $shortened_url = $link_as_parameter;
-                    } else $shortened_url = "https://savmrl.it/r/" . $shortener_code;
+                    } else $shortened_url = "https://savmrl.it/alpha/r/" . $shortener_code;
                     ?>
                     <p class="text-align-center hidden" id="message"></p>
-                    <div class="text-align-center" id="copy-link-container">
-                        <div class="input-link-container">
+                    <div class="result-card" id="copy-link-container">
+                        <div class="result-success-badge">
+                            <svg class="icon-inline" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 17l6 6 13-13"/></svg>
+                            <?php echo t('link-created', $lang); ?>
+                        </div>
+                        <div class="input-link-container result-input-container">
                             <input id="link-input-to-copy" class="input-link" type="url"
                                    value="<?php echo $shortened_url; ?>" onkeydown="onkeydown_enter(event)"
                                    oninput="validateName(this)" readonly/>
@@ -129,31 +139,34 @@
                             <?php } ?>
                         </div>
 
-                        <div class="text-align-center" style="margin-top:8px;font-size:0.9em;color:var(--color-text-secondary)">
-                            <?php echo t('redirect-link', $lang); ?> <a
-                                    href="<?php echo $link_as_parameter; ?>"><?php echo $link_as_parameter; ?></a>
+                        <div class="result-original-url">
+                            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <a href="<?php echo $link_as_parameter; ?>"><?php echo strlen($link_as_parameter) > 60 ? substr($link_as_parameter, 0, 60) . '...' : $link_as_parameter; ?></a>
                         </div>
 
-                        <div class="margin-top-30px flex-row">
+                        <?php if ($show_qr): ?>
+                        <div class="result-qr-section" id="qr-code-section">
+                            <img id="qrcode" alt="QR Code"
+                                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=<?php echo urlencode($shortened_url); ?>"/>
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="result-actions">
                             <input id="copy-link-button" class="button-link" type="button"
                                    value="<?php echo t('copy-link', $lang); ?>"
                                    onclick="copyLink()"/>
-                            <input id="another-link-button" class="button-link" type="button"
-                                   value="<?php echo t('generate-another', $lang); ?>"
-                                   onclick="location.href='/alpha/'"/>
-                            <a href="/stats/<?php echo $shortener_code; ?>">
-                                <input id="see-stats-button" class="button-link" type="button"
-                                       value="<?php echo t('see-stats', $lang); ?>"/>
-                            </a>
+                            <div class="result-actions-row">
+                                <input id="another-link-button" class="button-link result-btn-secondary" type="button"
+                                       value="<?php echo t('generate-another', $lang); ?>"
+                                       onclick="location.href='/alpha/'"/>
+                                <a href="/alpha/stats/<?php echo $shortener_code; ?>" style="flex:1;">
+                                    <input id="see-stats-button" class="button-link result-btn-secondary" type="button"
+                                           value="<?php echo t('see-stats', $lang); ?>"/>
+                                </a>
+                            </div>
                         </div>
                         <div id="additional_params"></div>
                     </div>
-                    <?php if ($show_qr): ?>
-                    <div class="text-align-center qr-code-section" id="qr-code-section">
-                        <img id="qrcode" alt="QR Code"
-                             src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=<?php echo urlencode($shortened_url); ?>"/>
-                    </div>
-                    <?php endif; ?>
 
 
                     <script>
@@ -189,6 +202,11 @@
                                         global_old_name = getValidatedNewName(new_name);
                                         messageEl.classList.add("info-message");
                                         messageEl.innerHTML = '<?php echo t('link-renamed', $lang); ?>'.replace('{{source-link}}', result.data.old_name).replace('{{new-link}}', result.data.new_name);
+                                        var statsBtn = document.getElementById("see-stats-button");
+                                        if (statsBtn && statsBtn.parentElement) {
+                                            statsBtn.parentElement.href = "/alpha/stats/" + global_old_name;
+                                        }
+                                        document.getElementById("link-input-to-copy").value = result.data.short_url;
                                         var qrImg = document.getElementById("qrcode");
                                         if (qrImg) {
                                             qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(result.data.short_url);
@@ -196,30 +214,30 @@
                                     } else {
                                         messageEl.classList.add("error-message");
                                         messageEl.innerHTML = result.description;
-                                        document.getElementById("link-input-to-copy").value = "https://savmrl.it/r/" + global_old_name;
+                                        document.getElementById("link-input-to-copy").value = "https://savmrl.it/alpha/r/" + global_old_name;
                                     }
                                 })
                                 .catch(error => {
                                     console.error('Error:', error);
-                                    document.getElementById("link-input-to-copy").value = "https://savmrl.it/r/" + global_old_name;
+                                    document.getElementById("link-input-to-copy").value = "https://savmrl.it/alpha/r/" + global_old_name;
                                 });
                         }
 
                         function editOrSaveLink(button) {
-                            let editImage = "/savmrl/images/edit.svg";
-                            let saveImage = "/savmrl/images/save.svg";
+                            let editImage = "/alpha/images/edit.svg";
+                            let saveImage = "/alpha/images/save.svg";
                             let inputLink = document.getElementById("link-input-to-copy");
 
                             if (inputLink.readOnly) {
                                 button.style.backgroundImage = 'url("' + saveImage + '")';
-                                inputLink.value = inputLink.value.substring("https://savmrl.it/r/".length);
+                                inputLink.value = inputLink.value.substring("https://savmrl.it/alpha/r/".length);
                                 inputLink.readOnly = false;
                                 inputLink.focus();
                             } else {
                                 button.style.backgroundImage = 'url("' + editImage + '")';
                                 let new_name = getValidatedNewName(inputLink.value);
-                                inputLink.value = inputLink.value.replace("https://savmrl.it/r/", "");
-                                inputLink.value = "https://savmrl.it/r/" + inputLink.value;
+                                inputLink.value = inputLink.value.replace("https://savmrl.it/alpha/r/", "");
+                                inputLink.value = "https://savmrl.it/alpha/r/" + inputLink.value;
                                 inputLink.readOnly = true;
                                 inputLink.blur();
 
@@ -270,7 +288,7 @@
                     </div>
                     <div class="input-link-container">
                         <input id="link-input" type="url" class="input-link" placeholder="<?php echo t('insert-link', $lang); ?>"
-                               name="link" oninput="linkInput()" value="<?php echo $link_as_parameter; ?>" required/>
+                               name="link" oninput="linkInput()" value="<?php echo $link_as_parameter; ?>" required autofocus/>
                         <input id="generate-link-button" class="button-link <?php echo $hidden_or_not_class; ?>"
                                type="submit" value=""/>
                     </div>
@@ -346,13 +364,13 @@
                                        min="5" max="30" value="<?php echo $redirect_seconds; ?>"
                                        placeholder="<?php echo t('optional', $lang); ?>"/>
                             </div>
-                        </div>
-                        <div class="qr-toggle-row">
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="qr_toggle" checked />
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <label for="qr_toggle"><?php echo t('generate-qr', $lang); ?></label>
+                            <div class="advanced-row">
+                                <label class="advanced-label" for="qr_toggle"><?php echo t('generate-qr', $lang); ?></label>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="qr_toggle" checked />
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div class="terms-checkbox-row">
                             <input type="checkbox" id="accept_terms" required />
@@ -508,7 +526,7 @@
     </script>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/footer.php"); ?>
 </footer>
 
 </body>

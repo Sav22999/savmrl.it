@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/v2/helpers.php';
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/admin-auth.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/admin-auth.php");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     api_method_not_allowed('POST');

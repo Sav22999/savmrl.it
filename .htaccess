@@ -6,8 +6,8 @@ RewriteRule ^alpha/ - [L]
 # Allow static assets
 RewriteRule ^savmrl/ - [L]
 
-# Block all API calls (production)
-RewriteRule ^api/ /r/ [L]
+# Allow API calls (needed by alpha)
+RewriteRule ^api/ - [L]
 
 # Block stats pages
 RewriteRule ^stats/ /r/ [L]

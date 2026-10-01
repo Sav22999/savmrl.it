@@ -8,7 +8,7 @@ header('Content-Type: text/html; charset=UTF-8');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>savmrl.it — Link suspended</title>
+    <title>savmrl.it — Link temporarily suspended</title>
     <link rel="icon" type="image/svg+xml" href="/savmrl/images/icon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -80,10 +80,10 @@ header('Content-Type: text/html; charset=UTF-8');
                 <line x1="58" y1="22" x2="22" y2="58" stroke="#d63031" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
         </div>
-        <h1>Link suspended</h1>
+        <h1>Link temporarily suspended</h1>
         <p class="subtitle">
-            This link is no longer reachable.<br>
-            The savmrl.it service has been suspended due to illegal use.
+            This link is temporarily unavailable.<br>
+            The savmrl.it service is temporarily suspended for maintenance. It will be restored soon.
         </p>
         <div class="legal">
             For inquiries: <a href="https://saveriomorelli.com/contact-me" style="color:#636e72;font-weight:600;">saveriomorelli.com/contact-me</a>

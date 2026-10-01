@@ -43,7 +43,7 @@ if ($row["expiry_date"] !== null && strtotime($row["expiry_date"]) < strtotime(d
 
 api_success("Link info retrieved", [
     "name" => $row["name"],
-    "short_url" => "https://savmrl.it/r/" . $row["name"],
+    "short_url" => SHORT_URL_BASE . $row["name"],
     "click_count" => (int) $row["click_count"],
     "openings_limit" => $row["limit_times"],
     "expiry_date" => $row["expiry_date"],

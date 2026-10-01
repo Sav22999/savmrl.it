@@ -50,7 +50,7 @@ $c->close();
 
 api_success("Statistics retrieved", [
     "name" => $name,
-    "short_url" => "https://savmrl.it/r/" . $name,
+    "short_url" => SHORT_URL_BASE . $name,
     "total_clicks" => (int) $count_row["count"],
     "openings_limit" => $link_row["limit_times"],
     "expiry_date" => $link_row["expiry_date"],

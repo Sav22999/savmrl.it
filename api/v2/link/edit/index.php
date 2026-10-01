@@ -101,5 +101,5 @@ $c->close();
 api_success("Link renamed successfully", [
     "old_name" => $old_name,
     "new_name" => $new_name,
-    "short_url" => "https://savmrl.it/r/" . $new_name,
+    "short_url" => SHORT_URL_BASE . $new_name,
 ]);

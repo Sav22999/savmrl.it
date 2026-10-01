@@ -41,6 +41,16 @@ if ($link['admin_blocked']) {
     api_unauthorized('This link has been blocked by an administrator');
 }
 
+$has_access_code = $link['access_code'] !== null;
+$current_code_provided = isset($data['current_access_code']) && $data['current_access_code'] !== '';
+
+if ($has_access_code && $current_code_provided) {
+    if (!verify_access_code($data['current_access_code'], $link['access_code'])) {
+        $c->close();
+        api_unauthorized('Invalid current access code');
+    }
+}
+
 $updates = [];
 $params = [];
 $types = "";
@@ -51,17 +61,16 @@ if (isset($data['destination_url']) && $data['destination_url'] !== '') {
         $c->close();
         api_bad_request('Invalid destination URL');
     }
-    if ($link['access_code'] !== null) {
-        if (!isset($data['access_code']) || $data['access_code'] === '') {
+    if ($has_access_code) {
+        if (!$current_code_provided) {
             $c->close();
-            api_bad_request('Access code is required to change the destination of a protected link');
+            api_bad_request('Current access code is required to change the destination of a protected link');
         }
-        $code_hash = hash('sha512', $data['access_code']);
-        if ($code_hash !== $link['access_code']) {
-            $c->close();
-            api_unauthorized('Invalid access code');
+        if (isset($data['new_access_code']) && $data['new_access_code'] !== '') {
+            $new_url = encryptTextWithPassword($new_url, $data['new_access_code']);
+        } else {
+            $new_url = encryptTextWithPassword($new_url, $data['current_access_code']);
         }
-        $new_url = encryptTextWithPassword($new_url, $data['access_code']);
     }
     $updates[] = "`redirect_link` = ?";
     $params[] = $new_url;
@@ -82,15 +91,57 @@ if (isset($data['openings_limit'])) {
     $types .= "i";
 }
 
-if (isset($data['access_code']) && $data['access_code'] !== '') {
-    $new_hash = hash('sha512', $data['access_code']);
+if (isset($data['redirect_seconds'])) {
+    $rs = (int)$data['redirect_seconds'];
+    $rs = max(5, min(30, $rs));
+    $updates[] = "`redirect_seconds` = ?";
+    $params[] = $rs;
+    $types .= "i";
+}
 
-    $destination_already_handled = isset($data['destination_url']) && $data['destination_url'] !== '';
-    if (!$destination_already_handled && $link['access_code'] !== null) {
-        $new_link = encryptTextWithPassword($link['redirect_link'], $data['access_code']);
+if (isset($data['remove_access_code']) && $data['remove_access_code']) {
+    if (!$has_access_code) {
+        $c->close();
+        api_bad_request('Link does not have an access code');
+    }
+    if (!$current_code_provided) {
+        $c->close();
+        api_bad_request('Current access code is required to remove it');
+    }
+    $decrypted_url = decryptTextWithPassword($link['redirect_link'], $data['current_access_code']);
+    if ($decrypted_url && filter_var($decrypted_url, FILTER_VALIDATE_URL)) {
         $updates[] = "`redirect_link` = ?";
-        $params[] = $new_link;
+        $params[] = $decrypted_url;
         $types .= "s";
+    }
+    $updates[] = "`access_code` = NULL";
+
+} else if (isset($data['new_access_code']) && $data['new_access_code'] !== '') {
+    $new_hash = password_hash($data['new_access_code'], PASSWORD_DEFAULT);
+
+    if ($has_access_code) {
+        if (!$current_code_provided) {
+            $c->close();
+            api_bad_request('Current access code is required to change it');
+        }
+        $decrypted_url = decryptTextWithPassword($link['redirect_link'], $data['current_access_code']);
+        if ($decrypted_url) {
+            $re_encrypted = encryptTextWithPassword($decrypted_url, $data['new_access_code']);
+            $destination_already_handled = isset($data['destination_url']) && $data['destination_url'] !== '';
+            if (!$destination_already_handled) {
+                $updates[] = "`redirect_link` = ?";
+                $params[] = $re_encrypted;
+                $types .= "s";
+            }
+        }
+    } else {
+        $destination_already_handled = isset($data['destination_url']) && $data['destination_url'] !== '';
+        if (!$destination_already_handled) {
+            $encrypted_url = encryptTextWithPassword($link['redirect_link'], $data['new_access_code']);
+            $updates[] = "`redirect_link` = ?";
+            $params[] = $encrypted_url;
+            $types .= "s";
+        }
     }
 
     $updates[] = "`access_code` = ?";

@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/v2/helpers.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/savmrl/include/emails.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/alpha/include/emails.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     api_method_not_allowed('POST');
@@ -55,12 +55,17 @@ if ($step === 'request') {
         api_unauthorized('Token mismatch');
     }
 
+    $email_to_notify = $user['email'];
+    $username_to_notify = $user['username'];
+
     auth_destroy_session();
     $result = auth_confirm_delete_account($user['id']);
 
     if (isset($result['error'])) {
         api_error($result['error']);
     }
+
+    send_account_deleted_email($email_to_notify, $username_to_notify);
 
     api_success('Account deleted successfully.');
 

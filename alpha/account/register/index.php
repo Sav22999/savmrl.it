@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/translations.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/meta.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/translations.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth.php");
     auth_start_session();
     if (auth_get_current_user()) { header('Location: /alpha/account/'); exit; }
     global $title_header;
@@ -17,7 +17,7 @@
 <header>
     <?php echo $title_header; ?>
 </header>
-<main>
+<main class="main-centered">
     <div class="horizontal-center">
         <div class="auth-form-container">
             <h2 class="title-section brilors"><?php echo t('signup', $lang); ?></h2>
@@ -28,6 +28,16 @@
                 <input type="email" id="email" class="input-link" placeholder="<?php echo t('email', $lang); ?>" required />
                 <input type="password" id="password" class="input-link" placeholder="<?php echo t('password-min', $lang); ?>" minlength="8" required />
                 <input type="password" id="password-confirm" class="input-link" placeholder="<?php echo t('confirm-password', $lang); ?>" minlength="8" required />
+                <div class="terms-checkbox-row">
+                    <input type="checkbox" id="accept_terms" required />
+                    <label for="accept_terms"><?php echo t('accept-terms', $lang); ?></label>
+                </div>
+                <altcha-widget challengeurl="/api/v2/altcha/challenge/" strings='<?php echo htmlspecialchars(json_encode([
+                    'label' => t('altcha-label', $lang),
+                    'verifying' => t('altcha-verifying', $lang),
+                    'verified' => t('altcha-verified', $lang),
+                    'error' => t('altcha-error', $lang),
+                ])); ?>'></altcha-widget>
                 <input type="submit" class="button-link" value="<?php echo t('signup', $lang); ?>" />
             </form>
             <p class="text-align-center auth-link-text">
@@ -37,9 +47,10 @@
     </div>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/footer.php"); ?>
 </footer>
 
+<script async defer src="https://cdn.jsdelivr.net/npm/altcha/dist/altcha.min.js" type="module"></script>
 <script>
 function showMessage(text, isError) {
     const el = document.getElementById('auth-message');
@@ -57,10 +68,24 @@ function submitRegister(e) {
         return;
     }
 
+    if (!document.getElementById('accept_terms').checked) {
+        showMessage(<?php echo json_encode(t('must-accept-terms', $lang)); ?>, true);
+        return;
+    }
+
+    const altchaWidget = document.querySelector('altcha-widget');
+    const altchaValue = altchaWidget ? altchaWidget.value : '';
+    if (!altchaValue) {
+        showMessage(<?php echo json_encode(t('captcha-required', $lang)); ?>, true);
+        return;
+    }
+
     const data = {
         username: document.getElementById('username').value,
         email: document.getElementById('email').value,
         password: password,
+        terms_accepted: true,
+        altcha: altchaValue,
     };
 
     fetch('/api/v2/auth/register/', {

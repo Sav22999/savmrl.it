@@ -298,12 +298,13 @@ function generate_otp($user_id, $purpose = 'login_2fa') {
     $del->close();
 
     $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    $code_hash = password_hash($code, PASSWORD_DEFAULT);
     $temp_token = bin2hex(random_bytes(32));
     $ttl = ($purpose === 'email_verification') ? 86400 : 1800;
     $expires = date('Y-m-d H:i:s', time() + $ttl);
 
     $stmt = $c->prepare("INSERT INTO `otp_codes_savmrl` (`user_id`, `code`, `purpose`, `temp_token`, `expires_at`) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("issss", $user_id, $code, $purpose, $temp_token, $expires);
+    $stmt->bind_param("issss", $user_id, $code_hash, $purpose, $temp_token, $expires);
     if (!$stmt->execute()) {
         $stmt->close();
         $c->close();
@@ -345,7 +346,13 @@ function verify_otp($temp_token, $code, $purpose = 'login_2fa') {
         return ['error' => 'Too many attempts'];
     }
 
-    if (!hash_equals($otp['code'], $code)) {
+    $code_match = false;
+    if (strpos($otp['code'], '$') === 0) {
+        $code_match = password_verify($code, $otp['code']);
+    } else {
+        $code_match = hash_equals($otp['code'], $code);
+    }
+    if (!$code_match) {
         $inc = $c->prepare("UPDATE `otp_codes_savmrl` SET `attempts` = `attempts` + 1 WHERE `id` = ?");
         $inc->bind_param("i", $otp['id']);
         $inc->execute();
@@ -502,7 +509,7 @@ function auth_confirm_delete_account($user_id) {
     $del_otp->execute();
     $del_otp->close();
 
-    $nullify = $c->prepare("UPDATE `redirect_alpha_savmrl` SET `user_id` = NULL WHERE `user_id` = ?");
+    $nullify = $c->prepare("UPDATE `redirect_savmrl` SET `user_id` = NULL WHERE `user_id` = ?");
     $nullify->bind_param("i", $user_id);
     $nullify->execute();
     $nullify->close();
@@ -544,6 +551,69 @@ function auth_resend_verification($user_id) {
     if (!$otp) return false;
 
     return ['code' => $otp['code'], 'temp_token' => $otp['temp_token'], 'email' => $user['email'], 'username' => $user['username']];
+}
+
+function auth_forgot_password_request($email) {
+    global $localhost_db, $username_db, $password_db, $database_savmrl;
+
+    $email = strtolower(trim($email));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return ['error' => 'Invalid email format'];
+    }
+
+    $c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl);
+    if ($c->connect_error) return ['error' => 'Database error'];
+    $c->set_charset("utf8mb4");
+
+    $stmt = $c->prepare("SELECT `id`, `username`, `email`, `blocked` FROM `users_savmrl` WHERE `email` = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows !== 1) {
+        $stmt->close();
+        $c->close();
+        return ['success' => true];
+    }
+    $user = $result->fetch_assoc();
+    $stmt->close();
+    $c->close();
+
+    if ((int)$user['blocked'] === 1) {
+        return ['success' => true];
+    }
+
+    $otp = generate_otp($user['id'], 'password_reset');
+    if (!$otp) {
+        return ['error' => 'Failed to generate verification code'];
+    }
+
+    return ['success' => true, 'user_id' => $user['id'], 'code' => $otp['code'], 'temp_token' => $otp['temp_token'], 'email' => $user['email'], 'username' => $user['username']];
+}
+
+function auth_reset_password($temp_token, $code, $new_password) {
+    if (strlen($new_password) < 8) {
+        return ['error' => 'Password must be at least 8 characters'];
+    }
+
+    $result = verify_otp($temp_token, $code, 'password_reset');
+    if (isset($result['error'])) {
+        return $result;
+    }
+
+    global $localhost_db, $username_db, $password_db, $database_savmrl;
+    $new_hash = password_hash($new_password, PASSWORD_BCRYPT, ['cost' => 12]);
+    $c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl);
+    if ($c->connect_error) return ['error' => 'Database error'];
+    $c->set_charset("utf8mb4");
+
+    $upd = $c->prepare("UPDATE `users_savmrl` SET `password_hash` = ? WHERE `id` = ?");
+    $upd->bind_param("si", $new_hash, $result['user_id']);
+    $upd->execute();
+    $upd->close();
+    $c->close();
+
+    auth_destroy_all_sessions($result['user_id']);
+    return ['success' => true];
 }
 
 function auth_cleanup($c) {

@@ -6,8 +6,8 @@ global $localhost_db, $password_db, $database_savmrl, $username_db, $title;
 $title_header = "<a href='/alpha/' id='title-page-with-icon'><img src='/savmrl/images/icon-big.svg'/><div class='text'>savmrl.it</div></a> <span style='color: teal;font-family: serif'>αlpha</span>";
 $seconds = 0; //TODO : set manually
 
-$redirect_table = "redirect_alpha_savmrl";
-$opened_table = "opened_alpha_savmrl";
+$redirect_table = "redirect_savmrl";
+$opened_table = "opened_savmrl";
 
 function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false, &$linkData = null)
 {

@@ -1,6 +1,6 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth.php");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: /alpha/account/login/');

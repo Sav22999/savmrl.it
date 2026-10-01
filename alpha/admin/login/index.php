@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/translations.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/admin-auth.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/meta.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/translations.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/admin-auth.php");
     admin_auth_start_session();
     if (admin_get_current()) { header('Location: /alpha/admin/'); exit; }
     global $title_header;
@@ -13,11 +13,11 @@
     ?>
     <title>Admin Login — savmrl.it</title>
 </head>
-<body>
+<body class="admin-mode">
 <header>
     <?php echo $title_header; ?>
 </header>
-<main>
+<main class="main-centered">
     <div class="horizontal-center">
         <div class="auth-form-container">
             <h2 class="title-section brilors">Admin Login</h2>
@@ -32,7 +32,7 @@
     </div>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/footer.php"); ?>
 </footer>
 
 <script>

@@ -52,6 +52,9 @@
                 <li>IP addresses are stored securely and <strong>never shared with third parties</strong>, except as
                     required by law.
                 </li>
+                <li>IP addresses are automatically anonymized (removed) after <strong>30 days</strong> from the date of
+                    collection.
+                </li>
                 <li>For full details, please refer to our <a href="https://www.savmrl.it/privacy">Privacy Policy</a>.
                 </li>
             </ul>
@@ -68,6 +71,9 @@
             <p>The Service must not be used for illegal, abusive, or malicious purposes. Links containing or redirecting
                 to illegal content may be removed without notice. Users remain solely responsible for the content of the
                 URLs they shorten and share.</p>
+            <p>The developer and operator of the Service is <strong>not responsible</strong> for any illegal or
+                illegitimate use of the Service by its users. The responsibility for any unlawful activity carried out
+                through the Service lies entirely with the user who performed such activity.</p>
         </section>
 
         <section class="horizontal-center-p text-align-justify">
@@ -118,7 +124,7 @@
                 these terms and conditions.
             </p>
             <p>
-                Last updated: 16 Oct 2025
+                Last updated: 30 Sep 2026
             </p>
         </section>
     </div>

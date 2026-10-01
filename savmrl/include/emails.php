@@ -71,6 +71,21 @@ function send_otp_email($to_email, $username, $otp_code) {
     return send_email($to_email, 'Your savmrl.it login code', email_wrap($content));
 }
 
+function send_password_reset_email($to_email, $username, $otp_code) {
+    $name = $username ?: 'there';
+    $content = '<h2 style="margin:0 0 16px;color:#1a2b3c;font-family:Inter,Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;">Password reset</h2>'
+        . '<p style="color:#6b7a8d;line-height:1.6;font-size:15px;">Hi ' . htmlspecialchars($name) . ',</p>'
+        . '<p style="color:#6b7a8d;line-height:1.6;font-size:15px;">You requested to reset your password. Use the following code:</p>'
+        . '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;">'
+        . '<tr><td align="center">'
+        . '<div style="display:inline-block;background:#f5f6f8;border:2px solid #e2e6ea;border-radius:12px;padding:20px 40px;">'
+        . '<span style="font-size:36px;font-weight:700;letter-spacing:8px;color:#00A7AA;font-family:Inter,Arial,Helvetica,sans-serif;">' . htmlspecialchars($otp_code) . '</span>'
+        . '</div>'
+        . '</td></tr></table>'
+        . '<p style="color:#999;font-size:12px;line-height:1.5;">This code expires in 30 minutes. If you didn\'t request a password reset, you can safely ignore this email.</p>';
+    return send_email($to_email, 'savmrl.it — Password reset code', email_wrap($content));
+}
+
 function send_password_changed_email($to_email, $username) {
     $name = $username ?: 'there';
     $content = '<h2 style="margin:0 0 16px;color:#1a2b3c;font-family:Inter,Arial,Helvetica,sans-serif;font-size:22px;font-weight:700;">Password changed</h2>'

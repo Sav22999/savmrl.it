@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/translations.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/meta.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/translations.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth.php");
     global $title_header;
     $lang = detectLanguage();
 
@@ -57,7 +57,7 @@
 <header>
     <?php echo $title_header; ?>
 </header>
-<main>
+<main class="main-centered">
     <div class="horizontal-center">
         <div class="auth-form-container">
             <?php if ($success): ?>
@@ -72,7 +72,7 @@
     </div>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/footer.php"); ?>
 </footer>
 </body>
 </html>

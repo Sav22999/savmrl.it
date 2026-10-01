@@ -114,10 +114,14 @@
         <section class="horizontal-center-p text-align-justify">
             <h4>5. Data Retention</h4>
             <ul>
-                <li>Data related to a link (original URL, creation date, IP address, expiry, click count) are kept until
+                <li>Data related to a link (original URL, creation date, expiry, click count) are kept until
                     the link is <strong>expired</strong> or <strong>deleted</strong>.
                 </li>
-                <li>Expired or deleted links may be purged after a short retention period.</li>
+                <li><strong>IP addresses</strong> are automatically anonymized (set to null) after <strong>30 days</strong>
+                    from the date of collection. This applies to IP addresses stored in link creation records,
+                    click/visit records, and session records.
+                </li>
+                <li>Expired or deleted links and their associated data may be purged after a short retention period.</li>
                 <li>When technically possible, users may request removal of a specific link and associated data.</li>
             </ul>
             <p>After deletion, stored data are permanently erased or anonymized.</p>
@@ -195,7 +199,7 @@
                 this Privacy Policy.
             </p>
             <p>
-                Last updated: 16 Oct 2025
+                Last updated: 30 Sep 2026
             </p>
         </section>
     </div>

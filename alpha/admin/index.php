@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/translations.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/admin-auth.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/meta.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/translations.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/admin-auth.php");
     admin_auth_start_session();
     $admin = admin_require_login();
     global $title_header;
@@ -13,11 +13,11 @@
     ?>
     <title>Admin Dashboard — savmrl.it</title>
 </head>
-<body>
+<body class="admin-mode">
 <header>
     <?php echo $title_header; ?>
     <div class="auth-nav">
-        <span class="auth-nav-link admin-badge">Admin: <?php echo htmlspecialchars($admin['username']); ?></span>
+        <span class="auth-nav-link admin-badge"><?php echo htmlspecialchars($admin['username']); ?></span>
         <a href="/alpha/admin/logout/" class="auth-nav-link auth-logout-btn"><?php echo t('logout', $lang); ?></a>
     </div>
 </header>
@@ -47,14 +47,20 @@
                     <div class="admin-stat-value" id="stat-blocked">-</div>
                     <div class="admin-stat-label">Blocked</div>
                 </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-value" id="stat-user-reported">-</div>
+                    <div class="admin-stat-label">User Reports</div>
+                </div>
             </div>
 
             <div class="admin-nav-grid">
                 <a href="/alpha/admin/links/" class="admin-nav-card">
+                    <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                     <h3>Manage Links</h3>
                     <p>Search, block, and unblock links</p>
                 </a>
                 <a href="/alpha/admin/users/" class="admin-nav-card">
+                    <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                     <h3>Manage Users</h3>
                     <p>View users, toggle pro features, block accounts</p>
                 </a>
@@ -63,7 +69,7 @@
     </div>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer-alpha.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/footer.php"); ?>
 </footer>
 
 <script>
@@ -72,11 +78,13 @@ fetch('/api/v2/admin/stats/')
     .then(data => {
         if (data.code !== '200') return;
         const s = data.data;
-        document.getElementById('stat-total-links').textContent = s.total_links;
-        document.getElementById('stat-total-clicks').textContent = s.total_clicks;
-        document.getElementById('stat-total-users').textContent = s.total_users;
-        document.getElementById('stat-reported').textContent = s.reported_links;
-        document.getElementById('stat-blocked').textContent = s.blocked_links;
+        function fmtNum(n) { return String(Number(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+        document.getElementById('stat-total-links').textContent = fmtNum(s.total_links);
+        document.getElementById('stat-total-clicks').textContent = fmtNum(s.total_clicks);
+        document.getElementById('stat-total-users').textContent = fmtNum(s.total_users);
+        document.getElementById('stat-reported').textContent = fmtNum(s.reported_links);
+        document.getElementById('stat-blocked').textContent = fmtNum(s.blocked_links);
+        document.getElementById('stat-user-reported').textContent = fmtNum(s.user_reported_links || 0);
     })
     .catch(() => {});
 </script>

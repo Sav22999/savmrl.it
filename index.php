@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>savmrl.it — Service suspended</title>
+    <title>savmrl.it — Service temporarily suspended</title>
     <link rel="icon" type="image/svg+xml" href="/savmrl/images/icon.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -89,10 +89,10 @@
                 <line x1="70" y1="30" x2="30" y2="70" stroke="#d63031" stroke-width="3" stroke-linecap="round"/>
             </svg>
         </div>
-        <h1>Service suspended</h1>
+        <h1>Service temporarily suspended</h1>
         <p class="subtitle">
-            Due to illegal use of the service, savmrl.it has been suspended.<br>
-            All links have been deactivated immediately.
+            The savmrl.it service is temporarily suspended for maintenance and security improvements.<br>
+            All links are temporarily deactivated. The service will be restored soon.
         </p>
         <div class="legal">
             For inquiries<br>

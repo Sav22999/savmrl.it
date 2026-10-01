@@ -4,12 +4,13 @@ if (!function_exists('t')) {
 }
 $footerLang = isset($lang) ? $lang : detectLanguage();
 ?>
-Developed with
-<div class="square-20px"></div>
-<div class="image-heart image-background-primary image-square-20px"></div>
-by <a href="https://saveriomorelli.com" class="bold footer-author">Saverio Morelli</a>
-<br>
-<span class="footer-small-text">
-<a href="/savmrl/privacy/"><?php echo t('privacy', $footerLang); ?></a>  | <a href="/savmrl/terms/"><?php echo t('terms', $footerLang); ?></a> | <a
-            href="/savmrl/addons/"><?php echo t('addons', $footerLang); ?></a> | <a href="/alpha/account/"><?php echo t('account', $footerLang); ?></a> | <a href="https://savmrl.it/r/github">GitHub</a>
-</span>
+<nav class="footer-links">
+    <a href="/alpha/privacy/"><?php echo t('privacy', $footerLang); ?></a>
+    <a href="/alpha/terms/"><?php echo t('terms', $footerLang); ?></a>
+    <a href="/alpha/addons/"><?php echo t('addons', $footerLang); ?></a>
+    <a href="https://savmrl.it/r/github">GitHub</a>
+    <a href="/alpha/admin/">Admin</a>
+</nav>
+<div class="footer-attribution">
+    Developed with <span class="image-heart image-background-primary image-heart-inline"></span> by <a href="https://saveriomorelli.com" class="footer-author">Saverio Morelli</a>
+</div>

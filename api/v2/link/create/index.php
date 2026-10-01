@@ -17,9 +17,13 @@ $openings = isset($request["openings"]) ? $request["openings"] : null;
 $date = isset($request["date"]) ? $request["date"] : null;
 $access_code = isset($request["access_code"]) ? $request["access_code"] : null;
 $custom_name = isset($request["name"]) ? validate_name($request["name"]) : null;
+$redirect_seconds = isset($request["redirect_seconds"]) ? $request["redirect_seconds"] : null;
 
 $openings = isValidNumber($openings);
 $date = isValidDate($date);
+if ($redirect_seconds !== null) {
+    $redirect_seconds = max(5, min(30, (int)$redirect_seconds));
+}
 
 if (!isValidUrl($link)) {
     api_bad_request("Links pointing to savmrl.it are not allowed");
@@ -46,7 +50,7 @@ $ip_address = getIpAddress();
 $access_code_hash = null;
 $link_to_store = getGoodString($link);
 if ($access_code !== null && $access_code !== "") {
-    $access_code_hash = hash('sha512', $access_code);
+    $access_code_hash = password_hash($access_code, PASSWORD_DEFAULT);
     $link_to_store = encryptTextWithPassword($link, $access_code);
 }
 
@@ -91,9 +95,9 @@ if ($custom_name !== null && $custom_name !== "") {
     }
 }
 
-$query_insert = "INSERT INTO `$redirect_table` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `inserted_timestamp`, `inserted_from_ip`, `reported`, `user_id`) VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?)";
+$query_insert = "INSERT INTO `$redirect_table` (`id`, `name`, `redirect_link`, `access_code`, `limit_times`, `expiry_date`, `redirect_seconds`, `inserted_timestamp`, `inserted_from_ip`, `reported`, `user_id`) VALUES (NULL, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, NULL, ?)";
 $stmt_insert = $c->prepare($query_insert);
-$stmt_insert->bind_param("sssissi", $new_name, $link_to_store, $access_code_hash, $openings, $date, $ip_address, $user_id);
+$stmt_insert->bind_param("sssisisi", $new_name, $link_to_store, $access_code_hash, $openings, $date, $redirect_seconds, $ip_address, $user_id);
 
 if (!$stmt_insert->execute()) {
     $c->rollback();
@@ -107,10 +111,11 @@ $c->close();
 
 api_created("Link created successfully", [
     "name" => $new_name,
-    "short_url" => "https://savmrl.it/r/" . $new_name,
+    "short_url" => SHORT_URL_BASE . $new_name,
     "original_url" => $link,
     "openings_limit" => $openings,
     "expiry_date" => $date,
+    "redirect_seconds" => $redirect_seconds,
     "has_access_code" => ($access_code !== null && $access_code !== ""),
 ]);
 

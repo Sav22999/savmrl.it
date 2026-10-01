@@ -1,6 +1,6 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT'] . "/api/v2/helpers.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/admin-auth.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/admin-auth.php");
 
 admin_auth_start_session();
 admin_require_login();
@@ -15,6 +15,7 @@ $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $per_page = isset($_GET['per_page']) ? min(50, max(1, (int)$_GET['per_page'])) : 20;
 $offset = ($page - 1) * $per_page;
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
 
 $c = get_db_connection();
 
@@ -39,7 +40,14 @@ $count_stmt->execute();
 $total = $count_stmt->get_result()->fetch_assoc()['total'];
 $count_stmt->close();
 
-$query = "SELECT u.*, (SELECT COUNT(*) FROM `$redirect_table` WHERE `user_id` = u.`id`) AS link_count FROM `users_savmrl` u WHERE $where ORDER BY u.`created_at` DESC LIMIT ? OFFSET ?";
+$order_clause = "u.`created_at` DESC";
+if ($sort === 'oldest') $order_clause = "u.`created_at` ASC";
+elseif ($sort === 'most-links') $order_clause = "link_count DESC";
+elseif ($sort === 'least-links') $order_clause = "link_count ASC";
+elseif ($sort === 'username-az') $order_clause = "u.`username` ASC";
+elseif ($sort === 'username-za') $order_clause = "u.`username` DESC";
+
+$query = "SELECT u.*, (SELECT COUNT(*) FROM `$redirect_table` WHERE `user_id` = u.`id`) AS link_count FROM `users_savmrl` u WHERE $where ORDER BY $order_clause LIMIT ? OFFSET ?";
 
 $all_params = $params;
 $all_params[] = $per_page;
