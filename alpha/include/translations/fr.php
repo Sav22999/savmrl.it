@@ -224,5 +224,22 @@ $strings = [
     'error-reported-title' => 'Lien signalé comme dangereux',
     'error-reported-desc' => 'Ce lien a été signalé comme dangereux et est actuellement bloqué. Si vous pensez qu\'il s\'agit d\'une erreur, contactez-nous.',
     'go-home' => 'Aller à l\'accueil',
+
+    // Add-ons page
+    'addons-title' => 'Extensions pour navigateur',
+    'addons-intro' => 'Raccourcissez la page que vous consultez directement depuis la barre d\'outils de votre navigateur, sans jamais ouvrir savmrl.it.',
+    'addons-install-title' => 'Installer l\'extension',
+    'addons-install-subtitle' => 'Disponible sur les stores officiels des principaux navigateurs web.',
+    'addons-install-action' => 'Installer',
+    'addons-other-browsers' => 'Vous utilisez un autre navigateur ? Les navigateurs basés sur Chromium comme Brave, Opera et Vivaldi peuvent installer l\'extension depuis le Chrome Web Store.',
+    'addons-features-title' => 'Pourquoi utiliser l\'extension',
+    'addons-feature-options-title' => 'Options personnalisables',
+    'addons-feature-options-desc' => 'En appuyant sur l\'icône, une fenêtre s\'ouvre pour personnaliser le lien avant de le créer.',
+    'addons-feature-oneclick-title' => 'Mode un clic',
+    'addons-feature-oneclick-desc' => 'Vous préférez la rapidité ? Activez le mode un clic : le lien est raccourci immédiatement, sans fenêtre.',
+    'addons-feature-handy-title' => 'Toujours à portée de main',
+    'addons-feature-handy-desc' => 'Tout se passe dans le navigateur : plus besoin d\'ouvrir le site et de coller l\'URL.',
+    'addons-feature-free-title' => 'Gratuite et open source',
+    'addons-feature-free-desc' => 'Le même service gratuit que le site, avec le code source disponible sur GitHub.',
 ];
 ?>

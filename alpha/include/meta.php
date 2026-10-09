@@ -8,7 +8,6 @@ $url_opengraph = "https://www.savmrl.it/alpha/images/banner.png";
     <meta charset="UTF-8">
 
     <!-- Primary Meta Tags -->
-    <title>savmrl.it – Free URL Shortener with Link Tracking</title>
     <meta name="description" content="Shorten and share links with savmrl.it. Free registration, click tracking, QR codes, and browser extensions for Chrome, Firefox, and Edge.">
     <meta name="keywords" content="URL shortener, free link shortener, link redirect service, QR code generator, link tracking, savmrl.it, Saverio Morelli">
     <meta name="author" content="Saverio Morelli">
@@ -37,7 +36,7 @@ global $title;
 if (isset($title)) {
     echo "<title>" . $title . "</title>";
 } else {
-    $title = "?";
-    echo "<title>savmrl.it</title>";
+    $title = "savmrl.it – Free URL Shortener with Link Tracking";
+    echo "<title>" . $title . "</title>";
 }
 ?>

@@ -224,5 +224,22 @@ $strings = [
     'error-reported-title' => 'Enlace reportado como inseguro',
     'error-reported-desc' => 'Este enlace ha sido reportado como inseguro y está bloqueado. Si crees que es un error, contáctanos.',
     'go-home' => 'Ir al inicio',
+
+    // Add-ons page
+    'addons-title' => 'Extensiones de navegador',
+    'addons-intro' => 'Acorta la página que estás visitando directamente desde la barra de herramientas del navegador, sin abrir nunca savmrl.it.',
+    'addons-install-title' => 'Instalar la extensión',
+    'addons-install-subtitle' => 'Disponible en las tiendas oficiales de los principales navegadores web.',
+    'addons-install-action' => 'Instalar',
+    'addons-other-browsers' => '¿Usas otro navegador? Los navegadores basados en Chromium como Brave, Opera y Vivaldi pueden instalar la extensión desde Chrome Web Store.',
+    'addons-features-title' => 'Por qué usar la extensión',
+    'addons-feature-options-title' => 'Opciones personalizables',
+    'addons-feature-options-desc' => 'Al pulsar el icono se abre una ventana donde puedes personalizar el enlace antes de crearlo.',
+    'addons-feature-oneclick-title' => 'Modo de un clic',
+    'addons-feature-oneclick-desc' => '¿Prefieres la máxima rapidez? Activa el modo de un clic: el enlace se acorta al instante, sin ventana.',
+    'addons-feature-handy-title' => 'Siempre a mano',
+    'addons-feature-handy-desc' => 'Todo ocurre en el navegador: no hace falta abrir el sitio ni pegar la URL.',
+    'addons-feature-free-title' => 'Gratuita y de código abierto',
+    'addons-feature-free-desc' => 'El mismo servicio gratuito que el sitio web, con el código fuente disponible en GitHub.',
 ];
 ?>

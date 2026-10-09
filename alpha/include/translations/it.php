@@ -225,5 +225,22 @@ $strings = [
     'error-reported-title' => 'Link segnalato come non sicuro',
     'error-reported-desc' => 'Questo link è stato segnalato come non sicuro ed è attualmente bloccato. Se ritieni sia un errore, contattaci.',
     'go-home' => 'Vai alla homepage',
+
+    // Add-ons page
+    'addons-title' => 'Estensioni per browser',
+    'addons-intro' => 'Abbrevia la pagina che stai visitando direttamente dalla barra degli strumenti del browser, senza mai aprire savmrl.it.',
+    'addons-install-title' => 'Installa l\'estensione',
+    'addons-install-subtitle' => 'Disponibile sugli store ufficiali dei principali browser web.',
+    'addons-install-action' => 'Installa',
+    'addons-other-browsers' => 'Usi un altro browser? I browser basati su Chromium come Brave, Opera e Vivaldi possono installare l\'estensione dal Chrome Web Store.',
+    'addons-features-title' => 'Perché usare l\'estensione',
+    'addons-feature-options-title' => 'Opzioni personalizzabili',
+    'addons-feature-options-desc' => 'Premendo l\'icona si apre una popup dove puoi personalizzare il link prima di crearlo.',
+    'addons-feature-oneclick-title' => 'Modalità un clic',
+    'addons-feature-oneclick-desc' => 'Preferisci la massima velocità? Attiva la modalità one-click: il link viene abbreviato subito, senza popup.',
+    'addons-feature-handy-title' => 'Sempre a portata di mano',
+    'addons-feature-handy-desc' => 'Tutto avviene nel browser: non serve aprire il sito e incollare l\'URL.',
+    'addons-feature-free-title' => 'Gratuita e open source',
+    'addons-feature-free-desc' => 'Lo stesso servizio gratuito del sito, con il codice sorgente disponibile su GitHub.',
 ];
 ?>

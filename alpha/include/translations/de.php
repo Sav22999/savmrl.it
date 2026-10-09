@@ -224,5 +224,22 @@ $strings = [
     'error-reported-title' => 'Link als unsicher gemeldet',
     'error-reported-desc' => 'Dieser Link wurde als unsicher gemeldet und ist derzeit gesperrt. Wenn Sie glauben, dass dies ein Fehler ist, kontaktieren Sie uns.',
     'go-home' => 'Zur Startseite',
+
+    // Add-ons page
+    'addons-title' => 'Browser-Erweiterungen',
+    'addons-intro' => 'Kürzen Sie die gerade besuchte Seite direkt aus der Symbolleiste Ihres Browsers, ohne savmrl.it jemals zu öffnen.',
+    'addons-install-title' => 'Erweiterung installieren',
+    'addons-install-subtitle' => 'Verfügbar in den offiziellen Stores der wichtigsten Webbrowser.',
+    'addons-install-action' => 'Installieren',
+    'addons-other-browsers' => 'Nutzen Sie einen anderen Browser? Chromium-basierte Browser wie Brave, Opera und Vivaldi können die Erweiterung aus dem Chrome Web Store installieren.',
+    'addons-features-title' => 'Warum die Erweiterung nutzen',
+    'addons-feature-options-title' => 'Anpassbare Optionen',
+    'addons-feature-options-desc' => 'Ein Klick auf das Symbol öffnet ein Fenster, in dem Sie den Link vor dem Erstellen anpassen können.',
+    'addons-feature-oneclick-title' => 'Ein-Klick-Modus',
+    'addons-feature-oneclick-desc' => 'Lieber maximal schnell? Aktivieren Sie den Ein-Klick-Modus: Der Link wird sofort gekürzt, ganz ohne Fenster.',
+    'addons-feature-handy-title' => 'Immer zur Hand',
+    'addons-feature-handy-desc' => 'Alles passiert im Browser: Sie müssen die Website nicht öffnen und die URL nicht einfügen.',
+    'addons-feature-free-title' => 'Kostenlos und Open Source',
+    'addons-feature-free-desc' => 'Derselbe kostenlose Dienst wie die Website, mit auf GitHub verfügbarem Quellcode.',
 ];
 ?>

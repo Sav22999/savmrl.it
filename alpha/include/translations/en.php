@@ -246,5 +246,22 @@ $strings = [
     'error-reported-title' => 'Link reported as unsafe',
     'error-reported-desc' => 'This link has been reported as unsafe and is currently blocked. If you believe this is an error, please contact us.',
     'go-home' => 'Go to homepage',
+
+    // Add-ons page
+    'addons-title' => 'Web browser add-ons',
+    'addons-intro' => 'Shorten the page you are visiting straight from your browser toolbar, without ever opening savmrl.it.',
+    'addons-install-title' => 'Install the add-on',
+    'addons-install-subtitle' => 'Available on the official stores of the main web browsers.',
+    'addons-install-action' => 'Install',
+    'addons-other-browsers' => 'Using another browser? Chromium-based browsers such as Brave, Opera and Vivaldi can install the add-on from the Chrome Web Store.',
+    'addons-features-title' => 'Why use the add-on',
+    'addons-feature-options-title' => 'Customizable options',
+    'addons-feature-options-desc' => 'Pressing the icon opens a popup where you can customize the link before creating it.',
+    'addons-feature-oneclick-title' => 'One-click mode',
+    'addons-feature-oneclick-desc' => 'Prefer maximum speed? Turn on one-click mode: the link is shortened right away, with no popup.',
+    'addons-feature-handy-title' => 'Always at hand',
+    'addons-feature-handy-desc' => 'Everything happens in your browser: no need to open the website and paste the URL.',
+    'addons-feature-free-title' => 'Free and open source',
+    'addons-feature-free-desc' => 'The same free service as the website, with the source code available on GitHub.',
 ];
 ?>
