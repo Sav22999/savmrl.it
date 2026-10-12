@@ -1,6 +1,6 @@
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/credentials.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/credentials.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php");
 global $redirect_table, $opened_table, $localhost_db, $username_db, $password_db, $database_savmrl;
 header("Content-Type:application/json");
 $request = json_decode(file_get_contents('php://input'), true); //POST request
@@ -25,7 +25,7 @@ if ($condition) {
         $c->set_charset("utf8mb4");
 
         // Lock the tables for both SELECT and UPDATE
-        $c->query("LOCK TABLES `$redirect_table` READ, `$redirect_table` WRITE");
+        $c->query("LOCK TABLES `$redirect_table` WRITE, `$opened_table` WRITE");
 
         //"c1" ("old name")
         //"c2" ("new name")

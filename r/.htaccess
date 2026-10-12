@@ -1,2 +1,2 @@
-ErrorDocument 404 /r/
-ErrorDocument 403 /r/
+ErrorDocument 404 /alpha/r/
+ErrorDocument 403 /alpha/r/

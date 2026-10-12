@@ -1,0 +1,2 @@
+ErrorDocument 404 /alpha/stats/
+ErrorDocument 403 /alpha/stats/
