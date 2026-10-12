@@ -1,97 +1,252 @@
-<?php
-http_response_code(410);
-header('Content-Type: text/html; charset=UTF-8');
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <title>savmrl.it — Link temporarily suspended</title>
-    <link rel="icon" type="image/svg+xml" href="/savmrl/images/icon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f4f6f7;
-            color: #2d3436;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-        .container {
-            text-align: center;
-            max-width: 520px;
-        }
-        .icon {
-            margin-bottom: 24px;
-        }
-        .icon svg {
-            width: 80px;
-            height: 80px;
-        }
-        h1 {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #d63031;
-            margin-bottom: 16px;
-        }
-        .subtitle {
-            font-size: 1em;
-            line-height: 1.7;
-            color: #636e72;
-            margin-bottom: 24px;
-        }
-        .legal {
-            font-size: 0.85em;
-            line-height: 1.6;
-            color: #b2bec3;
-            border-top: 1px solid #dfe6e9;
-            padding-top: 20px;
-        }
-        .brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            color: #b2bec3;
-            font-weight: 600;
-            font-size: 0.9em;
-            margin-top: 24px;
-        }
-        .brand img {
-            width: 24px;
-            height: 24px;
-            opacity: 0.5;
-        }
-    </style>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/meta.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/translations.php"); ?>
+
+    <?php
+    global $title_header, $seconds;
+    $lang = detectLanguage();
+
+    $name = substr($_SERVER['REQUEST_URI'], strlen('/r/'));
+    $name = strtok($name, '?');
+
+    $linkData = null;
+    $redirect_url = getUrlFromName($name, false, false, $linkData);
+    $title = t('redirecting', $lang) . " - " . $redirect_url;
+
+    $errors = array("not_exists", "invalid", "access_code_required", "access_code_wrong", "reported", "admin_blocked", "?");
+
+    $redirect_delay = 5;
+    if ($linkData && isset($linkData['redirect_seconds']) && $linkData['redirect_seconds'] > 0) {
+        $redirect_delay = (int)$linkData['redirect_seconds'];
+    }
+    ?>
+    <title><?php echo $title; ?></title>
 </head>
 <body>
-    <div class="container">
-        <div class="icon">
-            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="40" cy="40" r="35" fill="none" stroke="#d63031" stroke-width="2.5" opacity="0.2"/>
-                <line x1="22" y1="22" x2="58" y2="58" stroke="#d63031" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="58" y1="22" x2="22" y2="58" stroke="#d63031" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-        </div>
-        <h1>Link temporarily suspended</h1>
-        <p class="subtitle">
-            This link is temporarily unavailable.<br>
-            The savmrl.it service is temporarily suspended for maintenance. It will be restored soon.
-        </p>
-        <div class="legal">
-            For inquiries: <a href="https://saveriomorelli.com/contact-me" style="color:#636e72;font-weight:600;">saveriomorelli.com/contact-me</a>
-        </div>
-        <span class="brand">
-            <img src="/savmrl/images/icon.svg" alt="">
-            savmrl.it
-        </span>
+
+<header>
+    <?php echo $title_header; ?>
+</header>
+
+<main class="main-centered">
+    <div class="horizontal-center">
+        <?php if (!in_array($redirect_url, $errors)) { ?>
+            <div class="redirect-container">
+                <h2 class="title-section brilors"><?php echo t('redirecting', $lang); ?></h2>
+                <p class="redirect-url"><?php echo htmlspecialchars($redirect_url); ?></p>
+
+                <?php if ($redirect_delay > 0): ?>
+                    <div class="redirect-countdown" id="countdown"><?php echo $redirect_delay; ?></div>
+                    <p style="font-size:0.85em;color:var(--color-text-secondary)">
+                        <?php echo $redirect_delay . ' ' . t('redirect-delay-info', $lang); ?>
+                    </p>
+                    <p id="redirect-paused-msg" style="display:none;font-size:0.85em;color:var(--color-text-secondary);margin-top:4px;">
+                        <?php echo t('redirect-paused', $lang); ?>
+                    </p>
+                    <script>
+                    (function() {
+                        var remaining = <?php echo $redirect_delay; ?>;
+                        var url = <?php echo json_encode($redirect_url); ?>;
+                        var el = document.getElementById('countdown');
+                        var pausedMsg = document.getElementById('redirect-paused-msg');
+                        var delayInfo = el.nextElementSibling;
+                        var paused = false;
+                        var pauseSvg = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/></svg>';
+                        var interval = setInterval(function() {
+                            if (paused) return;
+                            remaining--;
+                            el.textContent = remaining;
+                            if (remaining <= 0) {
+                                clearInterval(interval);
+                                window.location.href = url;
+                            }
+                        }, 1000);
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var details = document.querySelector('.report-section details');
+                            if (details) {
+                                details.addEventListener('toggle', function() {
+                                    if (this.open) {
+                                        paused = true;
+                                        el.innerHTML = pauseSvg;
+                                        if (delayInfo) delayInfo.style.display = 'none';
+                                        pausedMsg.style.display = '';
+                                    } else {
+                                        paused = false;
+                                        el.textContent = remaining;
+                                        if (delayInfo) delayInfo.style.display = '';
+                                        pausedMsg.style.display = 'none';
+                                    }
+                                });
+                            }
+                        });
+                    })();
+                    </script>
+                <?php else: ?>
+                    <?php redirectTo($name, $redirect_url, $seconds); ?>
+                <?php endif; ?>
+
+                <div class="redirect-actions">
+                    <a href="<?php echo htmlspecialchars($redirect_url); ?>">
+                        <?php echo t('redirect-manual', $lang); ?>
+                    </a>
+                </div>
+
+                <div class="report-section">
+                    <details>
+                        <summary><?php echo t('report-link', $lang); ?></summary>
+                        <p style="font-size:0.85em;color:var(--color-text-secondary);margin-top:8px;"><?php echo t('report-reason', $lang); ?></p>
+                        <div class="report-options">
+                            <button class="report-btn" onclick="reportLink('phishing')"><?php echo t('report-phishing', $lang); ?></button>
+                            <button class="report-btn" onclick="reportLink('spam')"><?php echo t('report-spam', $lang); ?></button>
+                            <button class="report-btn" onclick="reportLink('illegal')"><?php echo t('report-illegal', $lang); ?></button>
+                            <button class="report-btn" onclick="reportLink('other')"><?php echo t('report-other', $lang); ?></button>
+                        </div>
+                        <div id="report-message" style="margin-top:8px;"></div>
+                    </details>
+                </div>
+            </div>
+
+            <script>
+            function reportLink(reason) {
+                var btns = document.querySelectorAll('.report-btn');
+                btns.forEach(function(b) { b.disabled = true; });
+
+                fetch('/api/v2/link/report/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({name: <?php echo json_encode($name); ?>, reason: reason}),
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    var msgEl = document.getElementById('report-message');
+                    if (data.code === '200') {
+                        msgEl.className = 'info-message';
+                        msgEl.textContent = <?php echo json_encode(t('report-success', $lang)); ?>;
+                    } else {
+                        msgEl.className = 'error-message';
+                        msgEl.textContent = data.description || <?php echo json_encode(t('report-error', $lang)); ?>;
+                        btns.forEach(function(b) { b.disabled = false; });
+                    }
+                })
+                .catch(function() {
+                    var msgEl = document.getElementById('report-message');
+                    msgEl.className = 'error-message';
+                    msgEl.textContent = <?php echo json_encode(t('report-error', $lang)); ?>;
+                    btns.forEach(function(b) { b.disabled = false; });
+                });
+            }
+            </script>
+        <?php
+        } else {
+            $errors_type_1 = array("not_exists", "invalid", "?");
+            $errors_type_2 = array("access_code_required", "access_code_wrong");
+            $errors_type_3 = array("reported", "admin_blocked");
+
+            if (in_array($redirect_url, $errors_type_1)) {
+                $title = "";
+                $title_section = "";
+                $description = "";
+                $go_to = "/";
+                $seconds = 0;
+                $illustration = "not-found";
+
+                switch ($redirect_url) {
+                    case "not_exists":
+                        $title = "savmrl.it - Page not exists";
+                        $title_section = t('error-not-exists-title', $lang);
+                        $description = t('error-not-exists-desc', $lang);
+                        $illustration = "expired";
+                        $go_to = "/";
+                        $seconds = 10;
+                        break;
+
+                    case "invalid":
+                        $title = "savmrl.it - Invalid";
+                        $title_section = t('error-invalid-title', $lang);
+                        $description = t('error-invalid-desc', $lang);
+                        $illustration = "not-found";
+                        $go_to = "/";
+                        $seconds = 10;
+                        break;
+
+                    default:
+                        $go_to = "/";
+                        $seconds = 0;
+                }
+                ?>
+                <title><?php echo $title; ?></title>
+                <div class="error-page">
+                    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/error-illustration.php"); ?>
+                    <h2 class="title-section"><?php echo $title_section; ?></h2>
+                    <p class="error-page-desc"><?php echo $description; ?></p>
+                    <a href="/" class="button-link" style="margin-top:16px;width:auto;display:inline-block;padding:10px 24px;"><?php echo t('go-home', $lang); ?></a>
+                </div>
+                <?php
+
+            } else if (in_array($redirect_url, $errors_type_2)) {
+                $title = "savmrl.it - Access code required";
+                $title_section = t('error-access-code-title', $lang);
+                $description = t('error-access-code-desc', $lang);
+                $illustration = "locked";
+                ?>
+                <title><?php echo $title; ?></title>
+                <div class="error-page">
+                    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/error-illustration.php"); ?>
+                    <h2 class="title-section"><?php echo $title_section; ?></h2>
+                    <p class="error-page-desc"><?php echo $description; ?></p>
+                    <form method="post" action="/access-code/" onsubmit="onsubmit_link(this);" style="margin-top:16px;">
+                        <div style="display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;">
+                            <input class="input-link" id="access-code" type="password" name="access_code"
+                                   placeholder="<?php echo t('access-code-placeholder', $lang); ?>" required style="width:200px;flex-shrink:0;"/>
+                            <input id="go-to-link-button" class="button-link" type="submit" value="<?php echo t('go-to-link', $lang); ?>" style="width:auto;margin:0;padding:10px 20px;"/>
+                        </div>
+                    </form>
+                    <script>
+                        document.getElementById("access-code").onfocus = function() { this.type = "text"; }
+                        document.getElementById("access-code").onblur = function() { this.type = "password"; }
+                        function onsubmit_link(form) {
+                            var nameElement = document.createElement("input");
+                            nameElement.type = "text";
+                            nameElement.classList.add("hidden");
+                            nameElement.name = "name";
+                            nameElement.value = "<?php echo $name; ?>";
+                            form.appendChild(nameElement);
+                        }
+                    </script>
+                </div>
+                <?php
+            } else if (in_array($redirect_url, $errors_type_3)) {
+                if ($redirect_url === "admin_blocked") {
+                    $title = "savmrl.it - Link blocked";
+                    $title_section = t('error-blocked-title', $lang);
+                    $description = t('error-admin-blocked', $lang);
+                    $illustration = "blocked";
+                } else {
+                    $title = "savmrl.it - Link blocked";
+                    $title_section = t('error-reported-title', $lang);
+                    $description = t('error-reported-desc', $lang);
+                    $illustration = "warning";
+                }
+                ?>
+                <title><?php echo $title; ?></title>
+                <div class="error-page">
+                    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/error-illustration.php"); ?>
+                    <h2 class="title-section"><?php echo $title_section; ?></h2>
+                    <p class="error-page-desc"><?php echo $description; ?></p>
+                    <a href="/" class="button-link" style="margin-top:16px;width:auto;display:inline-block;padding:10px 24px;"><?php echo t('go-home', $lang); ?></a>
+                </div>
+                <?php
+            }
+        }
+        ?>
     </div>
+</main>
+<footer>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php"); ?>
+</footer>
+
 </body>
 </html>

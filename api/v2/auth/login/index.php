@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/v2/helpers.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/alpha/include/emails.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/include/emails.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     api_method_not_allowed('POST');
@@ -26,8 +26,8 @@ if (isset($result['error'])) {
 if (isset($result['email_not_verified'])) {
     $resend = auth_resend_verification($result['user_id']);
     if ($resend) {
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/alpha/include/emails.php';
-        $verify_url = "https://savmrl.it/alpha/account/verify/?token=" . urlencode($resend['temp_token']);
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/include/emails.php';
+        $verify_url = "https://savmrl.it/account/verify/?token=" . urlencode($resend['temp_token']);
         send_verification_email($resend['email'], $resend['username'], $verify_url);
     }
     api_response(403, "Error", "Email not verified. A new verification email has been sent.", [
