@@ -1,2 +1,2 @@
-ErrorDocument 404 /alpha/admin/
-ErrorDocument 403 /alpha/admin/
+ErrorDocument 404 /admin/
+ErrorDocument 403 /admin/

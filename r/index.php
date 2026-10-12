@@ -39,6 +39,7 @@
                 <p class="redirect-url"><?php echo htmlspecialchars($redirect_url); ?></p>
 
                 <?php if ($redirect_delay > 0): ?>
+                    <?php redirectTo($name, $redirect_url, $redirect_delay); ?>
                     <div class="redirect-countdown" id="countdown"><?php echo $redirect_delay; ?></div>
                     <p style="font-size:0.85em;color:var(--color-text-secondary)">
                         <?php echo $redirect_delay . ' ' . t('redirect-delay-info', $lang); ?>
