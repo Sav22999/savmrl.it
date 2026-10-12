@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/v2/helpers.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/alpha/include/emails.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/include/emails.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     api_method_not_allowed('POST');
@@ -33,7 +33,7 @@ if (isset($result['error'])) {
 
 $otp = generate_otp($result['user_id'], 'email_verification');
 if ($otp) {
-    $verify_url = "https://savmrl.it/alpha/account/verify/?token=" . urlencode($otp['temp_token']);
+    $verify_url = "https://savmrl.it/account/verify/?token=" . urlencode($otp['temp_token']);
     send_verification_email($result['email'], $result['username'], $verify_url);
 }
 

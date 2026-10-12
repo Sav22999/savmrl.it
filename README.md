@@ -10,7 +10,8 @@ This is the official repo for the https://savmrl.it project.
 
 ### What savmrl.it is
 
-savmrl.it is an anonymous and free shortener and redirect service. It permits to get shorter links and also to track how many times your links have been opened.
+savmrl.it is an anonymous and free shortener and redirect service. It permits to get shorter links and also to track how
+many times your links have been opened.
 
 You can use this service without any registration, just go to http://savmrl.it and start to use it!
 
@@ -29,6 +30,5 @@ To support me, you can do a donation :smile: with **LiberaPay** or **PayPal**:
 ### Screenshots
 
 <img src="./savmrl/images/banner.png" width="300px"></img>
-
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/Sav22999/savmrl.it) [![Generic badge](https://img.shields.io/badge/developed%20by-Sav22999-lightgrey.svg)](https://saveriomorelli.com)

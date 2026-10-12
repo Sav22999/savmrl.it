@@ -1,2 +1,2 @@
-ErrorDocument 404 /account/
-ErrorDocument 403 /account/
+ErrorDocument 404 /alpha/account/
+ErrorDocument 403 /alpha/account/

@@ -2,20 +2,22 @@
 <html lang="en">
 <head>
     <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/admin-auth.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/meta.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/translations.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/admin-auth.php");
     admin_auth_start_session();
     if (admin_get_current()) { header('Location: /admin/'); exit; }
     global $title_header;
+    $lang = detectLanguage();
     ?>
     <title>Admin Login — savmrl.it</title>
 </head>
-<body>
+<body class="admin-mode">
 <header>
     <?php echo $title_header; ?>
 </header>
-<main>
+<main class="main-centered">
     <div class="horizontal-center">
         <div class="auth-form-container">
             <h2 class="title-section brilors">Admin Login</h2>
@@ -24,13 +26,13 @@
             <form id="admin-login-form" class="auth-form" onsubmit="submitAdminLogin(event)">
                 <input type="text" id="username" class="input-link" placeholder="Username" autocomplete="username" required />
                 <input type="password" id="password" class="input-link" placeholder="Password" autocomplete="current-password" required />
-                <input type="submit" class="button-link" value="Login" />
+                <input type="submit" class="button-link" value="<?php echo t('login', $lang); ?>" />
             </form>
         </div>
     </div>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php"); ?>
 </footer>
 
 <script>
@@ -58,7 +60,7 @@ function submitAdminLogin(e) {
         }
         window.location.href = '/admin/';
     })
-    .catch(() => showMessage('Connection error', true));
+    .catch(() => showMessage(<?php echo json_encode(t('connection-error', $lang)); ?>, true));
 }
 </script>
 </body>

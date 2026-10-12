@@ -1,31 +1,31 @@
 @font-face {
     font-family: 'basic';
-    src: url("/savmrl/font/basic.otf");
+    src: url("/font/basic.otf");
 }
 
 @font-face {
     font-family: 'brilors';
-    src: url("/savmrl/font/brilors.otf");
+    src: url("/font/brilors.otf");
 }
 
 @font-face {
     font-family: 'brilors2';
-    src: url("/savmrl/font/brilors2.otf");
+    src: url("/font/brilors2.otf");
 }
 
 @font-face {
     font-family: 'domine';
-    src: url("/savmrl/font/domine.ttf");
+    src: url("/font/domine.ttf");
 }
 
 @font-face {
     font-family: 'Stack Sans Notch';
-    src: url("/savmrl/font/stacksansnotch.ttf") format("truetype");
+    src: url("/font/stacksansnotch.ttf") format("truetype");
 }
 
 @font-face {
     font-family: 'Inter';
-    src: url("/savmrl/font/inter.ttf") format("truetype");
+    src: url("/font/inter.ttf") format("truetype");
 }
 
 :root {
@@ -196,6 +196,12 @@ footer a:hover {
     font-weight: 600;
 }
 
+.footer-build {
+    font-size: 0.75em;
+    opacity: 0.4;
+    margin-top: 4px;
+}
+
 /* ---- Main ---- */
 main {
     position: relative;
@@ -280,6 +286,7 @@ h4 {
     margin-bottom: 4px;
     transition: color 0.2s ease;
 }
+
 .back-nav-link:hover {
     color: var(--color-primary);
 }
@@ -795,19 +802,19 @@ form#generate-link-form {
 
 #generate-link-button, #edit-link {
     width: 48px;
-    background-image: url("/alpha/images/arrow-right.svg");
+    background-image: url("/images/arrow-right.svg");
     background-size: auto 22px;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 #edit-link {
-    background-image: url("/alpha/images/edit.svg");
+    background-image: url("/images/edit.svg");
 }
 
 #copy-link-button {
     cursor: copy;
-    background-image: url("/alpha/images/copy.svg");
+    background-image: url("/images/copy.svg");
     background-size: auto 18px;
     background-position: 14px center;
     background-repeat: no-repeat;
@@ -815,7 +822,7 @@ form#generate-link-form {
 }
 
 #see-stats-button {
-    background-image: url("/alpha/images/statistics.svg");
+    background-image: url("/images/statistics.svg");
     background-size: auto 18px;
     background-position: 14px center;
     background-repeat: no-repeat;
@@ -823,7 +830,7 @@ form#generate-link-form {
 }
 
 #another-link-button {
-    background-image: url("/alpha/images/refresh.svg");
+    background-image: url("/images/refresh.svg");
     background-size: auto 18px;
     background-position: 14px center;
     background-repeat: no-repeat;
@@ -1182,8 +1189,8 @@ img#qrcode {
 }
 
 .badge-blocked {
-    background-color: var(--color-error-bg);
-    color: var(--color-error);
+    background-color: var(--color-error);
+    color: #fff;
 }
 
 .badge-user-reported {
@@ -2194,7 +2201,7 @@ section.horizontal-center-p th {
 
 /* ---- Decorative elements ---- */
 .image-heart {
-    mask-image: url("/alpha/images/heart.svg");
+    mask-image: url("/images/heart.svg");
     mask-repeat: no-repeat;
     mask-size: cover;
     display: inline-block;
@@ -2213,9 +2220,15 @@ section.horizontal-center-p th {
 }
 
 @keyframes heartbeat {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .image-background-primary {
@@ -2224,8 +2237,12 @@ section.horizontal-center-p th {
 
 /* ---- Skeleton loading ---- */
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 .skeleton {
@@ -2274,12 +2291,13 @@ body.admin-mode .link-card {
 /* ---- Admin action buttons ---- */
 .btn-action-block {
     border-color: var(--color-error) !important;
-    color: var(--color-error) !important;
-    background: transparent;
+    color: #fff !important;
+    background: var(--color-error) !important;
 }
 
 .btn-action-block:hover {
-    background: var(--color-error) !important;
+    background: #b71c1c !important;
+    border-color: #b71c1c !important;
     color: #fff !important;
 }
 
@@ -2296,12 +2314,13 @@ body.admin-mode .link-card {
 
 .btn-action-unblock, .btn-action-unreport {
     border-color: var(--color-success) !important;
-    color: var(--color-success) !important;
-    background: transparent;
+    color: #fff !important;
+    background: var(--color-success) !important;
 }
 
 .btn-action-unblock:hover, .btn-action-unreport:hover {
-    background: var(--color-success) !important;
+    background: #1b7a2b !important;
+    border-color: #1b7a2b !important;
     color: #fff !important;
 }
 
@@ -2580,6 +2599,186 @@ body.admin-mode .link-card {
     margin-bottom: 12px;
 }
 
+/* ---- Add-ons page ---- */
+.addon-intro {
+    max-width: 560px;
+    margin: 0 auto;
+    color: var(--color-text-secondary);
+}
+
+.addon-section-title {
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.addon-section-title-spaced {
+    margin-bottom: 16px;
+}
+
+.addon-section-subtitle {
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--color-text-secondary);
+    margin: 0 0 16px;
+}
+
+.addon-store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    width: 100%;
+}
+
+.addon-store-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 16px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.addon-store-card:hover {
+    border-color: var(--color-primary-light);
+    background: var(--color-primary-bg);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.addon-store-card:focus-visible {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus);
+}
+
+.addon-store-card:active {
+    transform: translateY(0);
+}
+
+.addon-store-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    color: var(--color-text);
+    transition: var(--transition);
+}
+
+.addon-store-logo img,
+.addon-store-logo svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    fill: currentColor;
+}
+
+.addon-store-name {
+    font-family: var(--font-heading);
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: center;
+}
+
+.addon-store-meta {
+    font-size: 0.8em;
+    color: var(--color-text-secondary);
+    text-align: center;
+    margin-top: -8px;
+}
+
+.addon-store-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-bg-hover);
+    color: var(--color-primary);
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.addon-store-cta svg {
+    width: 14px;
+    height: 14px;
+}
+
+.addon-store-card:hover .addon-store-name,
+.addon-store-card:hover .addon-store-logo {
+    color: var(--color-primary);
+}
+
+.addon-store-card:hover .addon-store-cta {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.addon-hint {
+    text-align: center;
+    font-size: 0.85em;
+    color: var(--color-text-secondary);
+    margin: 16px auto 0;
+    max-width: 560px;
+}
+
+.addon-features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.addon-feature {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 20px 16px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.addon-feature:hover {
+    background: var(--color-bg-secondary);
+}
+
+.addon-feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    background: var(--color-primary-bg-hover);
+}
+
+.addon-feature-icon svg {
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary);
+}
+
+.addon-feature h3 {
+    margin-bottom: 4px;
+    font-size: 0.95em;
+}
+
+.addon-feature p {
+    margin: 0;
+    font-size: 0.85em;
+    color: var(--color-text-secondary);
+}
+
 /* ---- Utility ---- */
 .hidden {
     display: none !important;
@@ -2750,6 +2949,11 @@ body.admin-mode .link-card {
 
     .admin-stats-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .addon-store-grid,
+    .addon-features {
+        grid-template-columns: 1fr;
     }
 
     .user-stats-grid {
