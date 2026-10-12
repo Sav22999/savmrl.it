@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <?php
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/header-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/meta-alpha.php");
-    include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/auth.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/meta.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/translations.php");
+    include_once($_SERVER['DOCUMENT_ROOT'] . "/include/auth.php");
     global $title_header;
+    $lang = detectLanguage();
 
     $token = isset($_GET['token']) ? $_GET['token'] : '';
     $success = false;
@@ -55,13 +57,13 @@
 <header>
     <?php echo $title_header; ?>
 </header>
-<main>
+<main class="main-centered">
     <div class="horizontal-center">
         <div class="auth-form-container">
             <?php if ($success): ?>
                 <h2 class="title-section brilors">Email verified!</h2>
                 <p class="text-align-center">Your email has been verified successfully.</p>
-                <p class="text-align-center"><a href="/account/login/" class="button-link" style="display:inline-block;margin-top:16px;text-decoration:none;">Login</a></p>
+                <p class="text-align-center"><a href="/account/login/" class="button-link" style="display:inline-block;margin-top:16px;text-decoration:none;"><?php echo t('login', $lang); ?></a></p>
             <?php else: ?>
                 <h2 class="title-section brilors">Verification failed</h2>
                 <p class="text-align-center error-message"><?php echo htmlspecialchars($error); ?></p>
@@ -70,7 +72,7 @@
     </div>
 </main>
 <footer>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/savmrl/include/footer.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php"); ?>
 </footer>
 </body>
 </html>

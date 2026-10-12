@@ -1,23 +1,2 @@
-RewriteEngine On
-
-# Allow alpha (development)
-RewriteRule ^alpha/ - [L]
-
-# Allow static assets
-RewriteRule ^savmrl/ - [L]
-
-# Allow API calls (needed by alpha)
-RewriteRule ^api/ - [L]
-
-# Block stats pages
-RewriteRule ^stats/ /r/ [L]
-
-# Block root account pages
-RewriteRule ^account/ /r/ [L]
-
-# Block admin pages
-RewriteRule ^admin/ /r/ [L]
-
-# All shortened links go through /r/ which shows suspension
 ErrorDocument 404 /r/
 ErrorDocument 403 /r/

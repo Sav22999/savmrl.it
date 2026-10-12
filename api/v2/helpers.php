@@ -1,8 +1,8 @@
 <?php
 
-include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/credentials.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/header.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/alpha/include/auth.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/credentials.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/header.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/include/auth.php");
 
 header("Content-Type: application/json; charset=utf-8");
 
@@ -59,7 +59,7 @@ function api_method_not_allowed($allowed) {
     api_response(405, "Error", "Method not allowed. Use: " . $allowed);
 }
 
-define('SHORT_URL_BASE', 'https://savmrl.it/alpha/r/');
+define('SHORT_URL_BASE', 'https://savmrl.it/r/');
 
 function get_json_body() {
     $body = file_get_contents('php://input');

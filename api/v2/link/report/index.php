@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/v2/helpers.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/alpha/include/mailer.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/include/mailer.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     api_method_not_allowed('POST');
