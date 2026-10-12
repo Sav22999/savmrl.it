@@ -192,6 +192,10 @@ $strings = [
     'stats-search-desc' => 'Inserisci il nome di un link per visualizzare le statistiche dei click. Le statistiche sono pubbliche.',
     'stats-search-placeholder' => 'Nome del link (es. aBcDe)',
     'stats-search-another' => 'Cerca un altro link',
+    'stats-total-clicks' => 'Click totali',
+    'stats-created' => 'Creato',
+    'stats-last-click' => 'Ultimo click',
+    'stats-last-7-days' => 'Ultimi 7 giorni',
 
     // Admin date filters
     'date-from' => 'Da',
