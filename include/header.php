@@ -156,6 +156,78 @@ function getStatistics($name)
     return "?";
 }
 
+function getDetailedStatistics($name)
+{
+    global $redirect_table, $opened_table;
+    global $localhost_db, $username_db, $password_db, $database_savmrl;
+
+    $c = new mysqli($localhost_db, $username_db, $password_db, $database_savmrl);
+    if ($c->connect_error) return null;
+    $c->set_charset("utf8mb4");
+
+    $stmt = $c->prepare("SELECT `name`, `limit_times`, `expiry_date`, `redirect_seconds`, `inserted_timestamp`, `reported`, `admin_blocked` FROM `$redirect_table` WHERE `name` = ?");
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if ($result->num_rows === 0) {
+        $c->close();
+        return null;
+    }
+
+    $link = $result->fetch_assoc();
+
+    $stmt = $c->prepare("SELECT COUNT(*) AS `total` FROM `$opened_table` WHERE `name` = ?");
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $total = $stmt->get_result()->fetch_assoc()['total'];
+    $stmt->close();
+
+    $stmt = $c->prepare("SELECT MAX(`visited_timestamp`) AS `last_click` FROM `$opened_table` WHERE `name` = ?");
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $last_click = $stmt->get_result()->fetch_assoc()['last_click'];
+    $stmt->close();
+
+    $stmt = $c->prepare("SELECT DATE(`visited_timestamp`) AS `day`, COUNT(*) AS `clicks` FROM `$opened_table` WHERE `name` = ? AND `visited_timestamp` >= DATE_SUB(CURDATE(), INTERVAL 6 DAY) GROUP BY DATE(`visited_timestamp`) ORDER BY `day` ASC");
+    $stmt->bind_param("s", $name);
+    $stmt->execute();
+    $daily_result = $stmt->get_result();
+    $daily = [];
+    while ($row = $daily_result->fetch_assoc()) {
+        $daily[$row['day']] = (int)$row['clicks'];
+    }
+    $stmt->close();
+
+    $days = [];
+    for ($i = 6; $i >= 0; $i--) {
+        $d = date('Y-m-d', strtotime("-$i days"));
+        $days[$d] = isset($daily[$d]) ? $daily[$d] : 0;
+    }
+
+    $status = 'active';
+    if (isset($link['admin_blocked']) && $link['admin_blocked'] == 1) $status = 'blocked';
+    elseif ($link['reported'] == 1) $status = 'reported';
+    elseif ($link['expiry_date'] && strtotime($link['expiry_date']) < time()) $status = 'expired';
+    elseif ($link['limit_times'] && $total >= $link['limit_times']) $status = 'expired';
+
+    $c->close();
+
+    return [
+        'total_clicks' => (int)$total,
+        'created_at' => $link['inserted_timestamp'],
+        'last_click' => $last_click,
+        'status' => $status,
+        'has_expiry' => $link['expiry_date'] !== null,
+        'expiry_date' => $link['expiry_date'],
+        'has_limit' => $link['limit_times'] !== null,
+        'limit_times' => $link['limit_times'],
+        'redirect_seconds' => $link['redirect_seconds'],
+        'daily_clicks' => $days,
+    ];
+}
+
 function getGoodString($string)
 {
     return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');

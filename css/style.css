@@ -2779,6 +2779,198 @@ body.admin-mode .link-card {
     color: var(--color-text-secondary);
 }
 
+/* ---- Stats detail page ---- */
+.stats-detail-card {
+    max-width: 520px;
+    margin: 16px auto 0;
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 24px;
+}
+
+.stats-link-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.stats-short-url-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.stats-short-url {
+    font-family: var(--font-mono);
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.stats-short-url:hover {
+    text-decoration: underline;
+}
+
+.stats-copy-btn {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: 6px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: var(--transition);
+    line-height: 0;
+}
+
+.stats-copy-btn:hover {
+    background: var(--color-bg);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.stats-copy-btn.copied {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+    border-color: var(--color-success);
+}
+
+.stats-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.stats-metric-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 16px 12px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stats-metric-card:hover {
+    background: var(--color-bg);
+}
+
+.stats-metric-value {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: var(--font-heading);
+}
+
+.stats-metric-label {
+    font-size: 0.78em;
+    color: var(--color-text-secondary);
+    margin-top: 2px;
+}
+
+.stats-chart-section {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+}
+
+.stats-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+.stats-chart-title {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.stats-chart-total {
+    font-size: 0.78em;
+    color: var(--color-text-secondary);
+}
+
+.stats-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 120px;
+}
+
+.stats-chart-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.stats-chart-count {
+    font-size: 0.7em;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+    min-height: 16px;
+}
+
+.stats-chart-bar-wrap {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.stats-chart-bar {
+    width: 100%;
+    background: var(--color-primary);
+    border-radius: 4px 4px 0 0;
+    min-height: 3px;
+    transition: height 0.4s ease;
+    opacity: 0.8;
+}
+
+.stats-chart-bar:hover {
+    opacity: 1;
+}
+
+.stats-chart-col:hover .stats-chart-count {
+    color: var(--color-primary);
+}
+
+.stats-chart-day {
+    font-size: 0.68em;
+    color: var(--color-text-secondary);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.stats-extra-info {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stats-extra-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82em;
+    color: var(--color-text-secondary);
+}
+
 /* ---- Utility ---- */
 .hidden {
     display: none !important;
@@ -2963,6 +3155,23 @@ body.admin-mode .link-card {
 
     .user-stat-card {
         padding: 12px 8px;
+    }
+
+    .stats-detail-card {
+        padding: 18px 14px;
+        border-radius: var(--border-radius);
+    }
+
+    .stats-metrics-grid {
+        gap: 6px;
+    }
+
+    .stats-metric-value {
+        font-size: 1.05em;
+    }
+
+    .stats-chart {
+        height: 100px;
     }
 
     .user-stat-value {
