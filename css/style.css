@@ -500,7 +500,7 @@ h4 {
 }
 
 /* ---- Inputs (unified) ---- */
-textarea, input, select {
+textarea, input, select, .input-link#access-code {
     padding: 10px 14px;
     width: 100%;
     font-size: 0.95em;
@@ -1448,9 +1448,6 @@ img#qrcode {
     transition: var(--transition);
 }
 
-.admin-stat-card:hover {
-    background: var(--color-bg);
-}
 
 .admin-stat-value {
     font-family: var(--font-heading);
@@ -2507,9 +2504,6 @@ body.admin-mode .link-card {
     transition: var(--transition);
 }
 
-.user-stat-card:hover {
-    background: var(--color-bg);
-}
 
 .user-stat-value {
     font-size: 1.5em;
@@ -2858,9 +2852,6 @@ body.admin-mode .link-card {
     transition: var(--transition);
 }
 
-.stats-metric-card:hover {
-    background: var(--color-bg);
-}
 
 .stats-metric-value {
     font-size: 1.5em;
@@ -3167,7 +3158,7 @@ body.admin-mode .link-card {
     }
 
     .stats-metric-value {
-        font-size: 1.05em;
+        font-size: 1.3em;
     }
 
     .stats-chart {
