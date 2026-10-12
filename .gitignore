@@ -1,2 +1,4 @@
 savmrl/include/credentials.php
 .idea/*
+vendor/
+.maintenance
