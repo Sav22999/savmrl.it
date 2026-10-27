@@ -71,6 +71,8 @@ if (isset($data['destination_url']) && $data['destination_url'] !== '') {
         } else {
             $new_url = encryptTextWithPassword($new_url, $data['current_access_code']);
         }
+    } else if (isset($data['new_access_code']) && $data['new_access_code'] !== '') {
+        $new_url = encryptTextWithPassword($new_url, $data['new_access_code']);
     }
     $updates[] = "`redirect_link` = ?";
     $params[] = $new_url;
@@ -138,6 +140,11 @@ if (isset($data['remove_access_code']) && $data['remove_access_code']) {
         $destination_already_handled = isset($data['destination_url']) && $data['destination_url'] !== '';
         if (!$destination_already_handled) {
             $encrypted_url = encryptTextWithPassword($link['redirect_link'], $data['new_access_code']);
+            if ($encrypted_url === false) {
+                error_log("[savmrl] encrypt FAILED for name=" . $name . " url_len=" . strlen($link['redirect_link']));
+                $c->close();
+                api_bad_request('Encryption failed');
+            }
             $updates[] = "`redirect_link` = ?";
             $params[] = $encrypted_url;
             $types .= "s";

@@ -111,22 +111,40 @@
 
             <div id="access-code-section">
                 <div id="ac-status-has" style="display:none;">
-                    <p style="font-size:0.9em;margin-bottom:12px;"><?php echo t('access-code-active', $lang); ?></p>
-                    <label><?php echo t('current-access-code', $lang); ?></label>
-                    <input type="password" id="current-access-code" class="input-link" placeholder="<?php echo t('current-access-code', $lang); ?>" />
-                    <div style="display:flex;gap:8px;margin-top:8px;">
-                        <button type="button" class="button-link" style="flex:1;" onclick="showAccessCodeAction('change')"><?php echo t('modify-access-code', $lang); ?></button>
-                        <button type="button" class="btn btn-danger" style="flex:1;" onclick="removeAccessCode()"><?php echo t('remove-access-code', $lang); ?></button>
+                    <div class="ac-status-bar">
+                        <span class="ac-status-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            <?php echo t('access-code-active', $lang); ?>
+                        </span>
+                        <div class="ac-actions">
+                            <button type="button" class="ac-action-btn" onclick="toggleAcPanel('change')"><?php echo t('modify-access-code', $lang); ?></button>
+                            <button type="button" class="ac-action-btn ac-action-danger" onclick="toggleAcPanel('remove')"><?php echo t('remove-access-code', $lang); ?></button>
+                        </div>
                     </div>
-                    <div id="ac-change-fields" style="display:none;margin-top:12px;">
+                    <div id="ac-panel-change" class="ac-panel" style="display:none;">
+                        <label><?php echo t('current-access-code', $lang); ?></label>
+                        <input type="password" id="current-access-code" class="input-link" placeholder="<?php echo t('current-access-code', $lang); ?>" />
                         <label><?php echo t('new-access-code', $lang); ?></label>
                         <input type="password" id="new-access-code" class="input-link" placeholder="<?php echo t('new-access-code', $lang); ?>" />
                     </div>
+                    <div id="ac-panel-remove" class="ac-panel" style="display:none;">
+                        <label><?php echo t('current-access-code', $lang); ?></label>
+                        <input type="password" id="current-access-code-remove" class="input-link" placeholder="<?php echo t('current-access-code', $lang); ?>" />
+                        <button type="button" class="btn btn-danger" style="width:100%;margin-top:8px;" onclick="removeAccessCode()"><?php echo t('remove-access-code', $lang); ?></button>
+                    </div>
                 </div>
                 <div id="ac-status-none" style="display:none;">
-                    <p style="font-size:0.9em;color:var(--color-text-secondary);margin-bottom:12px;"><?php echo t('access-code-none', $lang); ?></p>
-                    <label><?php echo t('set-access-code', $lang); ?></label>
-                    <input type="password" id="set-access-code" class="input-link" placeholder="<?php echo t('new-access-code', $lang); ?>" />
+                    <div class="ac-status-bar">
+                        <span class="ac-status-label" style="color:var(--color-text-secondary);">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 019.9-1"/></svg>
+                            <?php echo t('access-code-none', $lang); ?>
+                        </span>
+                        <button type="button" class="ac-action-btn" onclick="toggleAcPanel('add')"><?php echo t('set-access-code', $lang); ?></button>
+                    </div>
+                    <div id="ac-panel-add" class="ac-panel" style="display:none;">
+                        <label><?php echo t('new-access-code', $lang); ?></label>
+                        <input type="password" id="set-access-code" class="input-link" placeholder="<?php echo t('new-access-code', $lang); ?>" />
+                    </div>
                 </div>
             </div>
 
@@ -355,7 +373,13 @@ function editSettings(name) {
     document.getElementById('link-destination').placeholder = 'https://example.com';
     document.getElementById('ac-status-has').style.display = 'none';
     document.getElementById('ac-status-none').style.display = 'none';
-    if (document.getElementById('ac-change-fields')) document.getElementById('ac-change-fields').style.display = 'none';
+    document.querySelectorAll('.ac-panel').forEach(function(p) { p.style.display = 'none'; });
+    activeAcPanel = null;
+    document.getElementById('current-access-code').value = '';
+    document.getElementById('current-access-code-remove').value = '';
+    document.getElementById('new-access-code').value = '';
+    document.getElementById('set-access-code').value = '';
+    clearModalMsg();
     linkHasAccessCode = false;
 
     fetch('/api/v2/user/links/?per_page=50')
@@ -386,15 +410,35 @@ function editSettings(name) {
 
 function closeLinkModal() {
     document.getElementById('link-settings-modal').classList.remove('active');
+    clearModalMsg();
 }
 
-function showAccessCodeAction(action) {
-    document.getElementById('ac-change-fields').style.display = action === 'change' ? '' : 'none';
+function showModalMsg(text, isError) {
+    const el = document.getElementById('link-settings-message');
+    el.className = isError ? 'error-message' : 'info-message';
+    el.textContent = text;
+}
+
+function clearModalMsg() {
+    const el = document.getElementById('link-settings-message');
+    el.textContent = '';
+    el.className = '';
+}
+
+let activeAcPanel = null;
+function toggleAcPanel(panel) {
+    var panels = document.querySelectorAll('.ac-panel');
+    panels.forEach(function(p) { p.style.display = 'none'; });
+    if (activeAcPanel === panel) { activeAcPanel = null; return; }
+    var el = document.getElementById('ac-panel-' + panel);
+    if (el) el.style.display = '';
+    activeAcPanel = panel;
 }
 
 function removeAccessCode() {
-    const currentCode = document.getElementById('current-access-code').value;
-    if (!currentCode) { showMsg(<?php echo json_encode(t('current-access-code', $lang)); ?>, true); return; }
+    clearModalMsg();
+    const currentCode = document.getElementById('current-access-code-remove').value;
+    if (!currentCode) { showModalMsg(<?php echo json_encode(t('current-access-code', $lang)); ?>, true); return; }
     const name = document.getElementById('link-name').value;
     fetch('/api/v2/user/links/update/', {
         method: 'POST',
@@ -403,14 +447,15 @@ function removeAccessCode() {
     })
     .then(r => r.json())
     .then(result => {
-        if (result.code === '200') { showMsg(<?php echo json_encode(t('link-settings-updated', $lang)); ?>, false); closeLinkModal(); reloadAll(); }
-        else showMsg(result.description, true);
+        if (result.code === '200') { closeLinkModal(); showMsg(<?php echo json_encode(t('link-settings-updated', $lang)); ?>, false); reloadAll(); }
+        else showModalMsg(result.description, true);
     })
-    .catch(() => showMsg(S.connErr, true));
+    .catch(() => showModalMsg(S.connErr, true));
 }
 
 function saveLinkSettings(e) {
     e.preventDefault();
+    clearModalMsg();
     const name = document.getElementById('link-name').value;
     const payload = {name};
     const destination = document.getElementById('link-destination').value;
@@ -439,10 +484,10 @@ function saveLinkSettings(e) {
     })
     .then(r => r.json())
     .then(result => {
-        if (result.code === '200') { showMsg(<?php echo json_encode(t('link-settings-updated', $lang)); ?>, false); closeLinkModal(); reloadAll(); }
-        else showMsg(result.description, true);
+        if (result.code === '200') { closeLinkModal(); showMsg(<?php echo json_encode(t('link-settings-updated', $lang)); ?>, false); reloadAll(); }
+        else showModalMsg(result.description, true);
     })
-    .catch(() => showMsg(S.connErr, true));
+    .catch(() => showModalMsg(S.connErr, true));
 }
 
 const observer = new IntersectionObserver(entries => {
