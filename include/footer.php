@@ -26,4 +26,4 @@ document.querySelectorAll('.otp-input').forEach(function(el) {
 <div class="footer-attribution">
     Developed with <span class="image-heart image-background-primary image-heart-inline"></span> by <a href="https://saveriomorelli.com" class="footer-author">Saverio Morelli</a>
 </div>
-<div class="footer-build"><?php echo defined('SAVMRL_BUILD') ? 'build ' . SAVMRL_BUILD : ''; ?></div>
+<div class="footer-build"><a href="/changelog/"><?php echo defined('SAVMRL_BUILD') ? 'build ' . SAVMRL_BUILD : ''; ?></a></div>
