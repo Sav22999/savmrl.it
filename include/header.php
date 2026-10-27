@@ -6,7 +6,7 @@ global $localhost_db, $password_db, $database_savmrl, $username_db, $title;
 $title_header = "<a href='/' id='title-page-with-icon'><img src='/images/icon-big.svg'/><div class='text'>savmrl.it</div></a>";
 $seconds = 0; //TODO : set manually
 
-define('SAVMRL_BUILD', '20261012');
+define('SAVMRL_BUILD', '20261027');
 
 $redirect_table = "redirect_savmrl";
 $opened_table = "opened_savmrl";
@@ -48,7 +48,7 @@ function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false, &
                 while ($row = $result->fetch_array()) {
                     $url = $row['redirect_link'];
 
-                    if ($row["reported"] === 1) {
+                    if ($row["reported"] == 1) {
                         $c->close();
                         return "reported";
                     }
@@ -58,20 +58,23 @@ function getUrlFromName($name, $accessCode = false, $alreadyEncrypted = false, &
                         return "admin_blocked";
                     }
 
-                    if ($row["access_code"] !== null) {
+                    $link_is_encrypted = ($row["access_code"] !== null);
+
+                    if ($link_is_encrypted) {
                         if ($is_protected) {
                             if (!verify_access_code($access_to_use, $row["access_code"])) {
                                 $c->close();
                                 return "access_code_wrong";
                             }
+                            $url = decryptTextWithPassword($url, $accessCode);
+                            if ($url === false) {
+                                $c->close();
+                                return "decrypt_failed";
+                            }
                         } else {
                             $c->close();
                             return "access_code_required";
                         }
-                    }
-
-                    if ($is_protected) {
-                        $url = decryptTextWithPassword($url, $accessCode);
                     }
                     if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
                         $linkData = [
