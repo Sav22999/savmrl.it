@@ -28,7 +28,7 @@
 
             <div class="admin-toolbar">
                 <div class="search-sort-bar">
-                    <input type="text" id="search-input" class="input-link" placeholder="Search by name, URL or IP..." oninput="debounceSearch()" />
+                    <input type="text" id="search-input" class="input-link" placeholder="Search by name, URL, IP or owner..." oninput="debounceSearch()" />
                     <div class="sort-dropdown" id="sort-dropdown">
                         <button type="button" class="sort-dropdown-btn" id="sort-dropdown-btn">
                             <span id="sort-label"><?php echo t('sort-newest', $lang); ?></span>
@@ -243,21 +243,21 @@ function appendLinks(links, total) {
         if (isEncrypted(link.original_url)) {
             destHtml = '<span class="encrypted-label"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16z" stroke="currentColor" stroke-width="1.5"/><path d="M6 10V8a6 6 0 1112 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> ' + <?php echo json_encode(t('link-encrypted', $lang)); ?> + '</span>';
         } else {
-            const escaped = link.original_url.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-            destHtml = '<a href="' + escaped + '" target="_blank" rel="noopener">' + truncate(link.original_url, 80) + '</a>';
+            const escaped = escHtml(link.original_url);
+            destHtml = '<a href="' + escaped + '" target="_blank" rel="noopener">' + hl(truncate(link.original_url, 80)) + '</a>';
         }
 
         html += '<div class="link-card">'
             + '<div class="link-card-header">'
-            + '<a href="' + link.short_url + '" class="link-name" target="_blank">' + link.short_url + '</a>'
+            + '<a href="' + link.short_url + '" class="link-name" target="_blank">' + hl(link.short_url) + '</a>'
             + status
             + '</div>'
             + '<div class="link-card-dest">' + destHtml + '</div>'
             + '<div class="link-card-meta">'
-            + '<span>IP: ' + (link.created_from_ip || 'N/A') + '</span>'
+            + '<span>IP: ' + hl(link.created_from_ip || 'N/A') + '</span>'
             + '<span>' + fmtNum(link.click_count || 0) + ' ' + <?php echo json_encode(t('clicks', $lang)); ?> + '</span>'
             + '<span>' + formatDate(link.created_at) + '</span>'
-            + (link.user_email ? '<span>Owner: ' + link.user_email + '</span>' : '<span>Anonymous</span>')
+            + (link.user_email ? '<span>Owner: ' + hl(link.user_email) + '</span>' : '<span>Anonymous</span>')
             + '</div>'
             + '<div class="link-card-actions">';
 
@@ -284,6 +284,18 @@ function appendLinks(links, total) {
 
 function truncate(str, len) {
     return str.length > len ? str.substring(0, len) + '...' : str;
+}
+
+function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function hl(text) {
+    const q = document.getElementById('search-input').value.trim();
+    if (!q || !text) return escHtml(text);
+    const escaped = escHtml(text);
+    const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    return escaped.replace(re, '<mark>$1</mark>');
 }
 
 function formatDate(d) {

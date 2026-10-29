@@ -56,11 +56,12 @@ elseif ($filter === 'expired') { $where .= " AND r.`expiry_date` IS NOT NULL AND
 
 if ($search !== '') {
     $like = "%" . $search . "%";
-    $where .= " AND (r.`name` LIKE ? OR r.`redirect_link` LIKE ? OR r.`inserted_from_ip` LIKE ?)";
+    $where .= " AND (r.`name` LIKE ? OR r.`redirect_link` LIKE ? OR r.`inserted_from_ip` LIKE ? OR u.`email` LIKE ?)";
     $params[] = $like;
     $params[] = $like;
     $params[] = $like;
-    $types .= "sss";
+    $params[] = $like;
+    $types .= "ssss";
 }
 
 if ($date_from !== '') {
@@ -74,7 +75,7 @@ if ($date_to !== '') {
     $types .= "s";
 }
 
-$count_query = "SELECT COUNT(*) AS total FROM `$redirect_table` r WHERE $where";
+$count_query = "SELECT COUNT(*) AS total FROM `$redirect_table` r LEFT JOIN `users_savmrl` u ON r.`user_id` = u.`id` WHERE $where";
 $count_stmt = $c->prepare($count_query);
 if (!empty($params)) {
     $count_stmt->bind_param($types, ...$params);

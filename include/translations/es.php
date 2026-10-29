@@ -111,6 +111,7 @@ $strings = [
     'link-encrypted' => 'Enlace cifrado',
     'destination-access-code-hint' => 'Este enlace está protegido por un código de acceso. Para cambiar el destino, también debes ingresar el código de acceso actual.',
     'new-access-code' => 'Nuevo código de acceso',
+    'new-access-code-hint' => 'Dejar vacío para mantener el código actual',
     'current-access-code' => 'Código de acceso actual',
     'modify-access-code' => 'Cambiar código de acceso',
     'remove-access-code' => 'Eliminar código de acceso',
@@ -191,6 +192,10 @@ $strings = [
     'stats-search-desc' => 'Ingresa el nombre de un enlace para ver sus estadísticas de clics. Las estadísticas son públicas.',
     'stats-search-placeholder' => 'Nombre del enlace (ej. aBcDe)',
     'stats-search-another' => 'Buscar otro enlace',
+    'stats-total-clicks' => 'Clics totales',
+    'stats-created' => 'Creado',
+    'stats-last-click' => 'Último clic',
+    'stats-last-7-days' => 'Últimos 7 días',
 
     // Admin date filters
     'date-from' => 'Desde',
@@ -220,6 +225,8 @@ $strings = [
     'error-invalid-desc' => 'El enlace acortado proporcionado no es válido. Verifica el enlace e inténtalo de nuevo.',
     'error-access-code-title' => 'Código de acceso requerido',
     'error-access-code-desc' => 'Este enlace está protegido. Ingresa el código de acceso para continuar.',
+    'error-decrypt-title' => 'Descifrado fallido',
+    'error-decrypt-desc' => 'El código de acceso es correcto, pero el enlace cifrado no pudo ser descifrado. Es posible que el enlace deba ser recreado por su propietario.',
     'error-blocked-title' => 'Enlace bloqueado',
     'error-reported-title' => 'Enlace reportado como inseguro',
     'error-reported-desc' => 'Este enlace ha sido reportado como inseguro y está bloqueado. Si crees que es un error, contáctanos.',

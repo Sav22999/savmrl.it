@@ -11,12 +11,21 @@
 
     $name = substr($_SERVER['REQUEST_URI'], strlen('/r/'));
     $name = strtok($name, '?');
+    $name = urldecode($name);
+
+    $access_code_posted = isset($_POST['access_code']) ? $_POST['access_code'] : false;
+    $access_code_error = false;
 
     $linkData = null;
-    $redirect_url = getUrlFromName($name, false, false, $linkData);
+    $redirect_url = getUrlFromName($name, $access_code_posted, false, $linkData);
+
+    if ($access_code_posted !== false && $redirect_url === "access_code_wrong") {
+        $access_code_error = true;
+    }
+
     $title = t('redirecting', $lang) . " - " . $redirect_url;
 
-    $errors = array("not_exists", "invalid", "access_code_required", "access_code_wrong", "reported", "admin_blocked", "?");
+    $errors = array("not_exists", "invalid", "decrypt_failed", "access_code_required", "access_code_wrong", "reported", "admin_blocked", "?");
 
     $redirect_delay = 5;
     if ($linkData && isset($linkData['redirect_seconds']) && $linkData['redirect_seconds'] > 0) {
@@ -39,6 +48,7 @@
                 <p class="redirect-url"><?php echo htmlspecialchars($redirect_url); ?></p>
 
                 <?php if ($redirect_delay > 0): ?>
+                    <?php redirectTo($name, $redirect_url, $redirect_delay); ?>
                     <div class="redirect-countdown" id="countdown"><?php echo $redirect_delay; ?></div>
                     <p style="font-size:0.85em;color:var(--color-text-secondary)">
                         <?php echo $redirect_delay . ' ' . t('redirect-delay-info', $lang); ?>
@@ -141,7 +151,7 @@
             </script>
         <?php
         } else {
-            $errors_type_1 = array("not_exists", "invalid", "?");
+            $errors_type_1 = array("not_exists", "invalid", "decrypt_failed", "?");
             $errors_type_2 = array("access_code_required", "access_code_wrong");
             $errors_type_3 = array("reported", "admin_blocked");
 
@@ -172,6 +182,15 @@
                         $seconds = 10;
                         break;
 
+                    case "decrypt_failed":
+                        $title = "savmrl.it - Decryption failed";
+                        $title_section = t('error-decrypt-title', $lang);
+                        $description = t('error-decrypt-desc', $lang);
+                        $illustration = "not-found";
+                        $go_to = "/";
+                        $seconds = 0;
+                        break;
+
                     default:
                         $go_to = "/";
                         $seconds = 0;
@@ -197,24 +216,21 @@
                     <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/error-illustration.php"); ?>
                     <h2 class="title-section"><?php echo $title_section; ?></h2>
                     <p class="error-page-desc"><?php echo $description; ?></p>
-                    <form method="post" action="/access-code/" onsubmit="onsubmit_link(this);" style="margin-top:16px;">
+                    <?php if ($access_code_error): ?>
+                        <p class="error-message" style="margin-top:12px;"><?php echo t('access-code-wrong', $lang); ?></p>
+                    <?php endif; ?>
+                    <form method="post" action="/r/<?php echo urlencode($name); ?>" style="margin-top:16px;">
                         <div style="display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;">
                             <input class="input-link" id="access-code" type="password" name="access_code"
-                                   placeholder="<?php echo t('access-code-placeholder', $lang); ?>" required style="width:200px;flex-shrink:0;"/>
+                                   placeholder="<?php echo t('access-code-placeholder', $lang); ?>" required
+                                   autocomplete="off"
+                                   style="width:200px;flex-shrink:0;border:1px solid var(--color-border);"/>
                             <input id="go-to-link-button" class="button-link" type="submit" value="<?php echo t('go-to-link', $lang); ?>" style="width:auto;margin:0;padding:10px 20px;"/>
                         </div>
                     </form>
                     <script>
                         document.getElementById("access-code").onfocus = function() { this.type = "text"; }
                         document.getElementById("access-code").onblur = function() { this.type = "password"; }
-                        function onsubmit_link(form) {
-                            var nameElement = document.createElement("input");
-                            nameElement.type = "text";
-                            nameElement.classList.add("hidden");
-                            nameElement.name = "name";
-                            nameElement.value = "<?php echo $name; ?>";
-                            form.appendChild(nameElement);
-                        }
                     </script>
                 </div>
                 <?php

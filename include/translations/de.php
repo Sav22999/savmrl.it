@@ -111,6 +111,7 @@ $strings = [
     'link-encrypted' => 'Verschlüsselter Link',
     'destination-access-code-hint' => 'Dieser Link ist durch einen Zugangscode geschützt. Um das Ziel zu ändern, müssen Sie auch den aktuellen Zugangscode eingeben.',
     'new-access-code' => 'Neuer Zugangscode',
+    'new-access-code-hint' => 'Leer lassen, um den aktuellen Code beizubehalten',
     'current-access-code' => 'Aktueller Zugangscode',
     'modify-access-code' => 'Zugangscode ändern',
     'remove-access-code' => 'Zugangscode entfernen',
@@ -191,6 +192,10 @@ $strings = [
     'stats-search-desc' => 'Geben Sie den Namen eines Links ein, um die Klickstatistiken anzuzeigen. Die Statistiken sind öffentlich.',
     'stats-search-placeholder' => 'Linkname (z.B. aBcDe)',
     'stats-search-another' => 'Einen anderen Link suchen',
+    'stats-total-clicks' => 'Klicks gesamt',
+    'stats-created' => 'Erstellt',
+    'stats-last-click' => 'Letzter Klick',
+    'stats-last-7-days' => 'Letzte 7 Tage',
 
     // Admin date filters
     'date-from' => 'Von',
@@ -220,6 +225,8 @@ $strings = [
     'error-invalid-desc' => 'Der angegebene Kurzlink ist ungültig. Überprüfen Sie den Link und versuchen Sie es erneut.',
     'error-access-code-title' => 'Zugangscode erforderlich',
     'error-access-code-desc' => 'Dieser Link ist geschützt. Geben Sie den Zugangscode ein, um fortzufahren.',
+    'error-decrypt-title' => 'Entschlüsselung fehlgeschlagen',
+    'error-decrypt-desc' => 'Der Zugangscode ist korrekt, aber der verschlüsselte Link konnte nicht entschlüsselt werden. Der Link muss möglicherweise vom Eigentümer neu erstellt werden.',
     'error-blocked-title' => 'Link gesperrt',
     'error-reported-title' => 'Link als unsicher gemeldet',
     'error-reported-desc' => 'Dieser Link wurde als unsicher gemeldet und ist derzeit gesperrt. Wenn Sie glauben, dass dies ein Fehler ist, kontaktieren Sie uns.',
