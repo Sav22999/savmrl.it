@@ -148,6 +148,11 @@ function debounceSearch() {
     searchTimeout = setTimeout(() => reloadAll(), 300);
 }
 
+function searchBy(query) {
+    document.getElementById('search-input').value = query;
+    reloadAll();
+}
+
 function setFilter(filter) {
     currentFilter = filter;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -254,10 +259,10 @@ function appendLinks(links, total) {
             + '</div>'
             + '<div class="link-card-dest">' + destHtml + '</div>'
             + '<div class="link-card-meta">'
-            + '<span>IP: ' + hl(link.created_from_ip || 'N/A') + '</span>'
+            + '<span>IP: ' + (link.created_from_ip ? '<a class="meta-link" href="#" onclick="searchBy(\'ip: ' + escHtml(link.created_from_ip) + '\');return false;">' + hl(link.created_from_ip) + '</a>' : 'N/A') + '</span>'
             + '<span>' + fmtNum(link.click_count || 0) + ' ' + <?php echo json_encode(t('clicks', $lang)); ?> + '</span>'
             + '<span>' + formatDate(link.created_at) + '</span>'
-            + (link.user_email ? '<span>Owner: ' + hl(link.user_email) + '</span>' : '<span>Anonymous</span>')
+            + (link.user_email ? '<span>Owner: <a class="meta-link" href="#" onclick="searchBy(\'owner: ' + escHtml(link.user_email) + '\');return false;">' + hl(link.user_email) + '</a></span>' : '<span>Anonymous</span>')
             + '</div>'
             + '<div class="link-card-actions">';
 
@@ -291,8 +296,10 @@ function escHtml(str) {
 }
 
 function hl(text) {
-    const q = document.getElementById('search-input').value.trim();
+    let q = document.getElementById('search-input').value.trim();
     if (!q || !text) return escHtml(text);
+    const prefixMatch = q.match(/^(?:ip|owner):\s*(.+)$/i);
+    if (prefixMatch) q = prefixMatch[1].trim();
     const escaped = escHtml(text);
     const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
     return escaped.replace(re, '<mark>$1</mark>');

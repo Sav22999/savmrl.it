@@ -55,13 +55,23 @@ elseif ($filter === 'active') {
 elseif ($filter === 'expired') { $where .= " AND r.`expiry_date` IS NOT NULL AND r.`expiry_date` < CURDATE()"; }
 
 if ($search !== '') {
-    $like = "%" . $search . "%";
-    $where .= " AND (r.`name` LIKE ? OR r.`redirect_link` LIKE ? OR r.`inserted_from_ip` LIKE ? OR u.`email` LIKE ?)";
-    $params[] = $like;
-    $params[] = $like;
-    $params[] = $like;
-    $params[] = $like;
-    $types .= "ssss";
+    if (preg_match('/^ip:\s*(.+)$/i', $search, $m)) {
+        $where .= " AND r.`inserted_from_ip` = ?";
+        $params[] = trim($m[1]);
+        $types .= "s";
+    } else if (preg_match('/^owner:\s*(.+)$/i', $search, $m)) {
+        $where .= " AND u.`email` = ?";
+        $params[] = trim($m[1]);
+        $types .= "s";
+    } else {
+        $like = "%" . $search . "%";
+        $where .= " AND (r.`name` LIKE ? OR r.`redirect_link` LIKE ? OR r.`inserted_from_ip` LIKE ? OR u.`email` LIKE ?)";
+        $params[] = $like;
+        $params[] = $like;
+        $params[] = $like;
+        $params[] = $like;
+        $types .= "ssss";
+    }
 }
 
 if ($date_from !== '') {
