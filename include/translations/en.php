@@ -124,6 +124,7 @@ $strings = [
     'link-encrypted' => 'Encrypted link',
     'destination-access-code-hint' => 'This link is protected by an access code. To change the destination, you must also enter the current access code.',
     'new-access-code' => 'New access code',
+    'new-access-code-hint' => 'Leave empty to keep the current access code',
     'current-access-code' => 'Current access code',
     'modify-access-code' => 'Change access code',
     'remove-access-code' => 'Remove access code',
@@ -212,6 +213,10 @@ $strings = [
     'stats-search-desc' => 'Enter a link name to view its click statistics. Statistics are public.',
     'stats-search-placeholder' => 'Link name (e.g. aBcDe)',
     'stats-search-another' => 'Search another link',
+    'stats-total-clicks' => 'Total clicks',
+    'stats-created' => 'Created',
+    'stats-last-click' => 'Last click',
+    'stats-last-7-days' => 'Last 7 days',
 
     // Admin date filters
     'date-from' => 'From',
@@ -242,6 +247,8 @@ $strings = [
     'error-invalid-desc' => 'The shortened link you provided is not valid. Check the link and try again.',
     'error-access-code-title' => 'Access code required',
     'error-access-code-desc' => 'This link is protected. Enter the access code to continue.',
+    'error-decrypt-title' => 'Decryption failed',
+    'error-decrypt-desc' => 'The access code is correct, but the encrypted link could not be decrypted. The link may need to be recreated by its owner.',
     'error-blocked-title' => 'Link blocked',
     'error-reported-title' => 'Link reported as unsafe',
     'error-reported-desc' => 'This link has been reported as unsafe and is currently blocked. If you believe this is an error, please contact us.',

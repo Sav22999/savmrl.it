@@ -111,6 +111,7 @@ $strings = [
     'link-encrypted' => 'Link crittografato',
     'destination-access-code-hint' => 'Questo link è protetto da un codice di accesso. Per modificare la destinazione, devi inserire anche il codice di accesso attuale.',
     'new-access-code' => 'Nuovo codice di accesso',
+    'new-access-code-hint' => 'Lascia vuoto per mantenere il codice attuale',
     'current-access-code' => 'Codice di accesso attuale',
     'modify-access-code' => 'Cambia codice di accesso',
     'remove-access-code' => 'Rimuovi codice di accesso',
@@ -192,6 +193,10 @@ $strings = [
     'stats-search-desc' => 'Inserisci il nome di un link per visualizzare le statistiche dei click. Le statistiche sono pubbliche.',
     'stats-search-placeholder' => 'Nome del link (es. aBcDe)',
     'stats-search-another' => 'Cerca un altro link',
+    'stats-total-clicks' => 'Click totali',
+    'stats-created' => 'Creato',
+    'stats-last-click' => 'Ultimo click',
+    'stats-last-7-days' => 'Ultimi 7 giorni',
 
     // Admin date filters
     'date-from' => 'Da',
@@ -221,6 +226,8 @@ $strings = [
     'error-invalid-desc' => 'Il link abbreviato fornito non è valido. Controlla il link e riprova.',
     'error-access-code-title' => 'Codice di accesso richiesto',
     'error-access-code-desc' => 'Questo link è protetto. Inserisci il codice di accesso per continuare.',
+    'error-decrypt-title' => 'Decifratura fallita',
+    'error-decrypt-desc' => 'Il codice di accesso è corretto, ma il link cifrato non può essere decifrato. Il link potrebbe dover essere ricreato dal proprietario.',
     'error-blocked-title' => 'Link bloccato',
     'error-reported-title' => 'Link segnalato come non sicuro',
     'error-reported-desc' => 'Questo link è stato segnalato come non sicuro ed è attualmente bloccato. Se ritieni sia un errore, contattaci.',
