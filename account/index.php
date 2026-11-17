@@ -22,6 +22,7 @@
 <main>
     <div class="horizontal-center">
         <div class="dashboard-container">
+            <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/shutdown-banner.php"); ?>
             <h2 class="title-section brilors"><?php echo htmlspecialchars($user['username']); ?></h2>
 
             <?php if ($user['pro_features']): ?>
@@ -52,6 +53,12 @@
                     <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="1.5"/><path d="M13.765 2.152C13.398 2 12.932 2 12 2c-.932 0-1.398 0-1.765.152a2 2 0 00-1.083 1.083c-.092.223-.129.484-.143.863a1.617 1.617 0 01-.952 1.424 1.617 1.617 0 01-1.71-.142c-.31-.24-.555-.414-.834-.473a2 2 0 00-1.489.382c-.3.227-.504.592-.912 1.32-.408.73-.612 1.094-.66 1.456a2 2 0 00.382 1.49c.155.204.38.378.694.588a1.617 1.617 0 010 2.814c-.314.21-.54.384-.694.588a2 2 0 00-.382 1.49c.048.362.252.726.66 1.456.408.728.612 1.093.912 1.32a2 2 0 001.49.382c.278-.059.523-.234.833-.473a1.617 1.617 0 011.71-.142c.58.272.94.78.953 1.424.014.379.05.64.143.863a2 2 0 001.083 1.083C10.602 22 11.068 22 12 22c.932 0 1.398 0 1.765-.152a2 2 0 001.083-1.083c.092-.223.129-.484.143-.863.013-.644.373-1.152.952-1.424a1.616 1.616 0 011.71.142c.311.24.556.414.834.473a2 2 0 001.49-.382c.3-.227.504-.592.912-1.32.408-.73.612-1.094.66-1.456a2 2 0 00-.382-1.49c-.155-.204-.38-.378-.694-.588a1.617 1.617 0 010-2.814c.314-.21.54-.384.694-.588a2 2 0 00.382-1.49c-.048-.362-.252-.726-.66-1.456-.408-.728-.612-1.093-.912-1.32a2 2 0 00-1.49-.382c-.278.06-.523.234-.833.473a1.616 1.616 0 01-1.71.142 1.617 1.617 0 01-.953-1.424c-.014-.379-.05-.64-.143-.863a2 2 0 00-1.083-1.083z" stroke="currentColor" stroke-width="1.5"/></svg>
                     <h3><?php echo t('settings', $lang); ?></h3>
                 </a>
+                <?php if (savmrl_is_export_open()): ?>
+                <a href="#" class="admin-nav-card" onclick="exportAllData(); return false;">
+                    <svg class="nav-card-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <h3><?php echo t('export-data', $lang); ?></h3>
+                </a>
+                <?php endif; ?>
             </div>
 
             <h3 class="brilors"><?php echo t('your-links', $lang); ?></h3>
@@ -488,6 +495,23 @@ function saveLinkSettings(e) {
         else showModalMsg(result.description, true);
     })
     .catch(() => showModalMsg(S.connErr, true));
+}
+
+function exportAllData() {
+    fetch('/api/v2/user/links/export/')
+        .then(r => {
+            if (!r.ok) throw new Error('Export failed');
+            return r.blob();
+        })
+        .then(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'savmrl-export.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+            showMsg(<?php echo json_encode(t('export-success', $lang)); ?>, false);
+        })
+        .catch(() => showMsg(S.connErr, true));
 }
 
 const observer = new IntersectionObserver(entries => {

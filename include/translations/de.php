@@ -248,5 +248,14 @@ $strings = [
     'addons-feature-handy-desc' => 'Alles passiert im Browser: Sie müssen die Website nicht öffnen und die URL nicht einfügen.',
     'addons-feature-free-title' => 'Kostenlos und Open Source',
     'addons-feature-free-desc' => 'Derselbe kostenlose Dienst wie die Website, mit auf GitHub verfügbarem Quellcode.',
+
+    // Shutdown
+    'shutdown-warning-title' => 'Dienst wird eingestellt.',
+    'shutdown-warning-desc' => 'savmrl.it wird am {shutdown_date} eingestellt. Bitte sichern Sie Ihre Links vorher.',
+    'shutdown-active-title' => 'Dienst eingestellt.',
+    'shutdown-active-desc' => 'savmrl.it wurde eingestellt. Die Domain wird am {domain_end} aufhören zu existieren. Sie können Ihre Daten bis zum {export_end} exportieren.',
+    'shutdown-export-link' => 'Daten exportieren →',
+    'export-data' => 'Daten exportieren',
+    'export-success' => 'Export erfolgreich heruntergeladen.',
 ];
 ?>

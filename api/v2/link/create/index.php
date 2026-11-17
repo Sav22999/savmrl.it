@@ -6,6 +6,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     api_method_not_allowed("POST");
 }
 
+if (savmrl_is_shutdown()) {
+    api_bad_request("Service has been discontinued. No new links can be created.");
+}
+
 $request = get_json_body();
 
 $link = isset($request["link"]) ? trim($request["link"]) : null;

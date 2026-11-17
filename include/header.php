@@ -6,7 +6,18 @@ global $localhost_db, $password_db, $database_savmrl, $username_db, $title;
 $title_header = "<a href='/' id='title-page-with-icon'><img src='/images/icon-big.svg'/><div class='text'>savmrl.it</div></a>";
 $seconds = 0; //TODO : set manually
 
-define('SAVMRL_BUILD', '20261027');
+define('SAVMRL_BUILD', '20261116');
+
+define('SAVMRL_SHUTDOWN_DATE', '2026-12-15');
+define('SAVMRL_DOMAIN_END_DATE', '2026-12-29');
+define('SAVMRL_EXPORT_END_DATE', '2026-12-28');
+
+function savmrl_is_shutdown() {
+    return date('Y-m-d') >= SAVMRL_SHUTDOWN_DATE;
+}
+function savmrl_is_export_open() {
+    return date('Y-m-d') <= SAVMRL_EXPORT_END_DATE;
+}
 
 $redirect_table = "redirect_savmrl";
 $opened_table = "opened_savmrl";

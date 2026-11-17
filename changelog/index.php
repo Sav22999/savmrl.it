@@ -44,6 +44,17 @@
 
             <div class="changelog-entry">
                 <div class="changelog-dot"></div>
+                <div class="changelog-date">16 November 2026 <span class="changelog-build">build 20261116</span></div>
+                <div class="changelog-title">Service shutdown announcement & data export</div>
+                <ul class="changelog-list">
+                    <li><span class="changelog-tag tag-new">New</span> Shutdown announcement banner displayed on all pages</li>
+                    <li><span class="changelog-tag tag-new">New</span> Data export feature — users can download all their links as JSON from the dashboard</li>
+                    <li><span class="changelog-tag tag-improve">Improve</span> Link creation blocked after service discontinuation date</li>
+                </ul>
+            </div>
+
+            <div class="changelog-entry">
+                <div class="changelog-dot"></div>
                 <div class="changelog-date">27 October 2026 <span class="changelog-build">build 20261027</span></div>
                 <div class="changelog-title">Access code encryption fix & admin improvements</div>
                 <ul class="changelog-list">
