@@ -270,5 +270,14 @@ $strings = [
     'addons-feature-handy-desc' => 'Everything happens in your browser: no need to open the website and paste the URL.',
     'addons-feature-free-title' => 'Free and open source',
     'addons-feature-free-desc' => 'The same free service as the website, with the source code available on GitHub.',
+
+    // Shutdown
+    'shutdown-warning-title' => 'Service discontinuation.',
+    'shutdown-warning-desc' => 'savmrl.it will be discontinued on {shutdown_date}. Please save your links before then.',
+    'shutdown-active-title' => 'Service discontinued.',
+    'shutdown-active-desc' => 'savmrl.it has been shut down. The domain will cease to exist on {domain_end}. You can export your data until {export_end}.',
+    'shutdown-export-link' => 'Export your data →',
+    'export-data' => 'Export data',
+    'export-success' => 'Export downloaded successfully.',
 ];
 ?>

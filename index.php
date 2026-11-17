@@ -61,6 +61,7 @@
     </div>
 
     <div class="horizontal-center">
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/shutdown-banner.php"); ?>
         <div class="vertical-center-home">
             <div class="vertical-top">
                 <h2 class="title-section brilors home-title"><?php echo t('payoff', $lang); ?></h2>

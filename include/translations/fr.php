@@ -248,5 +248,14 @@ $strings = [
     'addons-feature-handy-desc' => 'Tout se passe dans le navigateur : plus besoin d\'ouvrir le site et de coller l\'URL.',
     'addons-feature-free-title' => 'Gratuite et open source',
     'addons-feature-free-desc' => 'Le même service gratuit que le site, avec le code source disponible sur GitHub.',
+
+    // Shutdown
+    'shutdown-warning-title' => 'Arrêt du service.',
+    'shutdown-warning-desc' => 'savmrl.it sera arrêté le {shutdown_date}. Veuillez sauvegarder vos liens avant cette date.',
+    'shutdown-active-title' => 'Service arrêté.',
+    'shutdown-active-desc' => 'savmrl.it a été arrêté. Le domaine cessera d\'exister le {domain_end}. Vous pouvez exporter vos données jusqu\'au {export_end}.',
+    'shutdown-export-link' => 'Exporter vos données →',
+    'export-data' => 'Exporter les données',
+    'export-success' => 'Exportation téléchargée avec succès.',
 ];
 ?>

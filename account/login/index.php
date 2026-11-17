@@ -19,6 +19,7 @@
 </header>
 <main class="main-centered">
     <div class="horizontal-center">
+        <?php include_once($_SERVER['DOCUMENT_ROOT'] . "/include/shutdown-banner.php"); ?>
         <div class="auth-form-container">
             <h2 class="title-section brilors"><?php echo t('login', $lang); ?></h2>
             <div id="auth-message"></div>

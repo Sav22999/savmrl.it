@@ -249,5 +249,14 @@ $strings = [
     'addons-feature-handy-desc' => 'Tutto avviene nel browser: non serve aprire il sito e incollare l\'URL.',
     'addons-feature-free-title' => 'Gratuita e open source',
     'addons-feature-free-desc' => 'Lo stesso servizio gratuito del sito, con il codice sorgente disponibile su GitHub.',
+
+    // Shutdown
+    'shutdown-warning-title' => 'Dismissione del servizio.',
+    'shutdown-warning-desc' => 'savmrl.it sarà dismesso il {shutdown_date}. Salva i tuoi link prima di quella data.',
+    'shutdown-active-title' => 'Servizio dismesso.',
+    'shutdown-active-desc' => 'savmrl.it è stato dismesso. Il dominio cesserà di esistere il {domain_end}. Puoi esportare i tuoi dati fino al {export_end}.',
+    'shutdown-export-link' => 'Esporta i tuoi dati →',
+    'export-data' => 'Esporta dati',
+    'export-success' => 'Esportazione scaricata con successo.',
 ];
 ?>
